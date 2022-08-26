@@ -1,33 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="utf-8">
     <title>마이페이지</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/css/annual.css}" rel="stylesheet">
-    <link th:href="@{/css/signin.css}" rel="stylesheet">
-    <link th:href="@{/css/jquery.datetimepicker.css}" rel="stylesheet">
-    <script th:src="@{js/jquery-3.2.1.js}"></script>
-    <script th:src="@{js/jquery.datetimepicker.full.min.js}"></script>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 <body>
     <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-            <div class="col-md-12 text-end">
-                <div class="inline-block images">
-                    <a th:href="@{/}">
-                        <img src="/images/hncis.png">
-                    </a>
-                </div>
-                <form th:action="@{/mypage}" method="get" class="inline-block">
-                    <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}   |">로그인 사용자 이름</span>
-                    <button type="submit" class="btn btn-outline-primary me-2 mypage">마이페이지</button>
-                </form>
-                <form th:action="@{/logout}" method="post" class="inline-block">
-                    <button type="submit" class="btn btn-dark logout">로그아웃</button>
-                </form>
-            </div>
-        </header>
         <section>
             <table class="table">
                 <thread>
