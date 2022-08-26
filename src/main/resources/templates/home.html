@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>신청</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/annual.css}" rel="stylesheet">
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/css/jquery.datetimepicker.css}" rel="stylesheet">
+    <script th:src="@{js/jquery-3.2.1.js}"></script>
+    <script th:src="@{js/jquery.datetimepicker.full.min.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <div class="col-md-12 text-end">
+                <div class="inline-block images float">
+                    <a th:href="@{/}">
+                        <img src="/images/hncis.png">
+                    </a>
+                </div>
+                <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                    <a th:href="@{/selectAll}"> 전체 조회</a>
+                </div>
+                <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                    <a th:href="|@{/memberManagement}/${#dates.format(#calendars.createNow(), 'yyyy')}|"> 회원 관리</a>
+                </div>
+                <form th:action="@{/mypage}" method="get" class="inline-block">
+                    <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}   |">로그인 사용자 이름</span>
+                    <button type="submit" class="btn btn-outline-primary me-2 mypage">마이페이지</button>
+                </form>
+                <form th:action="@{/logout}" method="post" class="inline-block">
+                    <button type="submit" class="btn btn-dark logout">로그아웃</button>
+                </form>
+            </div>
+        </header>
+        <section>
+            <div class="sub_content">
+                <div>
+                    <div class='sub_header'>
+                        <p class='title'>연차</p>
+                    </div>
+                </div>
+                <div class="sub_panel_box">
+                    <p class="sub_title">기본정보</p>
+                    <table class="sub_table">
+                        <tr>
+                            <th>사번</th>
+                            <td><input type="text" id="user_id" class="input_text" th:value="${user.user_id}" readonly>
+                            <th>이름</th>
+                            <td><input type="text" id="user_name" class="input_text" th:value="${user.user_name}" readOnly></td>
+                            <th>직급</th>
+                            <td><input type="text" id="responsibilities_of_office" class="input_text" th:value="${user.responsibilities_of_office}" readOnly></td>
+                            <th>부서</th>
+                            <td><input type="text" id="department" class="input_text" th:value="${user.department}" readOnly></td>
+                        </tr>
+                        <tr>
+                            <th>입사일자</th>
+                            <td><input type="text" id="start_year" class="input_text" th:value="${user.start_year}" readOnly></td>
+                            <th>생년월일</th>
+                            <td><input type="text" id="birthday" class="input_text" th:value="${user.birthday}" readOnly></td>
+                            <th>성별</th>
+                            <td><input type="text" id="sex" class="input_text" th:value="${user.sex}" readOnly></td>
+                            <th>연락처</th>
+                            <td><input type="text" id="user_number" class="input_text" th:value="${user.user_number}" readOnly></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub_panel_box">
+                    <p class="sub_title">연차현황</p>
+                    <table class="sub_table">
+                        <tr>
+                            <th>차수/남은일수</th>
+                            <td>
+                                <p>
+                                    <span>전체연차&nbsp;&nbsp;</span><input type="text" id="total_annual" class="input_text2" th:value="${annual.total_annual}" readOnly/>
+                                    <span>사용연차&nbsp;&nbsp;</span><input type="text" id="use_annual" class="input_text2" th:value="${annual.use_annual}" readOnly/>
+                                    <span>잔여연차&nbsp;&nbsp;</span><input type="text" id="save_annual" class="input_text2" th:value="${annual.total_annual} - ${annual.use_annual}" readOnly/>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub_panel_box">
+                    <p class="sub_title">연차/반차</p>
+                    <label class="year">
+                        <input type="radio" name="years" value="year" th:onclick="yearChecked()" checked>
+                        <span>연차</span>
+                    </label>
+                    <label class="year">
+                        <input type="radio" name="years" value="half-year" th:onclick="yearChecked()">
+                        <span>반차</span>
+                    </label>
+                </div>
+                <div class="sub_panel_box">
+                    <p class="sub_title">신청정보</p>
+                    <table class="sub_table">
+                        <tr id="putIn">
+                            <th>신청연차</th>
+                            <td>
+                                <p>
+                                    <input type="text" id="application_year" class="input_text2" readonly/>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>기간</th>
+                            <td>
+                                <p>
+                                    <input type="text" value="" id="start_date" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"/>
+                                    <span id="tilde">~</span>
+                                    <input type="text" value="" id="end_date" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"/>
+                                    <label id="label_hidden" hidden>
+                                        <label class="time" hidden>
+                                            <input type="radio" name="time" id="def" value="연차" checked>
+                                            <span>연차</span>
+                                        </label>
+                                        <label class="time">
+                                            <input type="radio" name="time" id="am" value="오전">
+                                            <span>오전</span>
+                                        </label>
+                                        <label class="time">
+                                            <input type="radio" name="time" id="pm" value="오후">
+                                            <span>오후</span>
+                                        </label>
+                                    </label>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>사유</th>
+                            <td>
+                                <textarea rows="8" id="reason" class="input_text" th:onchange="removeClass(this)"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class='sub_btn_menu'>
+                    <ul>
+                        <a href="javascript:void(0)" class='btn_line btn_gray' th:onclick="application()">신청</a>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    function yearChecked() {
+        if (getValue('input[name="years"]:checked') === 'year') {
+            document.getElementById('putIn').hidden = false;
+            document.getElementById('tilde').hidden = false;
+            document.getElementById('end_date').hidden = false;
+            document.getElementById('label_hidden').hidden = true;
+            document.getElementById('def').checked = true;
+        }
+        else {
+            document.getElementById('putIn').hidden = true;
+            document.getElementById('tilde').hidden = true;
+            document.getElementById('end_date').hidden = true;
+            document.getElementById('label_hidden').hidden = false;
+            document.getElementById('am').checked = true;
+        }
+    }
+
+    function removeClass(obj){
+        obj.classList.remove("field-error");
+        let result = new Date(Date.parse(getValue("#end_date")) - Date.parse(getValue("#start_date"))).getDate();
+        if(isNaN(result))
+            document.querySelector('#application_year').value = 0;
+        else
+            document.querySelector('#application_year').value = result;
+    }
+
+    function application() {
+
+        if(paramChecked())
+            return;
+
+        let params = {
+            "user_id" : getValue("#user_id"),
+            "user_name" : getValue("#user_name"),
+            "responsibilities_of_office" : getValue("#responsibilities_of_office"),
+            "department" : getValue("#department"),
+            "start_year" : getValue("#start_year"),
+            "birthday" : getValue("#birthday"),
+            "sex" : getValue("#sex"),
+            "user_number" : getValue("#user_number"),
+            "total_annual" : getValue("#total_annual"),
+            "use_annual" : getValue("#use_annual"),
+            "application_year": getValue("#application_year"),
+            "start_date": getValue("#start_date"),
+            "end_date": getValue("#end_date"),
+            "time" : getValue('input[name="time"]:checked'),
+            "reason" : getValue("#reason"),
+            "appr_yn" : "N",
+            "cancel_yn" : "Y"
+        };
+
+       fetch("/application", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        }).then((response) => {
+            if(!response.ok)
+                throw response;
+            alert("신청이 완료되었습니다.");
+            window.location.href="/mypage";
+        }).catch(e => {
+            e.json().then(msg => {
+                for (let i = 0; i < msg.errors.length; i++) {
+                    document.querySelector("#"+msg.errors[i].field).className += ' field-error';
+                }
+            });
+        });
+    }
+
+    function paramChecked() {
+        if (getValue('input[name="years"]:checked') === 'half-year') {
+            document.querySelector('#application_year').value = "0.5";
+            document.querySelector("#end_date").value = getValue("#start_date");
+        }
+
+        if (isNaN(getValue("#application_year"))) {
+            document.querySelector("#application_year").className += ' field-error';
+            return true;
+        } else if (getValue("#start_date") > getValue("#end_date")) {
+            document.querySelector("#start_date").className += ' field-error';
+            document.querySelector("#end_date").className += ' field-error';
+            return true;
+        }
+        return false;
+    }
+
+    const getValue = (parameter) => {
+        return document.querySelector(parameter).value;
+    }
+
+    jQuery.datetimepicker.setLocale('ko');
+    $('#start_date').datetimepicker({
+        timepicker: false,
+        minDate: new Date(),
+        format: 'Y-m-d'
+    });
+    $('#end_date').datetimepicker({
+        timepicker: false,
+        minDate: new Date(),
+        format: 'Y-m-d'
+    });
+</script>
+</body>
+</html>

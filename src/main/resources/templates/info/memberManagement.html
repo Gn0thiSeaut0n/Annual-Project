@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>회원 관리</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/annual.css}" rel="stylesheet">
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/css/jquery.datetimepicker.css}" rel="stylesheet">
+    <script th:src="@{js/jquery-3.2.1.js}"></script>
+    <script th:src="@{js/jquery.datetimepicker.full.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-12 text-end">
+            <div class="inline-block images float">
+                <a th:href="@{/}">
+                    <img src="/images/hncis.png">
+                </a>
+            </div>
+            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                <a th:href="@{/selectAll}"> 전체 조회</a>
+            </div>
+            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                <a th:href="|@{/memberManagement}/${#dates.format(#calendars.createNow(), 'yyyy')}|"> 회원 관리</a>
+            </div>
+            <form th:action="@{/mypage}" method="get" class="inline-block">
+                <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}   |">로그인 사용자 이름</span>
+                <button type="submit" class="btn btn-outline-primary me-2 mypage">마이페이지</button>
+            </form>
+            <form th:action="@{/logout}" method="post" class="inline-block">
+                <button type="submit" class="btn btn-dark logout">로그아웃</button>
+            </form>
+        </div>
+    </header>
+    <section>
+        <table class="table">
+            <thread>
+                <tr class="pb-3 pt-3">
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">#</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">아이디</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">1월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">2월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">3월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">4월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">5월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">6월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">7월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">8월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">9월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">10월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">11월</th>
+                    <th scope="col" class="pb-4 pt-4 text-center text-bold">12월</th>
+                </tr>
+            </thread>
+            <tbody>
+            <tr th:each="list, index : ${allUser}" th:onclick="test([[${list.user_id}]])">
+                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${index.count}]]</th>
+                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
+                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.jan}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.feb}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.mar}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.apr}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.may}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.jun}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.jul}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.aug}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.sept}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.oct}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.nov}]]</th>
+                <th scope="col" class="pb-4 pt-4 text-center text-bold">[[${list.dec}]]</th>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+<script>
+    function test(user){
+        console.log('test = ' + user);
+    }
+</script>
+</body>
+</html>

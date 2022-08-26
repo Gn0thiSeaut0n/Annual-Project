@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.login.domain.dao.EtcDAO">
+    <select id="findByHistory" parameterType="String" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+        ORDER BY
+            HISTORY_ID DESC
+    </select>
+
+    <select id="findByAllHistory" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        ORDER BY
+            HISTORY_ID DESC
+    </select>
+
+    <insert id="insertApplicationHistory" parameterType="History">
+        INSERT INTO
+            APPLICATION_HISTORY
+        VALUES (
+                (SELECT * FROM (SELECT MAX(HISTORY_ID)+1 FROM APPLICATION_HISTORY) NEXT),
+                #{user_id},
+                #{user_name},
+                #{responsibilities_of_office},
+                #{department},
+                #{start_year},
+                #{birthday},
+                #{sex},
+                #{user_number},
+                #{total_annual},
+                #{use_annual},
+                #{start_date},
+                #{end_date},
+                #{time},
+                #{application_year},
+                #{reason},
+                #{appr_yn},
+                #{cancel_yn}
+               )
+    </insert>
+    <update id="updateAnnual" parameterType="Map">
+        UPDATE
+            ANNUAL_STATUS
+        SET
+            USE_ANNUAL = #{use_annual}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
+    <delete id="deleteHistory" parameterType="String">
+        DELETE FROM
+            APPLICATION_HISTORY
+        WHERE
+            HISTORY_ID = #{history_id}
+    </delete>
+
+    <update id="updateAppr" parameterType="String">
+        UPDATE
+            APPLICATION_HISTORY
+        SET
+            APPR_YN = 'Y'
+        WHERE
+            HISTORY_ID = #{history_id}
+    </update>
+
+<!--    <select id="findByAllUser" resultType="User">-->
+<!--        SELECT-->
+<!--            USER_ID,-->
+<!--            USER_NAME-->
+<!--        FROM-->
+<!--            USER_INFO-->
+<!--        ORDER BY-->
+<!--            USER_NAME DESC-->
+<!--    </select>-->
+    <select id="findByAllUserAnnual" parameterType="String" resultType="UserAnnual">
+        SELECT
+            USER_ID,
+            USER_NAME,
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'01')), '') as 'jan',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'02')), '') as 'feb',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'03')), '') as 'mar',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'04')), '') as 'apr',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'05')), '') as 'may',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'06')), '') as 'jun',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'07')), '') as 'jul',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'08')), '') as 'aug',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'09')), '') as 'sept',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'10')), '') as 'oct',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'11')), '') as 'nov',
+            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'12')), '') as 'dec'
+        FROM
+            USER_INFO U
+    </select>
+</mapper>

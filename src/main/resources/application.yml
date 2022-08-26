@@ -1,0 +1,22 @@
+# Devtools
+spring:
+  messages:
+    basename: messages,errors
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+  # MySQL 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # DB Source URL
+    url: jdbc:mysql://192.168.0.15:3306/proj?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    # DB username
+    username: root
+    # DB password
+    password: 1234
+
+mybatis:
+  type-aliases-package: hello.login.domain.dto
+  mapper-locations: mapper/*.xml

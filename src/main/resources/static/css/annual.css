@@ -1,0 +1,95 @@
+@charset "utf-8";
+
+/* fonts */
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.ttf');
+}
+
+/* reset */
+html * {max-height: 999999px} /* font size bug fix */
+html,body{margin:0px;padding:0px;width:100%;font-size:10.5px;font-family:'Noto Sans KR', sans-serif;-webkit-text-size-adjust:none;-webkit-font-smoothing:antialiased; overflow-x:hidden;}
+ul,ol,li,dl,dd,dt,input,h1,h2,h3,h4,h5,h6,p,b,input,button,textarea,fieldset,legend,td,th{margin:0px;padding:0px;font-weight:normal;word-break:keep-all}
+li{list-style:none}
+fieldset,img,a{border:0px}
+a{text-decoration:none;color: black;}
+legend,.blind{position:absolute;top:0;left:-10000px;width:0;height:0;overflow:hidden;font-size:0;line-height:0}
+caption{display:none}
+button,label{cursor:pointer}
+button{overflow:visible\9}	/* button fix for ie8 */
+input,textarea,button,select{font-family:'Noto Sans KR', sans-serif}
+table{width:100%;border-collapse:collapse;border-spacing:0;text-align:left}
+table th, table td{text-align:left}
+
+header, .mypage, .logout {
+    font-size: 15px;
+}
+
+.btn_line{display:block;width:170px;height:44px;line-height:42px;text-align:center;font-size:1.8em;color:#fff;font-weight:300;border:1px solid #fff;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.btn_line:hover{color:#666;background:#fff}
+.btn_line.btn_gray{color:#666;border-color:#999}
+.btn_line.btn_gray:hover{color:#fff;background:#999}
+
+.sub_header{margin:0 -40px;height:70px;background:#eef1f5}
+.sub_header .title{padding-left:40px;line-height:70px;font-size:2.8em;color:#333}
+
+.lnb_menu_box{margin-bottom:20px;height:39px;border-bottom:1px solid #dcdcdc}
+.sub_lnb_menu{position:relative;height:40px;white-space:nowrap}
+.sub_lnb_menu .lnb_menu{position:absolute;left:0;top:0}
+.sub_lnb_menu .lnb_menu .btn_menu{display:inline-block;margin-right:20px;padding:0 5px;height:38px;line-height:40px;font-size:1.4em;color:#666;border-bottom:3px solid transparent;*display:inline;zoom:1}
+.sub_lnb_menu .lnb_menu .btn_menu:hover{color:#175894}
+.sub_lnb_menu .lnb_menu .btn_menu.active{border-color:#175894}
+
+.sub_btn_menu{position:relative;padding-right:20px;margin-top:30px;min-height:33px;}
+.sub_btn_menu .btn_line{display:block;float:right;margin:0 3px 3px 0;padding:0 20px;min-width:66px;width:auto;height:30px;line-height:28px;font-size:1.2em}
+
+.sub_panel_box{position:relative;margin-top:30px}
+.sub_panel_box .sub_title{margin-bottom:10px;vertical-align:middle;line-height:1.2em;font-size:2em;color:#175894;font-weight:500; }
+
+.sub_table{width:100%}
+.sub_table th{padding:15px 10px 5px 10px;font-size:1.3em;color:#666;font-weight:500;vertical-align:top;border-bottom:1px solid #d5d5d5;border-top:1px solid #d5d5d5;background:#f2f2f2;white-space:nowrap}
+.sub_table td{padding:10px;height:30px;border-bottom:1px solid #d5d5d5;border-top:1px solid #d5d5d5}
+.sub_table .input_text{margin-left:0px;padding:0 7px;width:100%;height:30px;font-size:1.2em;color:#666;border:1px solid #d5d5d5;background:#f9f9f9;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;*line-height:28px;line-height:28px\9}
+.sub_table .input_text2{margin-left:0px;padding:0 7px;width:5%;height:30px;font-size:1.2em;color:#666;border:1px solid #d5d5d5;background:#f9f9f9;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;*line-height:28px;line-height:28px\9; text-align: center;}
+.sub_table .input_text3{margin-left:0px;padding:0 7px;width:20%;height:30px;font-size:1.2em;color:#666;border:1px solid #d5d5d5;background:#f9f9f9;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;*line-height:28px;line-height:28px\9}
+
+.year input[type="radio"] {
+    display: none;
+}
+
+.year input[type="radio"] + span {
+    display: inline-block;
+    width: 100px;
+    padding: 15px 10px;
+    border: 1px solid #dfdfdf;
+    background-color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.year input[type="radio"]:checked + span {
+    background-color: #113a6b;
+    color: #ffffff;
+}
+
+.time input[type="radio"] {
+    display: none;
+}
+
+.time input[type="radio"] + span {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    /*padding: 15px 10px;*/
+    border: 1px solid #dfdfdf;
+    background-color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
+
+.time input[type="radio"]:checked + span {
+    background-color: #113a6b;
+    color: #ffffff;
+}
