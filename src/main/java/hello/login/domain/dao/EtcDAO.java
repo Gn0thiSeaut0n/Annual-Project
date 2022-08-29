@@ -1,7 +1,7 @@
 package hello.login.domain.dao;
 
 import hello.login.domain.dto.History;
-import hello.login.domain.dto.User;
+import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,10 +23,9 @@ public interface EtcDAO {
 
     void updateAppr(String history_id);
 
-    List<User> findByAllUser();
-
     List<UserAnnual> findByAllUserAnnual(String year);
 
+<<<<<<< Updated upstream
     int findByHistoryAllCnt(String user_id);
 
     List<History> findByHistoryPaging(Map<String, Object> pageParam);
@@ -34,4 +33,7 @@ public interface EtcDAO {
     int findByAllHistoryCnt(Map<String, String> searchParam);
 
     List<History> findByAllHistoryPaging(Map<String, Object> pageParam);
+=======
+    List<MonthAndDayList> selectAnnualMonth(Map<String, String> map);
+>>>>>>> Stashed changes
 }

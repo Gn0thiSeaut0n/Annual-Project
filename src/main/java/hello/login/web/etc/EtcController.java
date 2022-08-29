@@ -1,7 +1,11 @@
 package hello.login.web.etc;
 
 import hello.login.domain.dto.History;
+<<<<<<< Updated upstream
 import hello.login.domain.dto.Pagination;
+=======
+import hello.login.domain.dto.MonthAndDayList;
+>>>>>>> Stashed changes
 import hello.login.domain.dto.User;
 import hello.login.domain.dto.UserAnnual;
 import hello.login.domain.service.EtcService;
@@ -15,7 +19,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< Updated upstream
 import java.util.HashMap;
+=======
+import java.time.LocalDate;
+>>>>>>> Stashed changes
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +95,6 @@ public class EtcController {
 
     @GetMapping("/memberManagement/{year}")
     public String memberManagement(@Login User loginMember, @PathVariable String year, Model model) {
-        log.info("year - test = {}",year);
         List<UserAnnual> allUserAnnual = etcService.findByAllUserAnnual(year);
         log.info("allUser = {}", allUserAnnual.toString());
 
@@ -95,6 +102,16 @@ public class EtcController {
         model.addAttribute("allUser", allUserAnnual);
 
         return "info/memberManagement";
+    }
+
+    @GetMapping("/memberManagement/{year}/{user}")
+    public String memberManagementDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
+
+        List<MonthAndDayList> monthAndDayLists = etcService.selectAnnualMonth(year, user);
+        log.info("month test = {}", monthAndDayLists.toString());
+
+        model.addAttribute("user", loginMember);
+        return "info/memberManagementDetail";
     }
 
     @DeleteMapping("/deleteHistory/{history_id}")

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>회원 연차 상세</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+<div class="container">
+    <section>
+        <table class="table table-bordered">
+            <thread>
+                <tr class="pb-3 pt-3">
+                    <th scope="col" class="p-0 text-center text-bold" style="width: 50px;"></th>
+                    <th scope="col" class="p-0 text-center text-bold" th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|" style="width: 50px;"></th>
+                </tr>
+            </thread>
+            <tbody>
+            <tr th:each="index : ${#numbers.sequence(1, 31)}">
+                <th scope="row" class="p-0 text-center text-bold" th:text="|${index}일|"></th>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

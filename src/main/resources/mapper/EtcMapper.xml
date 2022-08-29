@@ -116,6 +116,9 @@
         SELECT
             USER_ID,
             USER_NAME,
+            (SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'TOTAL' ,
+            (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'USE',
+            ((SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) - (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID)) AS 'RESULT' ,
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'01')), '') as 'jan',
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'02')), '') as 'feb',
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'03')), '') as 'mar',
@@ -132,6 +135,7 @@
             USER_INFO U
     </select>
 
+<<<<<<< Updated upstream
     <select id="findByHistoryAllCnt" parameterType="String" resultType="int">
         SELECT
             COUNT(*)
@@ -161,10 +165,18 @@
             REASON,
             APPR_YN,
             CANCEL_YN
+=======
+    <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
+        SELECT
+            APPLICATION_YEAR,
+            DATE_FORMAT(START_DATE, '%m') as 'month',
+            DATE_FORMAT(START_DATE, '%d') as 'day'
+>>>>>>> Stashed changes
         FROM
             APPLICATION_HISTORY
         WHERE
             USER_ID = #{user_id}
+<<<<<<< Updated upstream
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -216,6 +228,12 @@
                 AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
             </if>
         LIMIT #{pageSize} OFFSET #{startIndex}
+=======
+        AND
+            DATE_FORMAT(START_DATE, '%Y') = #{year}
+        AND
+            APPLICATION_YEAR NOT IN ('0.0');
+>>>>>>> Stashed changes
     </select>
 
 </mapper>
