@@ -47,4 +47,20 @@ public class EtcService {
     public List<UserAnnual> findByAllUserAnnual(String year) {
         return etcDAO.findByAllUserAnnual(year);
     }
+
+    public int findByHistoryAllCnt(String user_id) {
+        return etcDAO.findByHistoryAllCnt(user_id);
+    }
+
+    public List<History> findByHistoryPaging(Map<String, Object> pageParam) {
+        return etcDAO.findByHistoryPaging(pageParam);
+    }
+
+    public int findByAllHistoryCnt(Map<String, String> searchParam) {
+        return etcDAO.findByAllHistoryCnt(searchParam);
+    }
+
+    public List<History> findByAllHistoryPaging(Map<String, Object> pageParam) {
+        return etcDAO.findByAllHistoryPaging(pageParam);
+    }
 }

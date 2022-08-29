@@ -26,4 +26,12 @@ public interface EtcDAO {
     List<User> findByAllUser();
 
     List<UserAnnual> findByAllUserAnnual(String year);
+
+    int findByHistoryAllCnt(String user_id);
+
+    List<History> findByHistoryPaging(Map<String, Object> pageParam);
+
+    int findByAllHistoryCnt(Map<String, String> searchParam);
+
+    List<History> findByAllHistoryPaging(Map<String, Object> pageParam);
 }

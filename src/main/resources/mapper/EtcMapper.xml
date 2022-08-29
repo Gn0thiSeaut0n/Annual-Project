@@ -131,4 +131,91 @@
         FROM
             USER_INFO U
     </select>
+
+    <select id="findByHistoryAllCnt" parameterType="String" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+    </select>
+
+    <select id="findByHistoryPaging" parameterType="Map" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+        LIMIT #{pageSize} OFFSET #{startIndex}
+    </select>
+
+    <select id="findByAllHistoryCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            1=1
+            <if test="year != null">
+                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
+                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+            </if>
+            <if test="user_name != null">
+                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+            </if>
+    </select>
+
+    <select id="findByAllHistoryPaging" parameterType="Map" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            1=1
+            <if test="year != null">
+                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
+                    OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+            </if>
+            <if test="user_name != null">
+                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+            </if>
+        LIMIT #{pageSize} OFFSET #{startIndex}
+    </select>
+
 </mapper>

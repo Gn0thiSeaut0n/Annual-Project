@@ -10,7 +10,6 @@
             <table class="table">
                 <thread>
                     <tr class="pb-3 pt-3">
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">#</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold">아이디</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
@@ -20,8 +19,7 @@
                     </tr>
                 </thread>
                 <tbody>
-                    <tr th:each="list, index : ${history}">
-                        <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${index.count}]]</th>
+                    <tr th:each="list : ${history}">
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
@@ -32,6 +30,37 @@
                     </tr>
                 </tbody>
             </table>
+            <nav aria-label="Page navigation example" style="font-size: 16px">
+                <ul class="pagination" style="justify-content: center;">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/mypage?page=1}" aria-label="Previous">
+                            <span aria-hidden="true">처음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.prevBlock})}" aria-label="Previous">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li class="page-item"
+                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                            th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="@{/mypage?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
+                        </li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.nextBlock})}" aria-label="Next">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.totalPageCnt})}" aria-label="Previous">
+                            <span aria-hidden="true">끝</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </section>
     </div>
 <script>
@@ -52,7 +81,6 @@
             console.log("에러 발생");
         });
     }
-
 </script>
 </body>
 </html>
