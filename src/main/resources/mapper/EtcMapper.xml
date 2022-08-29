@@ -79,6 +79,7 @@
                 #{cancel_yn}
                )
     </insert>
+
     <update id="updateAnnual" parameterType="Map">
         UPDATE
             ANNUAL_STATUS
@@ -87,6 +88,7 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+
     <delete id="deleteHistory" parameterType="String">
         DELETE FROM
             APPLICATION_HISTORY
@@ -103,6 +105,21 @@
             HISTORY_ID = #{history_id}
     </update>
 
+    <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
+        SELECT
+            APPLICATION_YEAR,
+            DATE_FORMAT(START_DATE, '%m') as 'month',
+            DATE_FORMAT(START_DATE, '%d') as 'day'
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+            AND
+                DATE_FORMAT(START_DATE, '%Y') = #{year}
+            AND
+                APPLICATION_YEAR NOT IN ('0.0')
+    </select>
+
 <!--    <select id="findByAllUser" resultType="User">-->
 <!--        SELECT-->
 <!--            USER_ID,-->
@@ -112,6 +129,7 @@
 <!--        ORDER BY-->
 <!--            USER_NAME DESC-->
 <!--    </select>-->
+
     <select id="findByAllUserAnnual" parameterType="String" resultType="UserAnnual">
         SELECT
             USER_ID,
@@ -135,7 +153,6 @@
             USER_INFO U
     </select>
 
-<<<<<<< Updated upstream
     <select id="findByHistoryAllCnt" parameterType="String" resultType="int">
         SELECT
             COUNT(*)
@@ -165,18 +182,8 @@
             REASON,
             APPR_YN,
             CANCEL_YN
-=======
-    <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
-        SELECT
-            APPLICATION_YEAR,
-            DATE_FORMAT(START_DATE, '%m') as 'month',
-            DATE_FORMAT(START_DATE, '%d') as 'day'
->>>>>>> Stashed changes
         FROM
             APPLICATION_HISTORY
-        WHERE
-            USER_ID = #{user_id}
-<<<<<<< Updated upstream
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -187,13 +194,13 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-            <if test="year != null">
-                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
-            </if>
-            <if test="user_name != null">
-                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
-            </if>
+        <if test="year != null">
+            AND (START_DATE LIKE CONCAT('%', #{year}, '%')
+            OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+        </if>
+        <if test="user_name != null">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
     </select>
 
     <select id="findByAllHistoryPaging" parameterType="Map" resultType="History">
@@ -222,18 +229,12 @@
             1=1
             <if test="year != null">
                 AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-                    OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
             </if>
             <if test="user_name != null">
                 AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
             </if>
-        LIMIT #{pageSize} OFFSET #{startIndex}
-=======
-        AND
-            DATE_FORMAT(START_DATE, '%Y') = #{year}
-        AND
-            APPLICATION_YEAR NOT IN ('0.0');
->>>>>>> Stashed changes
+        LIMIT #{pageSize} OFFSET #{startIndex}1
     </select>
 
 </mapper>

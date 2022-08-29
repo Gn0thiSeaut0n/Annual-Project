@@ -1,11 +1,8 @@
 package hello.login.web.etc;
 
 import hello.login.domain.dto.History;
-<<<<<<< Updated upstream
 import hello.login.domain.dto.Pagination;
-=======
 import hello.login.domain.dto.MonthAndDayList;
->>>>>>> Stashed changes
 import hello.login.domain.dto.User;
 import hello.login.domain.dto.UserAnnual;
 import hello.login.domain.service.EtcService;
@@ -19,11 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< Updated upstream
 import java.util.HashMap;
-=======
-import java.time.LocalDate;
->>>>>>> Stashed changes
 import java.util.List;
 import java.util.Map;
 

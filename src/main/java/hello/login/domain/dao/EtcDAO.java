@@ -25,7 +25,6 @@ public interface EtcDAO {
 
     List<UserAnnual> findByAllUserAnnual(String year);
 
-<<<<<<< Updated upstream
     int findByHistoryAllCnt(String user_id);
 
     List<History> findByHistoryPaging(Map<String, Object> pageParam);
@@ -33,7 +32,6 @@ public interface EtcDAO {
     int findByAllHistoryCnt(Map<String, String> searchParam);
 
     List<History> findByAllHistoryPaging(Map<String, Object> pageParam);
-=======
+
     List<MonthAndDayList> selectAnnualMonth(Map<String, String> map);
->>>>>>> Stashed changes
 }

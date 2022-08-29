@@ -48,7 +48,6 @@ public class EtcService {
         return etcDAO.findByAllUserAnnual(year);
     }
 
-<<<<<<< Updated upstream
     public int findByHistoryAllCnt(String user_id) {
         return etcDAO.findByHistoryAllCnt(user_id);
     }
@@ -63,12 +62,12 @@ public class EtcService {
 
     public List<History> findByAllHistoryPaging(Map<String, Object> pageParam) {
         return etcDAO.findByAllHistoryPaging(pageParam);
-=======
+    }
+
     public List<MonthAndDayList> selectAnnualMonth(String year, String user) {
         Map<String, String> map = new HashMap<>();
         map.put("year", year);
         map.put("user_id", user);
         return etcDAO.selectAnnualMonth(map);
->>>>>>> Stashed changes
     }
 }
