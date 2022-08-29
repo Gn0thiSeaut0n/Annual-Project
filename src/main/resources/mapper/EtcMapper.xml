@@ -194,11 +194,11 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-        <if test="year != null">
-            AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-            OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+        <if test="year != '' and month != ''">
+            AND (START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
+            OR END_DATE LIKE CONCAT(#{year}, '-', #{month}, '%'))
         </if>
-        <if test="user_name != null">
+        <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
     </select>
@@ -227,14 +227,13 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-            <if test="year != null">
-                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+            <if test="year != '' and month != ''">
+                AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
             </if>
-            <if test="user_name != null">
+            <if test="user_name != ''">
                 AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
             </if>
-        LIMIT #{pageSize} OFFSET #{startIndex}1
+        LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
 </mapper>

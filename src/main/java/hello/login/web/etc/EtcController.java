@@ -39,16 +39,9 @@ public class EtcController {
     public String mypage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
 
         int totalListCnt = etcService.findByHistoryAllCnt(loginMember.getUser_id());
-
         Pagination pagination = new Pagination(totalListCnt, page);
 
-        Map<String, Object> pageParam = new HashMap<>();
-        pageParam.put("startIndex", pagination.getStartIndex());
-        pageParam.put("pageSize", pagination.getPageSize());
-        pageParam.put("user_id", loginMember.getUser_id());
-
-//        List<History> history = etcService.findByHistory(loginMember.getUser_id());
-        List<History> history = etcService.findByHistoryPaging(pageParam);
+        List<History> history = etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id());
 
         model.addAttribute("user", loginMember);
         model.addAttribute("history", history);
@@ -58,31 +51,19 @@ public class EtcController {
 
     @GetMapping("/selectAll")
     public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "") String year, @RequestParam(defaultValue = "") String user_name,
-                            @RequestParam(defaultValue = "") String month, Model model) {
+                            @RequestParam(defaultValue = "") String year,
+                            @RequestParam(defaultValue = "") String user_name,
+                            @RequestParam(defaultValue = "") String month,
+                            Model model) {
 
-        Map<String, String> searchParam = new HashMap<>();
-        searchParam.put("year", year);
-        searchParam.put("month", month);
-        searchParam.put("user_name", user_name);
-
-        int totalListCnt = etcService.findByAllHistoryCnt(searchParam);
-
-        Pagination pagination = new Pagination(totalListCnt, page);
-
-        Map<String, Object> pageParam = new HashMap<>();
-        pageParam.put("startIndex", pagination.getStartIndex());
-        pageParam.put("pageSize", pagination.getPageSize());
-        pageParam.put("year", year);
-        pageParam.put("month", month);
-        pageParam.put("user_name", user_name);
-
-//        List<History> history = etcService.findByAllHistory();
-        List<History> history = etcService.findByAllHistoryPaging(pageParam);
+        Pagination pagination = new Pagination(etcService.findByAllHistoryCnt(year, month, user_name), page);
 
         model.addAttribute("user", loginMember);
-        model.addAttribute("history", history);
+        model.addAttribute("history", etcService.findByAllHistoryPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
+                "year", year, "month", month, "user_name", user_name)));
         model.addAttribute("pagination", pagination);
+        model.addAttribute("searchParam", Map.of("year", year, "month", month, "user_name", user_name));
         return "info/selectAll";
     }
 
