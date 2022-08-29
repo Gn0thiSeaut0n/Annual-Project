@@ -2,7 +2,7 @@ package hello.login.domain.service;
 
 import hello.login.domain.dao.EtcDAO;
 import hello.login.domain.dto.History;
-import hello.login.domain.dto.User;
+import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,5 +46,28 @@ public class EtcService {
 
     public List<UserAnnual> findByAllUserAnnual(String year) {
         return etcDAO.findByAllUserAnnual(year);
+    }
+
+    public int findByHistoryAllCnt(String user_id) {
+        return etcDAO.findByHistoryAllCnt(user_id);
+    }
+
+    public List<History> findByHistoryPaging(Map<String, Object> pageParam) {
+        return etcDAO.findByHistoryPaging(pageParam);
+    }
+
+    public int findByAllHistoryCnt(Map<String, String> searchParam) {
+        return etcDAO.findByAllHistoryCnt(searchParam);
+    }
+
+    public List<History> findByAllHistoryPaging(Map<String, Object> pageParam) {
+        return etcDAO.findByAllHistoryPaging(pageParam);
+    }
+
+    public List<MonthAndDayList> selectAnnualMonth(String year, String user) {
+        Map<String, String> map = new HashMap<>();
+        map.put("year", year);
+        map.put("user_id", user);
+        return etcDAO.selectAnnualMonth(map);
     }
 }

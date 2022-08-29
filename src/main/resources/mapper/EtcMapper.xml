@@ -79,6 +79,7 @@
                 #{cancel_yn}
                )
     </insert>
+
     <update id="updateAnnual" parameterType="Map">
         UPDATE
             ANNUAL_STATUS
@@ -87,6 +88,7 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+
     <delete id="deleteHistory" parameterType="String">
         DELETE FROM
             APPLICATION_HISTORY
@@ -103,6 +105,21 @@
             HISTORY_ID = #{history_id}
     </update>
 
+    <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
+        SELECT
+            APPLICATION_YEAR,
+            DATE_FORMAT(START_DATE, '%m') as 'month',
+            DATE_FORMAT(START_DATE, '%d') as 'day'
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+            AND
+                DATE_FORMAT(START_DATE, '%Y') = #{year}
+            AND
+                APPLICATION_YEAR NOT IN ('0.0')
+    </select>
+
 <!--    <select id="findByAllUser" resultType="User">-->
 <!--        SELECT-->
 <!--            USER_ID,-->
@@ -112,10 +129,14 @@
 <!--        ORDER BY-->
 <!--            USER_NAME DESC-->
 <!--    </select>-->
+
     <select id="findByAllUserAnnual" parameterType="String" resultType="UserAnnual">
         SELECT
             USER_ID,
             USER_NAME,
+            (SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'TOTAL' ,
+            (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'USE',
+            ((SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) - (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID)) AS 'RESULT' ,
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'01')), '') as 'jan',
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'02')), '') as 'feb',
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'03')), '') as 'mar',
@@ -131,4 +152,89 @@
         FROM
             USER_INFO U
     </select>
+
+    <select id="findByHistoryAllCnt" parameterType="String" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+    </select>
+
+    <select id="findByHistoryPaging" parameterType="Map" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        LIMIT #{pageSize} OFFSET #{startIndex}
+    </select>
+
+    <select id="findByAllHistoryCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            1=1
+        <if test="year != null">
+            AND (START_DATE LIKE CONCAT('%', #{year}, '%')
+            OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+        </if>
+        <if test="user_name != null">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+    </select>
+
+    <select id="findByAllHistoryPaging" parameterType="Map" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            CANCEL_YN
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            1=1
+            <if test="year != null">
+                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
+                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+            </if>
+            <if test="user_name != null">
+                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+            </if>
+        LIMIT #{pageSize} OFFSET #{startIndex}1
+    </select>
+
 </mapper>

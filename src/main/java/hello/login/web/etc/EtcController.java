@@ -1,6 +1,8 @@
 package hello.login.web.etc;
 
 import hello.login.domain.dto.History;
+import hello.login.domain.dto.Pagination;
+import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.User;
 import hello.login.domain.dto.UserAnnual;
 import hello.login.domain.service.EtcService;
@@ -14,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,24 +36,58 @@ public class EtcController {
     }
 
     @GetMapping("/mypage")
-    public String mypage(@Login User loginMember, Model model) {
-        List<History> history = etcService.findByHistory(loginMember.getUser_id());
+    public String mypage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
+
+        int totalListCnt = etcService.findByHistoryAllCnt(loginMember.getUser_id());
+
+        Pagination pagination = new Pagination(totalListCnt, page);
+
+        Map<String, Object> pageParam = new HashMap<>();
+        pageParam.put("startIndex", pagination.getStartIndex());
+        pageParam.put("pageSize", pagination.getPageSize());
+        pageParam.put("user_id", loginMember.getUser_id());
+
+//        List<History> history = etcService.findByHistory(loginMember.getUser_id());
+        List<History> history = etcService.findByHistoryPaging(pageParam);
+
         model.addAttribute("user", loginMember);
         model.addAttribute("history", history);
+        model.addAttribute("pagination", pagination);
         return "info/mypage";
     }
 
     @GetMapping("/selectAll")
-    public String selectAll(@Login User loginMember, Model model) {
-        List<History> history = etcService.findByAllHistory();
+    public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "") String year, @RequestParam(defaultValue = "") String user_name,
+                            @RequestParam(defaultValue = "") String month, Model model) {
+
+        Map<String, String> searchParam = new HashMap<>();
+        searchParam.put("year", year);
+        searchParam.put("month", month);
+        searchParam.put("user_name", user_name);
+
+        int totalListCnt = etcService.findByAllHistoryCnt(searchParam);
+
+        Pagination pagination = new Pagination(totalListCnt, page);
+
+        Map<String, Object> pageParam = new HashMap<>();
+        pageParam.put("startIndex", pagination.getStartIndex());
+        pageParam.put("pageSize", pagination.getPageSize());
+        pageParam.put("year", year);
+        pageParam.put("month", month);
+        pageParam.put("user_name", user_name);
+
+//        List<History> history = etcService.findByAllHistory();
+        List<History> history = etcService.findByAllHistoryPaging(pageParam);
+
         model.addAttribute("user", loginMember);
         model.addAttribute("history", history);
+        model.addAttribute("pagination", pagination);
         return "info/selectAll";
     }
 
     @GetMapping("/memberManagement/{year}")
     public String memberManagement(@Login User loginMember, @PathVariable String year, Model model) {
-        log.info("year - test = {}",year);
         List<UserAnnual> allUserAnnual = etcService.findByAllUserAnnual(year);
         log.info("allUser = {}", allUserAnnual.toString());
 
@@ -57,6 +95,16 @@ public class EtcController {
         model.addAttribute("allUser", allUserAnnual);
 
         return "info/memberManagement";
+    }
+
+    @GetMapping("/memberManagement/{year}/{user}")
+    public String memberManagementDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
+
+        List<MonthAndDayList> monthAndDayLists = etcService.selectAnnualMonth(year, user);
+        log.info("month test = {}", monthAndDayLists.toString());
+
+        model.addAttribute("user", loginMember);
+        return "info/memberManagementDetail";
     }
 
     @DeleteMapping("/deleteHistory/{history_id}")
