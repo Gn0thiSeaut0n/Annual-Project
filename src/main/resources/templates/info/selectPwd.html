@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>비밀번호 변경</title>
+</head>
+<body>
+    <div style="text-align: center;">
+        <h3>현재 비밀번호를 입력해주세요</h3>
+        <input type="password" id="user_pw" name="user_pw" onkeypress="enterKey(event);" class="form-control"><br><br>
+        <button type="button" class="btn btn-outline-success me-2" onclick="selectCurrentPwd();">확인</button>
+    </div>
+<script>
+    function enterKey(e) {
+        if(e.keyCode === 13) {
+            selectCurrentPwd();
+        } else {
+            return true;
+        }
+    }
+
+    function selectCurrentPwd() {
+        if(getValue('#user_pw') == null || getValue('#user_pw') == '') {
+            alert('비밀번호를 입력해주세요');
+            return;
+        } else {
+            let params = {
+                "user_pw": getValue('#user_pw')
+            }
+
+            fetch("/selectCurrentPwd", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                if(!response.ok) {
+                    alert('비밀번호가 일치하지 않습니다!');
+                    return;
+                }
+                window.location.href='/updatePwd';
+            }).catch(e => {
+                e.json().then(msg => {
+
+                });
+            });
+        }
+    }
+
+    const getValue = (parameter) => {
+        return document.querySelector(parameter).value;
+    }
+
+    const setValue = (name, val) => {
+        document.querySelector(name).value = val;
+    }
+</script>
+</body>
+</html>

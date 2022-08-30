@@ -1,12 +1,9 @@
 package hello.login.web.etc;
 
-import hello.login.domain.dto.History;
-import hello.login.domain.dto.Pagination;
-import hello.login.domain.dto.MonthAndDayList;
-import hello.login.domain.dto.User;
-import hello.login.domain.dto.UserAnnual;
+import hello.login.domain.dto.*;
 import hello.login.domain.service.EtcService;
 import hello.login.web.argumentresolver.Login;
+import hello.login.web.util.JasyptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,8 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +34,7 @@ public class EtcController {
     @GetMapping("/mypage")
     public String mypage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
 
-        int totalListCnt = etcService.findByHistoryAllCnt(loginMember.getUser_id());
-        Pagination pagination = new Pagination(totalListCnt, page);
+        Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
 
         List<History> history = etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id());
 
@@ -99,6 +94,38 @@ public class EtcController {
     @PutMapping("/apprHistory/{history_id}")
     public ResponseEntity apprHistory(@PathVariable String history_id) {
         etcService.updateAppr(history_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/selectPwd")
+    public String selectPwdPage() {
+        return "info/selectPwd";
+    }
+
+    @PostMapping("/selectCurrentPwd")
+    public ResponseEntity selectCurrentPwd(@RequestBody User user, @Login User loginMember) {
+
+        // DB 비밀번호 복호화
+        String decrypt_user_pw = JasyptUtil.decrypt(etcService.selectCurrentPwd(loginMember.getUser_id()));
+
+        if (user.getUser_pw().equals(decrypt_user_pw)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/updatePwd")
+    public String updatePwdPage(HttpServletRequest request, Model model) {
+        return "info/updatePwd";
+    }
+
+    @PutMapping("/updatePwd")
+    public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
+
+        // 암호화
+        String encrypt_user_pw = JasyptUtil.encrypt(user.getUser_pw());
+        etcService.updatePwd(encrypt_user_pw, loginMember.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
     }
 

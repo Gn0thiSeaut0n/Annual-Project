@@ -184,6 +184,8 @@
             CANCEL_YN
         FROM
             APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -234,5 +236,23 @@
         </if>
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
+
+    <select id="selectCurrentPwd" parameterType="String" resultType="String">
+        SELECT
+            USER_PW
+        FROM
+            USER_INFO
+        WHERE
+            USER_ID = #{user_id}
+    </select>
+
+    <update id="updatePwd" parameterType="Map">
+        UPDATE
+            USER_INFO
+        SET
+            USER_PW = #{user_pw}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
 
 </mapper>

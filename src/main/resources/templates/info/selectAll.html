@@ -22,7 +22,7 @@
                 </select>
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
                 <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
-                       onkeypress="return enterKey(event);" style="font-size: 15px;" />
+                       onkeypress="enterKey(event);" style="font-size: 15px;" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
                 </div>

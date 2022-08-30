@@ -6,7 +6,6 @@ import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,4 +78,14 @@ public class EtcService {
         return etcDAO.selectAnnualMonth(map);
     }
 
+    public String selectCurrentPwd(String user_id) {
+        return etcDAO.selectCurrentPwd(user_id);
+    }
+
+    public void updatePwd(String encrypt_user_pw, String user_id) {
+        HashMap<String, String> userParam = new HashMap<>();
+        userParam.put("user_pw", encrypt_user_pw);
+        userParam.put("user_id", user_id);
+        etcDAO.updatePwd(userParam);
+    }
 }
