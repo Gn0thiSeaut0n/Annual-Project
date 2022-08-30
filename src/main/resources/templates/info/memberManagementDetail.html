@@ -17,6 +17,17 @@
             <tbody>
             <tr th:each="index : ${#numbers.sequence(1, 31)}">
                 <th scope="row" class="p-0 text-center text-bold" th:text="|${index}일|"></th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('1') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('2') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('3') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('4') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('6') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('7') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('8') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('9') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('10') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('11') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
+                <th scope="row" class="p-0 text-center text-bold" th:each="day : ${days}" th:if="${day.getMonth().equals('12') and day.getDay().equals(''+index)}">[[${day.getApplication_year}]]</th>
             </tr>
             </tbody>
         </table>

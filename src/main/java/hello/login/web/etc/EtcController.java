@@ -85,6 +85,7 @@ public class EtcController {
         log.info("month test = {}", monthAndDayLists.toString());
 
         model.addAttribute("user", loginMember);
+        model.addAttribute("days", monthAndDayLists);
         return "info/memberManagementDetail";
     }
 

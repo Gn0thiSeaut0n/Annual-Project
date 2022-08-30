@@ -108,8 +108,8 @@
     <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
         SELECT
             APPLICATION_YEAR,
-            DATE_FORMAT(START_DATE, '%m') as 'month',
-            DATE_FORMAT(START_DATE, '%d') as 'day'
+            MONTH(START_DATE) as 'month',
+            DAY(START_DATE) as 'day'
         FROM
             APPLICATION_HISTORY
         WHERE
