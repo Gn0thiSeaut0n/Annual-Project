@@ -52,8 +52,8 @@ public class EtcController {
     @GetMapping("/selectAll")
     public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "") String year,
-                            @RequestParam(defaultValue = "") String user_name,
                             @RequestParam(defaultValue = "") String month,
+                            @RequestParam(defaultValue = "") String user_name,
                             Model model) {
 
         Pagination pagination = new Pagination(etcService.findByAllHistoryCnt(year, month, user_name), page);

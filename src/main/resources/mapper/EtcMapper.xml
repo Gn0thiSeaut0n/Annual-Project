@@ -195,8 +195,7 @@
         WHERE
             1=1
         <if test="year != '' and month != ''">
-            AND (START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
-            OR END_DATE LIKE CONCAT(#{year}, '-', #{month}, '%'))
+            AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
         </if>
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
@@ -227,12 +226,12 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-            <if test="year != '' and month != ''">
-                AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
-            </if>
-            <if test="user_name != ''">
-                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
-            </if>
+        <if test="year != '' and month != ''">
+            AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
