@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,11 +77,25 @@ public class EtcController {
     @GetMapping("/memberManagement/{year}/{user}")
     public String memberManagementDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
 
-        List<MonthAndDayList> monthAndDayLists = etcService.selectAnnualMonth(year, user);
-        log.info("month test = {}", monthAndDayLists.toString());
+        Map<Integer, Map> bigBox = new HashMap<>();
+        Map<Integer, String> smallBox = new HashMap<>();
 
+        for (int i = 1; i <= 12; i++) {
+            for (int j = 1; j <= 31; j++) {
+                smallBox.put(j, "");
+            }
+            bigBox.put(i, new HashMap<>(smallBox));
+        }
+
+        etcService.selectAnnualMonth(year, user).stream().forEach( // 박스 12개 만들 것
+                (data) -> {
+                    // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
+                    bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
+                }
+        );
+
+        model.addAttribute("bigBox", bigBox);
         model.addAttribute("user", loginMember);
-        model.addAttribute("days", monthAndDayLists);
         return "info/memberManagementDetail";
     }
 
