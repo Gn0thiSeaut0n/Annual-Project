@@ -112,8 +112,8 @@ public class EtcController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/selectPwd")
-    public String selectPwdPage() {
+    @GetMapping("/selectCurrentPwd")
+    public String selectCurrentPwdPage() {
         return "info/selectPwd";
     }
 
