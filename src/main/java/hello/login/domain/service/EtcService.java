@@ -6,7 +6,6 @@ import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +51,19 @@ public class EtcService {
         return etcDAO.findByHistoryAllCnt(user_id);
     }
 
-    public List<History> findByHistoryPaging(Map<String, Object> pageParam) {
+    public List<History> findByHistoryPaging(int startIndex, int pageSize, String user_id) {
+        Map<String, Object> pageParam = new HashMap<>();
+        pageParam.put("startIndex", startIndex);
+        pageParam.put("pageSize", pageSize);
+        pageParam.put("user_id", user_id);
         return etcDAO.findByHistoryPaging(pageParam);
     }
 
-    public int findByAllHistoryCnt(Map<String, String> searchParam) {
+    public int findByAllHistoryCnt(String year, String month, String user_name) {
+        Map<String, String> searchParam = new HashMap<>();
+        searchParam.put("year", year);
+        searchParam.put("month", month);
+        searchParam.put("user_name", user_name);
         return etcDAO.findByAllHistoryCnt(searchParam);
     }
 
@@ -69,5 +76,16 @@ public class EtcService {
         map.put("year", year);
         map.put("user_id", user);
         return etcDAO.selectAnnualMonth(map);
+    }
+
+    public String selectCurrentPwd(String user_id) {
+        return etcDAO.selectCurrentPwd(user_id);
+    }
+
+    public void updatePwd(String encrypt_user_pw, String user_id) {
+        HashMap<String, String> userParam = new HashMap<>();
+        userParam.put("user_pw", encrypt_user_pw);
+        userParam.put("user_id", user_id);
+        etcDAO.updatePwd(userParam);
     }
 }

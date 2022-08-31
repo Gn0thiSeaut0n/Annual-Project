@@ -2,6 +2,7 @@ package hello.login.web.login;
 
 import hello.login.domain.dto.LoginForm;
 import hello.login.domain.dto.User;
+import hello.login.domain.service.EtcService;
 import hello.login.domain.service.LoginService;
 import hello.login.web.SessionConst;
 import hello.login.web.session.SessionManager;
@@ -25,6 +26,7 @@ public class LoginController {
 
     private final LoginService loginService;
     private final SessionManager sessionManager;
+    private final EtcService etcService;
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {

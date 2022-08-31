@@ -10,108 +10,99 @@
             <div class="input-group mb-3">
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">년도: &nbsp;</p>
                 <select id="year" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">
-                    <option value="2022">2022년</option>
-                    <option value="2023">2023년</option>
-                    <option value="2024">2024년</option>
-                    <option value="2025">2025년</option>
-                    <option value="2026">2026년</option>
+                    <option value="">선택</option>
+                    <option th:each="index : ${#numbers.sequence(2022, 2027)}" th:text="|${index}년|"
+                            th:value="${index}" th:attr="selected=${searchParam.year} eq ${index} ? 'true' : 'false'"></option>
                 </select>
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;월: &nbsp;</p>
                 <select id="month" class="custom-select" style="font-size: 15px; width: 7%; text-align: center;">
-                    <option value="01">1월</option>
-                    <option value="02">2월</option>
-                    <option value="03">3월</option>
-                    <option value="04">4월</option>
-                    <option value="05">5월</option>
-                    <option value="06">6월</option>
-                    <option value="07">7월</option>
-                    <option value="08">8월</option>
-                    <option value="09">9월</option>
-                    <option value="10">10월</option>
-                    <option value="11">11월</option>
-                    <option value="12">12월</option>
+                    <option value="">선택</option>
+                    <option th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|"
+                            th:value="${index}" th:attr="selected=${searchParam.month} eq ${index} ? 'true' : 'false'"></option>
                 </select>
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
-                <input type="text" class="form-control" id="user_name" name="user_name" onkeypress="return enterKey(event);" style="font-size: 14px;">
+                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
+                       onkeypress="enterKey(event);" style="font-size: 15px;" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
                 </div>
             </div>
-            <table class="table table-bordered">
-                <thread>
-                    <tr class="pb-3 pt-3">
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">아이디</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">승인여부</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
-                    </tr>
-                </thread>
-                <tbody>
-                    <tr th:each="list : ${history}">
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('N')}"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example" style="font-size: 16px">
-                <ul class="pagination" style="justify-content: center;">
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:search(1);" aria-label="Previous">
-                            <span aria-hidden="true">처음</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-<!--                        <a class="page-link" th:href="@{/selectAll?page={page} (page = ${pagination.prevBlock})}" aria-label="Previous">-->
-<!--                            <span aria-hidden="true">이전</span>-->
-<!--                        </a>-->
-                        <a class="page-link" th:prevBlock="${pagination.prevBlock}" href="javascript:search(this.getAttribute('prevBlock'))" aria-label="Previous">
-                            <span aria-hidden="true">이전</span>
-                        </a>
-                    </li>
-                    <th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
-                        <li class="page-item"
-                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
-                            th:each="pageButton : ${#numbers.sequence(start, end)}">
-                            <a class="page-link" th:href="@{/selectAll?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
+            <div th:if="${#lists.size(history) != 0}">
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="pb-3 pt-3">
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">아이디</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">승인여부</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
+                        </tr>
+                    </thread>
+                    <tbody>
+                        <tr th:each="list : ${history}">
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('N')}"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example" style="font-size: 16px">
+                    <ul class="pagination" style="justify-content: center;">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                                <span aria-hidden="true">처음</span>
+                            </a>
                         </li>
-                    </th:block>
-                    <li class="page-item">
-                        <a class="page-link" th:href="@{/selectAll?page={page} (page = ${pagination.nextBlock})}" aria-label="Next">
-                            <span aria-hidden="true">다음</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" th:href="@{/selectAll?page={page} (page = ${pagination.totalPageCnt})}" aria-label="Previous">
-                            <span aria-hidden="true">끝</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                                <span aria-hidden="true">이전</span>
+                            </a>
+                        </li>
+                        <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                            <li class="page-item"
+                                th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                                th:each="pageButton : ${#numbers.sequence(start, end)}">
+                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                            </li>
+                        </th:block>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                                <span aria-hidden="true">다음</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                                <span aria-hidden="true">끝</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div th:if="${#lists.size(history) == 0}" style="font-size: 25px; text-align: center;">
+                데이터가 없습니다!
+            </div>
         </section>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let today = new Date();
-            let year = today.getFullYear(); // 년도
-            let month = '0' + (today.getMonth() + 1);   // 0부터 시작이라 + 1 추가
-
-            document.querySelector('#year').value = year;
-            document.querySelector('#month').value = month;
-        });
-
         function enterKey(e) {
             if(e.keyCode === 13) {
                 search(1);
             } else {
                 return true;
             }
+        }
+
+        function search(pageNum) {
+            let selectYear = document.querySelector('#year').value;
+            let selectMonth = document.querySelector('#month').value;
+            let user_name = document.querySelector('#user_name').value;
+
+            window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
         }
 
         function apprHistory(id){
@@ -130,14 +121,6 @@
             }).catch(e => {
                 console.log("에러 발생");
             });
-        }
-
-        function search(pageNum) {
-            let selectYear = document.querySelector('#year').value;
-            let selectMonth = document.querySelector('#month').value;
-            let user_name = document.querySelector('#user_name').value;
-
-            window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
         }
     </script>
 </body>

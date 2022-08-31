@@ -7,6 +7,7 @@
 <body>
     <div class="container">
         <section>
+            <button type="button" onclick="popupCenter('/selectCurrentPwd', '비밀번호 변경', '500', '280')" class="btn btn-outline-success me-2" style="float: right; font-size: 15px; margin-bottom: 15px;">비밀번호 변경</button>
             <table class="table table-bordered">
                 <thread>
                     <tr class="pb-3 pt-3">
@@ -80,6 +81,31 @@
         }).catch(e => {
             console.log("에러 발생");
         });
+    }
+
+    /* 더블 모니터 윈도우 팝업 가운데 정렬 */
+    function popupCenter(url, title, w, h, opts) {
+       var _innerOpts = '';
+       if(opts !== null && typeof opts === 'object' ){
+           for (var p in opts ) {
+               if (opts.hasOwnProperty(p)) {
+                   _innerOpts += p + '=' + opts[p] + ',';
+               }
+           }
+       }
+       var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+       var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+       var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+       var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+       var left = (((width / 2) - (w / 2)) + dualScreenLeft) - 100;
+       var top = ((height / 2) - (h / 2)) + dualScreenTop;
+       var newWindow = window.open(url, title, _innerOpts + ' width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+       if (window.focus) {
+           newWindow.focus();
+       }
     }
 </script>
 </body>

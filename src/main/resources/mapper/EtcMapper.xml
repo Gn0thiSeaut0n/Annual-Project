@@ -108,8 +108,8 @@
     <select id="selectAnnualMonth" parameterType="Map" resultType="MonthAndDayList">
         SELECT
             APPLICATION_YEAR,
-            DATE_FORMAT(START_DATE, '%m') as 'month',
-            DATE_FORMAT(START_DATE, '%d') as 'day'
+            MONTH(START_DATE) as 'month',
+            DAY(START_DATE) as 'day'
         FROM
             APPLICATION_HISTORY
         WHERE
@@ -184,6 +184,8 @@
             CANCEL_YN
         FROM
             APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -194,11 +196,10 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-        <if test="year != null">
-            AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-            OR END_DATE LIKE CONCAT('%', #{year}, '%'))
+        <if test="year != '' and month != ''">
+            AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
         </if>
-        <if test="user_name != null">
+        <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
     </select>
@@ -227,14 +228,31 @@
             APPLICATION_HISTORY
         WHERE
             1=1
-            <if test="year != null">
-                AND (START_DATE LIKE CONCAT('%', #{year}, '%')
-                OR END_DATE LIKE CONCAT('%', #{year}, '%'))
-            </if>
-            <if test="user_name != null">
-                AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
-            </if>
-        LIMIT #{pageSize} OFFSET #{startIndex}1
+        <if test="year != '' and month != ''">
+            AND START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+        LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
+
+    <select id="selectCurrentPwd" parameterType="String" resultType="String">
+        SELECT
+            USER_PW
+        FROM
+            USER_INFO
+        WHERE
+            USER_ID = #{user_id}
+    </select>
+
+    <update id="updatePwd" parameterType="Map">
+        UPDATE
+            USER_INFO
+        SET
+            USER_PW = #{user_pw}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
 
 </mapper>

@@ -1,12 +1,9 @@
 package hello.login.web.etc;
 
-import hello.login.domain.dto.History;
-import hello.login.domain.dto.Pagination;
-import hello.login.domain.dto.MonthAndDayList;
-import hello.login.domain.dto.User;
-import hello.login.domain.dto.UserAnnual;
+import hello.login.domain.dto.*;
 import hello.login.domain.service.EtcService;
 import hello.login.web.argumentresolver.Login;
+import hello.login.web.util.JasyptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,17 +35,9 @@ public class EtcController {
     @GetMapping("/mypage")
     public String mypage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
 
-        int totalListCnt = etcService.findByHistoryAllCnt(loginMember.getUser_id());
+        Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
 
-        Pagination pagination = new Pagination(totalListCnt, page);
-
-        Map<String, Object> pageParam = new HashMap<>();
-        pageParam.put("startIndex", pagination.getStartIndex());
-        pageParam.put("pageSize", pagination.getPageSize());
-        pageParam.put("user_id", loginMember.getUser_id());
-
-//        List<History> history = etcService.findByHistory(loginMember.getUser_id());
-        List<History> history = etcService.findByHistoryPaging(pageParam);
+        List<History> history = etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id());
 
         model.addAttribute("user", loginMember);
         model.addAttribute("history", history);
@@ -58,31 +47,19 @@ public class EtcController {
 
     @GetMapping("/selectAll")
     public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "") String year, @RequestParam(defaultValue = "") String user_name,
-                            @RequestParam(defaultValue = "") String month, Model model) {
+                            @RequestParam(defaultValue = "") String year,
+                            @RequestParam(defaultValue = "") String month,
+                            @RequestParam(defaultValue = "") String user_name,
+                            Model model) {
 
-        Map<String, String> searchParam = new HashMap<>();
-        searchParam.put("year", year);
-        searchParam.put("month", month);
-        searchParam.put("user_name", user_name);
-
-        int totalListCnt = etcService.findByAllHistoryCnt(searchParam);
-
-        Pagination pagination = new Pagination(totalListCnt, page);
-
-        Map<String, Object> pageParam = new HashMap<>();
-        pageParam.put("startIndex", pagination.getStartIndex());
-        pageParam.put("pageSize", pagination.getPageSize());
-        pageParam.put("year", year);
-        pageParam.put("month", month);
-        pageParam.put("user_name", user_name);
-
-//        List<History> history = etcService.findByAllHistory();
-        List<History> history = etcService.findByAllHistoryPaging(pageParam);
+        Pagination pagination = new Pagination(etcService.findByAllHistoryCnt(year, month, user_name), page);
 
         model.addAttribute("user", loginMember);
-        model.addAttribute("history", history);
+        model.addAttribute("history", etcService.findByAllHistoryPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
+                "year", year, "month", month, "user_name", user_name)));
         model.addAttribute("pagination", pagination);
+        model.addAttribute("searchParam", Map.of("year", year, "month", month, "user_name", user_name));
         return "info/selectAll";
     }
 
@@ -100,9 +77,24 @@ public class EtcController {
     @GetMapping("/memberManagement/{year}/{user}")
     public String memberManagementDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
 
-        List<MonthAndDayList> monthAndDayLists = etcService.selectAnnualMonth(year, user);
-        log.info("month test = {}", monthAndDayLists.toString());
+        Map<Integer, Map> bigBox = new HashMap<>();
+        Map<Integer, String> smallBox = new HashMap<>();
 
+        for (int i = 1; i <= 12; i++) {
+            for (int j = 1; j <= 31; j++) {
+                smallBox.put(j, "");
+            }
+            bigBox.put(i, new HashMap<>(smallBox));
+        }
+
+        etcService.selectAnnualMonth(year, user).stream().forEach( // 박스 12개 만들 것
+                (data) -> {
+                    // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
+                    bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
+                }
+        );
+
+        model.addAttribute("bigBox", bigBox);
         model.addAttribute("user", loginMember);
         return "info/memberManagementDetail";
     }
@@ -117,6 +109,38 @@ public class EtcController {
     @PutMapping("/apprHistory/{history_id}")
     public ResponseEntity apprHistory(@PathVariable String history_id) {
         etcService.updateAppr(history_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/selectCurrentPwd")
+    public String selectCurrentPwdPage() {
+        return "info/selectPwd";
+    }
+
+    @PostMapping("/selectCurrentPwd")
+    public ResponseEntity selectCurrentPwd(@RequestBody User user, @Login User loginMember) {
+
+        // DB 비밀번호 복호화
+        String decrypt_user_pw = JasyptUtil.decrypt(etcService.selectCurrentPwd(loginMember.getUser_id()));
+
+        if (user.getUser_pw().equals(decrypt_user_pw)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/updatePwd")
+    public String updatePwdPage(HttpServletRequest request, Model model) {
+        return "info/updatePwd";
+    }
+
+    @PutMapping("/updatePwd")
+    public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
+
+        // 암호화
+        String encrypt_user_pw = JasyptUtil.encrypt(user.getUser_pw());
+        etcService.updatePwd(encrypt_user_pw, loginMember.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
     }
 

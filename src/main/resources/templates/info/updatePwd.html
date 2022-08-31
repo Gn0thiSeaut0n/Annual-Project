@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>비밀번호 변경</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+    <div style="text-align: center; padding: 30px;">
+        <h3>새 비밀번호를 입력해주세요</h3><br>
+        <p>새 비밀번호: <input type="password" id="user_pw" name="user_pw" class="form-control" style="width: 73%; float: right;"></p><br>
+        <p>비밀번호 확인: <input type="password" id="user_pw_check" name="user_pw_check" onkeypress="enterKey(event);" class="form-control" style="width: 73%; float: right;"></p><br>
+        <button type="button" class="btn btn-outline-info me-2" onclick="updatePwd();">확인</button>
+    </div>
+<script>
+    function enterKey(e) {
+        if(e.keyCode === 13) {
+            updatePwd();
+        } else {
+            return true;
+        }
+    }
+
+    function updatePwd() {
+        if(confirm("비밀번호를 변경하시겠습니까?")) {
+            let user_pw = getValue('#user_pw');
+            let user_pw_check = getValue('#user_pw_check');
+
+            if(user_pw != user_pw_check) {
+                setValue('#user_pw', '');
+                setValue('#user_pw_check', '');
+                alert('두 비밀번호가 일치하지 않습니다');
+                return;
+            }
+
+            let params = {
+                "user_pw": getValue('#user_pw')
+            }
+
+            fetch("/updatePwd", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                if(!response.ok) {
+                    alert('비밀번호 변경에 실패하였습니다!');
+                    return;
+                }
+                alert('비밀번호가 변경 되었습니다');
+                self.close();
+            }).catch(e => {
+                e.json().then(msg => {
+
+                });
+            });
+        }
+    }
+
+    const getValue = (parameter) => {
+        return document.querySelector(parameter).value;
+    }
+
+    const setValue = (name, val) => {
+        document.querySelector(name).value = val;
+    }
+</script>
+</body>
+</html>
