@@ -21,8 +21,9 @@ public class History {
     private String total_annual;
     private String use_annual;
     private String appr_yn;
-    private String cancel_yn;
-
+    private String appr_yn2;
+    private String request_date;
+    
     @NotNull
     private String application_year;
     @NotEmpty

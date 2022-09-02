@@ -20,7 +20,8 @@
             APPLICATION_YEAR,
             REASON,
             APPR_YN,
-            CANCEL_YN
+            APPR_YN2,
+            REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         WHERE
@@ -48,7 +49,8 @@
             APPLICATION_YEAR,
             REASON,
             APPR_YN,
-            CANCEL_YN
+            APPR_YN2,
+            REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         ORDER BY
@@ -76,7 +78,8 @@
                 #{application_year},
                 #{reason},
                 #{appr_yn},
-                #{cancel_yn}
+                #{appr_yn2},
+                NOW()
                )
     </insert>
 
@@ -191,7 +194,8 @@
             APPLICATION_YEAR,
             REASON,
             APPR_YN,
-            CANCEL_YN
+            APPR_YN2,
+            REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         WHERE
@@ -234,7 +238,8 @@
             APPLICATION_YEAR,
             REASON,
             APPR_YN,
-            CANCEL_YN
+            APPR_YN2,
+            REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         WHERE
