@@ -40,8 +40,8 @@ public class EtcService {
         etcDAO.updateAppr(history_id);
     }
 
-    public List<UserAnnual> findByAllUserAnnual(String year) {
-        return etcDAO.findByAllUserAnnual(year);
+    public List<UserAnnual> findByAllUserAnnualPaging(Map<String, Object> pageParam) {
+        return etcDAO.findByAllUserAnnualPaging(pageParam);
     }
 
     public int findByHistoryAllCnt(String user_id) {
@@ -69,13 +69,18 @@ public class EtcService {
     }
 
     public void updatePwd(String encrypt_user_pw, String user_id) {
-        HashMap<String, String> userParam = new HashMap<>();
+        Map<String, String> userParam = new HashMap<>();
         userParam.put("user_pw", encrypt_user_pw);
         userParam.put("user_id", user_id);
         etcDAO.updatePwd(userParam);
     }
 
+    public int findByAllUserAnnualCnt(String year, String user_name) {
+        return etcDAO.findByAllUserAnnualCnt(Map.of("year", year, "user_name", user_name));
+    }
+}
+
 //    public List<String> selectAllDate() {
 //        return etcDAO.selectAllDate();
 //    }
-}
+//}

@@ -27,7 +27,6 @@ public class EtcController {
     public ResponseEntity application(@RequestBody @Validated History history) {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(history.getUser_id(), getUseAnnual(history));
-//        etcService.selectAllDate(history.toString());
         log.info(history.toString());
 
         return new ResponseEntity(HttpStatus.OK);
@@ -62,11 +61,20 @@ public class EtcController {
         return "info/selectAll";
     }
 
-    @GetMapping("/memberManagement/{year}")
-    public String memberManagement(@Login User loginMember, @PathVariable String year, Model model) {
+    @GetMapping("/memberManagement")
+    public String memberManagement(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "") String year,
+                                   @RequestParam(defaultValue = "") String user_name,
+                                   Model model) {
+
+        Pagination pagination = new Pagination(etcService.findByAllUserAnnualCnt(year, user_name), page);
 
         model.addAttribute("user", loginMember);
-        model.addAttribute("allUser", etcService.findByAllUserAnnual(year));
+        model.addAttribute("allUser", etcService.findByAllUserAnnualPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
+                "year", year, "user_name", user_name)));
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("searchParam", Map.of("year", year, "user_name", user_name));
 
         return "info/memberManagement";
     }
@@ -116,15 +124,14 @@ public class EtcController {
 
     @PostMapping("/selectCurrentPwd")
     public ResponseEntity selectCurrentPwd(@RequestBody User user, @Login User loginMember) {
-
         // DB 비밀번호 복호화
         String decrypt_user_pw = JasyptUtil.decrypt(etcService.selectCurrentPwd(loginMember.getUser_id()));
 
-        if (user.getUser_pw().equals(decrypt_user_pw)) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
+        // 복호화한 비밀번호와 같은지 비교
+        if (!user.getUser_pw().equals(decrypt_user_pw)) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/updatePwd")
@@ -134,11 +141,16 @@ public class EtcController {
 
     @PutMapping("/updatePwd")
     public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
-
         // 암호화
         String encrypt_user_pw = JasyptUtil.encrypt(user.getUser_pw());
         etcService.updatePwd(encrypt_user_pw, loginMember.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/memberRegister")
+    public String memberRegisterPage(@Login User loginMember, Model model) {
+        model.addAttribute("user", loginMember);
+        return "info/memberRegister";
     }
 
     private float getUseAnnual(History history) {

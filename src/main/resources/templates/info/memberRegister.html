@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>신청</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+    <div class="container">
+        <section>
+            <div class="sub_content">
+                <div>
+                    <div class='sub_header'>
+                        <p class='title'>회원가입</p>
+                    </div>
+                </div>
+                <div class="sub_panel_box">
+                    <p class="sub_title">기본정보</p>
+                    <table class="sub_table">
+                        <tr>
+                            <th>아이디</th>
+                            <td><input type="text" id="user_id" name="user_id" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호</th>
+                            <td><input type="password" id="user_pw" name="user_pw" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>이름</th>
+                            <td><input type="text" id="user_name" name="user_name" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>성별</th>
+                            <td>
+                                <label class="sex">
+                                    <input type="radio" name="sex" id="male" value="남">
+                                    <span>남</span>
+                                </label>
+                                <label class="sex">
+                                    <input type="radio" name="sex" id="female" value="여">
+                                    <span>여</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>직급</th>
+                            <td><input type="text" id="responsibilities_of_office" name="responsibilities_of_office" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>소속</th>
+                            <td><input type="text" id="department" name="department" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>생년월일</th>
+                            <td><input type="text" id="birthday" name="birthday" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>입사일</th>
+                            <td><input type="text" id="start_year" name="stary_year" class="input_text"></td>
+                        </tr>
+                        <tr>
+                            <th>핸드폰 번호</th>
+                            <td><input type="text" id="user_number" name="user_number" class="input_text"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="text-align: center;">
+                    <button type="button" class="btn btn-outline-secondary" th:onclick="memberRegister()" style="font-size: 15px; margin-top: 20px;">회원 등록</button>
+                </div>
+        </section>
+    </div>
+<script>
+
+</script>
+</body>
+</html>

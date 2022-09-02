@@ -130,7 +130,7 @@
 <!--            USER_NAME DESC-->
 <!--    </select>-->
 
-    <select id="findByAllUserAnnual" parameterType="String" resultType="UserAnnual">
+    <select id="findByAllUserAnnualPaging" parameterType="String" resultType="UserAnnual">
         SELECT
             USER_ID,
             USER_NAME,
@@ -151,6 +151,16 @@
             IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'12')), '') as 'dec'
         FROM
             USER_INFO U
+        WHERE
+            1=1
+        <if test="year != ''">
+            AND START_YEAR LIKE CONCAT(#{year}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+        ORDER BY START_YEAR DESC
+        LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
     <select id="findByHistoryAllCnt" parameterType="String" resultType="int">
@@ -186,6 +196,7 @@
             APPLICATION_HISTORY
         WHERE
             USER_ID = #{user_id}
+        ORDER BY START_DATE DESC
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -234,6 +245,7 @@
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
+        ORDER BY START_DATE DESC
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -254,6 +266,21 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+
+    <select id="findByAllUserAnnualCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            USER_INFO
+        WHERE
+            1=1
+        <if test="year != ''">
+            AND START_YEAR LIKE CONCAT(#{year}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+    </select>
 
 <!--    <select id="selectAllDate" parameterType="String" resultType="String">-->
 <!--        SELECT-->
