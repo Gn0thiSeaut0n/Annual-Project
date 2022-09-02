@@ -5,6 +5,7 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/annual.css}" rel="stylesheet">
     <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/css/register.css}" rel="stylesheet">
     <link th:href="@{/css/jquery.datetimepicker.css}" rel="stylesheet">
     <script th:src="@{js/jquery-3.2.1.js}"></script>
     <script th:src="@{js/jquery.datetimepicker.full.min.js}"></script>
@@ -19,7 +20,10 @@
                 <a th:href="@{/selectAll}"> 전체 조회</a>
             </div>
             <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
-                <a th:href="@{/memberManagement}"> 회원 관리</a>
+                <a th:href="@{/memberManagement}"> 연차 현황</a>
+            </div>
+            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                <a th:href="@{/userRegister}"> 회원 관리</a>
             </div>
             <form th:action="@{/mypage}" method="get" class="inline-block">
                 <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}   |">로그인 사용자 이름</span>
