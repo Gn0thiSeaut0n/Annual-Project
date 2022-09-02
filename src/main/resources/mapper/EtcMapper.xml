@@ -255,4 +255,14 @@
             USER_ID = #{user_id}
     </update>
 
+<!--    <select id="selectAllDate" parameterType="String" resultType="String">-->
+<!--        SELECT-->
+<!--            USER_PW-->
+<!--        FROM-->
+<!--            USER_INFO-->
+<!--        WHERE-->
+<!--            USER_ID = #{user_id}-->
+<!--    </select>-->
+
+
 </mapper>

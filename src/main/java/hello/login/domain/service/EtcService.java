@@ -21,10 +21,7 @@ public class EtcService {
     }
 
     public void updateAnnual(String user_id, Float use_annual) {
-        Map<String, String> map = new HashMap<>();
-        map.put("user_id", user_id);
-        map.put("use_annual", ""+use_annual);
-        etcDAO.updateAnnual(map);
+        etcDAO.updateAnnual(Map.of("user_id", user_id, "use_annual", ""+use_annual));
     }
 
     public List<History> findByHistory(String user_id) {
@@ -52,19 +49,11 @@ public class EtcService {
     }
 
     public List<History> findByHistoryPaging(int startIndex, int pageSize, String user_id) {
-        Map<String, Object> pageParam = new HashMap<>();
-        pageParam.put("startIndex", startIndex);
-        pageParam.put("pageSize", pageSize);
-        pageParam.put("user_id", user_id);
-        return etcDAO.findByHistoryPaging(pageParam);
+        return etcDAO.findByHistoryPaging(Map.of("startIndex", startIndex, "pageSize", pageSize, "user_id", user_id));
     }
 
     public int findByAllHistoryCnt(String year, String month, String user_name) {
-        Map<String, String> searchParam = new HashMap<>();
-        searchParam.put("year", year);
-        searchParam.put("month", month);
-        searchParam.put("user_name", user_name);
-        return etcDAO.findByAllHistoryCnt(searchParam);
+        return etcDAO.findByAllHistoryCnt(Map.of("year", year, "month", month, "user_name", user_name));
     }
 
     public List<History> findByAllHistoryPaging(Map<String, Object> pageParam) {
@@ -72,10 +61,7 @@ public class EtcService {
     }
 
     public List<MonthAndDayList> selectAnnualMonth(String year, String user) {
-        Map<String, String> map = new HashMap<>();
-        map.put("year", year);
-        map.put("user_id", user);
-        return etcDAO.selectAnnualMonth(map);
+        return etcDAO.selectAnnualMonth(Map.of("year", year,"user_id", user));
     }
 
     public String selectCurrentPwd(String user_id) {
@@ -88,4 +74,8 @@ public class EtcService {
         userParam.put("user_id", user_id);
         etcDAO.updatePwd(userParam);
     }
+
+//    public List<String> selectAllDate() {
+//        return etcDAO.selectAllDate();
+//    }
 }

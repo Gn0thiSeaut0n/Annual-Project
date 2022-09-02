@@ -38,4 +38,6 @@ public interface EtcDAO {
     String selectCurrentPwd(String user_id);
 
     void updatePwd(HashMap<String, String> userParam);
+
+//    List<String> selectAllDate();
 }

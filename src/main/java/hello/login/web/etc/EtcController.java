@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -28,6 +27,8 @@ public class EtcController {
     public ResponseEntity application(@RequestBody @Validated History history) {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(history.getUser_id(), getUseAnnual(history));
+//        etcService.selectAllDate(history.toString());
+        log.info(history.toString());
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -37,10 +38,8 @@ public class EtcController {
 
         Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
 
-        List<History> history = etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id());
-
         model.addAttribute("user", loginMember);
-        model.addAttribute("history", history);
+        model.addAttribute("history", etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id()));
         model.addAttribute("pagination", pagination);
         return "info/mypage";
     }
@@ -65,11 +64,9 @@ public class EtcController {
 
     @GetMapping("/memberManagement/{year}")
     public String memberManagement(@Login User loginMember, @PathVariable String year, Model model) {
-        List<UserAnnual> allUserAnnual = etcService.findByAllUserAnnual(year);
-        log.info("allUser = {}", allUserAnnual.toString());
 
         model.addAttribute("user", loginMember);
-        model.addAttribute("allUser", allUserAnnual);
+        model.addAttribute("allUser", etcService.findByAllUserAnnual(year));
 
         return "info/memberManagement";
     }
