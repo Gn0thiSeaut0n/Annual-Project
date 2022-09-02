@@ -40,5 +40,8 @@ public interface EtcDAO {
 
     int findByAllUserAnnualCnt(Map<String, String> pageParam);
 
+    UserAnnual selectTotalAnnualMonth(Map<String, String> year);
+
+
 //    List<String> selectAllDate();
 }

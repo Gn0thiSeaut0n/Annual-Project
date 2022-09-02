@@ -78,6 +78,10 @@ public class EtcService {
     public int findByAllUserAnnualCnt(String year, String user_name) {
         return etcDAO.findByAllUserAnnualCnt(Map.of("year", year, "user_name", user_name));
     }
+
+    public UserAnnual selectTotalAnnualMonth(String year, String user) {
+        return etcDAO.selectTotalAnnualMonth(Map.of("year", year, "user_id", user));
+    }
 }
 
 //    public List<String> selectAllDate() {

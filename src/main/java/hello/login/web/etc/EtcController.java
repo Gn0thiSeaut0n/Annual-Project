@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -92,13 +93,14 @@ public class EtcController {
             bigBox.put(i, new HashMap<>(smallBox));
         }
 
-        etcService.selectAnnualMonth(year, user).stream().forEach( // 박스 12개 만들 것
+        etcService.selectAnnualMonth(year, user).stream().forEach(
                 (data) -> {
                     // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
                     bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
                 }
         );
 
+        model.addAttribute("monthTot", etcService.selectTotalAnnualMonth(year, user));
         model.addAttribute("bigBox", bigBox);
         model.addAttribute("user", loginMember);
         return "info/memberManagementDetail";

@@ -25,7 +25,7 @@
             <table class="table table-bordered">
                 <thread>
                     <tr class="pb-3 pt-3">
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">아이디</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">사번</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">이름</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">연차</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|" style="width: 50px;"></th>
@@ -35,23 +35,23 @@
                 </thread>
                 <tbody>
                 <tr th:each="list, index : ${allUser}" th:onclick="allUserDetail([[${list.user_id}]])">
-                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
-                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.total}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jan}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.feb}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.mar}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.apr}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.may}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jun}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jul}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.aug}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.sept}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.oct}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.nov}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.dec}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.use}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.result}]]</th>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_id}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_name}]]</td>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.total}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jan}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.feb}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.mar}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.apr}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.may}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jun}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jul}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.aug}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.sept}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.oct}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.nov}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.dec}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.use}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.result}]]</th>
                 </tr>
                 </tbody>
             </table>
