@@ -12,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -28,6 +26,7 @@ public class EtcController {
     public ResponseEntity application(@RequestBody @Validated History history) {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(history.getUser_id(), getUseAnnual(history));
+        log.info(history.toString());
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -37,10 +36,8 @@ public class EtcController {
 
         Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
 
-        List<History> history = etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id());
-
         model.addAttribute("user", loginMember);
-        model.addAttribute("history", history);
+        model.addAttribute("history", etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id()));
         model.addAttribute("pagination", pagination);
         return "info/mypage";
     }
@@ -63,13 +60,20 @@ public class EtcController {
         return "info/selectAll";
     }
 
-    @GetMapping("/memberManagement/{year}")
-    public String memberManagement(@Login User loginMember, @PathVariable String year, Model model) {
-        List<UserAnnual> allUserAnnual = etcService.findByAllUserAnnual(year);
-        log.info("allUser = {}", allUserAnnual.toString());
+    @GetMapping("/memberManagement")
+    public String memberManagement(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "") String year,
+                                   @RequestParam(defaultValue = "") String user_name,
+                                   Model model) {
+
+        Pagination pagination = new Pagination(etcService.findByAllUserAnnualCnt(year, user_name), page);
 
         model.addAttribute("user", loginMember);
-        model.addAttribute("allUser", allUserAnnual);
+        model.addAttribute("allUser", etcService.findByAllUserAnnualPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
+                "year", year, "user_name", user_name)));
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("searchParam", Map.of("year", year, "user_name", user_name));
 
         return "info/memberManagement";
     }
@@ -87,13 +91,14 @@ public class EtcController {
             bigBox.put(i, new HashMap<>(smallBox));
         }
 
-        etcService.selectAnnualMonth(year, user).stream().forEach( // 박스 12개 만들 것
+        etcService.selectAnnualMonth(year, user).stream().forEach(
                 (data) -> {
                     // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
                     bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
                 }
         );
 
+        model.addAttribute("monthTot", etcService.selectTotalAnnualMonth(year, user));
         model.addAttribute("bigBox", bigBox);
         model.addAttribute("user", loginMember);
         return "info/memberManagementDetail";
@@ -107,8 +112,9 @@ public class EtcController {
     }
 
     @PutMapping("/apprHistory/{history_id}")
-    public ResponseEntity apprHistory(@PathVariable String history_id) {
-        etcService.updateAppr(history_id);
+    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) {
+    	
+        etcService.updateAppr(history_id, loginMember.getAuth());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -119,29 +125,32 @@ public class EtcController {
 
     @PostMapping("/selectCurrentPwd")
     public ResponseEntity selectCurrentPwd(@RequestBody User user, @Login User loginMember) {
-
         // DB 비밀번호 복호화
         String decrypt_user_pw = JasyptUtil.decrypt(etcService.selectCurrentPwd(loginMember.getUser_id()));
 
-        if (user.getUser_pw().equals(decrypt_user_pw)) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
+        // 복호화한 비밀번호와 같은지 비교
+        if (!user.getUser_pw().equals(decrypt_user_pw)) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/updatePwd")
-    public String updatePwdPage(HttpServletRequest request, Model model) {
+    public String updatePwdPage() {
         return "info/updatePwd";
     }
 
     @PutMapping("/updatePwd")
     public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
-
         // 암호화
-        String encrypt_user_pw = JasyptUtil.encrypt(user.getUser_pw());
-        etcService.updatePwd(encrypt_user_pw, loginMember.getUser_id());
+        etcService.updatePwd(JasyptUtil.encrypt(user.getUser_pw()), loginMember.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/memberRegister")
+    public String memberRegisterPage(@Login User loginMember, Model model) {
+        model.addAttribute("user", loginMember);
+        return "info/memberRegister";
     }
 
     private float getUseAnnual(History history) {

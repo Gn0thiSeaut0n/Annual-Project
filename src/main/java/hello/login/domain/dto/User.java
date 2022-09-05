@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 public class User {
     @NotEmpty
     private String user_id; // 로그인 ID
-    @NotEmpty
     private String user_pw; // 로그인 PASSWORD
     @NotEmpty
     private String user_name; // 사용자 이름

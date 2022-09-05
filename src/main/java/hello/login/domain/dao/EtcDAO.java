@@ -4,7 +4,6 @@ import hello.login.domain.dto.History;
 import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
 import org.apache.ibatis.annotations.Mapper;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,13 +16,11 @@ public interface EtcDAO {
 
     List<History> findByHistory(String user_id);
 
-    List<History> findByAllHistory();
-
     void deleteHistory(String history_id);
 
-    void updateAppr(String history_id);
+    void updateAppr(Map<String, String> map);
 
-    List<UserAnnual> findByAllUserAnnual(String year);
+    List<UserAnnual> findByAllUserAnnualPaging(Map<String, Object> pageParam);
 
     int findByHistoryAllCnt(String user_id);
 
@@ -37,5 +34,10 @@ public interface EtcDAO {
 
     String selectCurrentPwd(String user_id);
 
-    void updatePwd(HashMap<String, String> userParam);
+    void updatePwd(Map<String, String> userParam);
+
+    int findByAllUserAnnualCnt(Map<String, String> pageParam);
+
+    UserAnnual selectTotalAnnualMonth(Map<String, String> year);
+
 }

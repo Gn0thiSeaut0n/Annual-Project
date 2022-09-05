@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>신청</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class='sub_btn_menu' style="margin: 0;">
+            <ul>
+                <a th:href="@{/userManagement}" class='btn_line btn_gray' style="float: left;">조회</a>
+            </ul>
+            <ul>
+                <a th:href="@{/userRegister}" class='btn_line btn_gray' style="float: left;">등록</a>
+            </ul>
+        </div>
+        <div class="sub_content">
+            <div class="sub_panel_box">
+                <p class="sub_title">기본정보</p>
+                <table class="sub_table">
+                    <tr>
+                        <th>사번</th>
+                        <td colspan="3"><input type="text" id="user_id" name="user_id" class="input_text" th:onchange="removeClass(this)"></td>
+                        <td><button type="button" class="btn btn-secondary" style="font-size: 12px;" onclick="duplicateId()">중복체크</button></td>
+                        <input type="hidden" id="origin_id">
+                        <th>이름</th>
+                        <td colspan="4"><input type="text" id="user_name" name="user_name" class="input_text" th:onchange="removeClass(this)"></td>
+                    </tr>
+                    <tr>
+                        <th>핸드폰 번호</th>
+                        <td colspan="4"><input type="text" id="user_number" name="user_number" class="input_text"
+                                               pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" th:onchange="removeClass(this)"></td>
+                        <th>성별</th>
+                        <td colspan="4">
+                            <label class="sex">
+                                <input type="radio" name="sex" id="male" value="M" checked="checked" th:onchange="removeClass(this)">
+                                <span>남</span>
+                            </label>
+                            <label class="sex">
+                                <input type="radio" name="sex" id="female" value="F" th:onchange="removeClass(this)">
+                                <span>여</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>직급</th>
+                        <td colspan="4">
+                            <select id="responsibilities_of_office" class="custom-select" style="font-size: 15px; width: 20%; text-align: center;" th:onchange="removeClass(this)">
+                                <option value="">선택</option>
+                                <option value="매니저">매니저</option>
+                                <option value="책임 매니저">책임 매니저</option>
+                                <option value="팀장">팀장</option>
+                            </select>
+                        </td>
+                        <th>부서</th>
+                        <td style="width: 32%;"><input type="text" id="department" name="department" class="input_text" th:onchange="removeClass(this)"></td>
+                    </tr>
+                    <tr>
+                        <th>생년월일</th>
+                        <td colspan="4"><input type="text" id="birthday" name="birthday" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"></td>
+                        <th>입사일</th>
+                        <td colspan="4"><input type="text" id="start_year" name="start_year" readonly="readonly" class="input_text3" style="width: 25%;" th:onchange="removeClass(this)"></td>
+                    </tr>
+                    <tr>
+                        <th>권한</th>
+                        <td colspan="6">
+                            <select id="auth" class="custom-select" style="font-size: 15px; width: 10%; text-align: center;" th:onchange="removeClass(this)">
+                                <option value="">선택</option>
+                                <option value="manager">관리자</option>
+                                <option value="user">일반 사용자</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <button type="button" class="btn btn-outline-secondary" th:onclick="userRegister()" style="margin-top: 20px; font-size: 13px;">등록</button>
+        </div>
+    </section>
+</div>
+<script>
+    function duplicateId() {
+        let user_id = getValue('#user_id');
+
+        if(user_id == null || user_id == '') {
+            alert('사번을 입력해주세요');
+        } else {
+            setValue('#origin_id', user_id);
+
+            let params = {
+                "user_id" : user_id
+            }
+
+            fetch("/duplicateId", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                response.text().then(function(data) {
+                    if(data == 1) {
+                        alert('중복된 사번입니다');
+                    } else if(data == 0) {
+                        alert('사용 가능한 사번입니다');
+                        return;
+                    }
+                });
+            }).catch(e => {
+                e.json().then(msg => {
+
+                });
+            });
+        }
+    }
+
+    function userRegister() {
+        let user_id = getValue('#user_id');
+        let origin_id = getValue('#origin_id');
+
+        // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크
+        if(origin_id != user_id) {
+            alert("아이디 중복을 확인해주세요");
+            setValue('#user_id', '');
+            return;
+        }
+
+        let params = {
+            "user_id" : getValue('#user_id'),
+            "user_name" : getValue('#user_name'),
+            "user_number" : getValue('#user_number'),
+            "sex" : getValue('input[name="sex"]:checked'),
+            "responsibilities_of_office" : getValue('#responsibilities_of_office'),
+            "department" : getValue('#department'),
+            "birthday" : getValue('#birthday'),
+            "start_year" : getValue('#start_year'),
+            "auth" : getValue('#auth'),
+        }
+
+        fetch("/userRegister", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        }).then((response) => {
+            if(!response.ok) {
+                throw response;
+            }
+            alert('회원이 등록되었습니다');
+            // /userManagement 수정 필요
+            window.location.href='/userRegister';
+        }).catch(e => {
+            e.json().then(msg => {
+                for (let i = 0; i < msg.errors.length; i++) {
+                    document.querySelector("#" + msg.errors[i].field).className += ' field-error';
+                }
+            });
+        });
+    }
+
+    function removeClass(obj){
+        obj.classList.remove("field-error");
+    }
+
+    const getValue = (parameter) => {
+        return document.querySelector(parameter).value;
+    }
+
+    const setValue = (name, val) => {
+        document.querySelector(name).value = val;
+    }
+
+    jQuery.datetimepicker.setLocale('ko');
+        $('#birthday').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+        $('#start_year').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+
+    const autoHypenPhone = function(str) {
+        str = str.replace(/[^0-9]/g, '');
+        let tmp = '';
+
+        if (str.substring(0, 2) == 02) {
+            // 서울 전화번호일 경우 10자리까지만 나타나고 그 이상의 자리수는 자동삭제
+            if (str.length < 3) {
+                return str;
+            } else if (str.length < 6) {
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2);
+                return tmp;
+            } else if (str.length < 10) {
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2, 3);
+                tmp += '-';
+                tmp += str.substr(5);
+                return tmp;
+            } else {
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2, 4);
+                tmp += '-';
+                tmp += str.substr(6, 4);
+                return tmp;
+            }
+        } else {
+            // 핸드폰 및 다른 지역 전화번호 일 경우
+            if (str.length < 4) {
+                return str;
+            } else if (str.length < 7) {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+                return tmp;
+            } else if (str.length < 11) {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 3);
+                tmp += '-';
+                tmp += str.substr(6);
+                return tmp;
+            } else {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+                return tmp;
+            }
+        }
+        return str;
+    }
+
+    let phoneNum = document.getElementById('user_number');
+
+    phoneNum.onkeyup = function() {
+      this.value = autoHypenPhone(this.value);
+    }
+</script>
+</body>
+</html>

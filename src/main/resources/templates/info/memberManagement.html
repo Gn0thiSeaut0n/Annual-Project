@@ -7,44 +7,116 @@
 <body>
 <div class="container">
     <section>
-        <table class="table table-bordered">
-            <thread>
-                <tr class="pb-3 pt-3">
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">아이디</th>
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">이름</th>
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">연차</th>
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|" style="width: 50px;"></th>
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">합계</th>
-                    <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">잔여</th>
+        <div class="input-group mb-3">
+            <p style="font-size: 16px; text-align: center; padding-top: 2px;">년도: &nbsp;</p>
+            <select id="year" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">
+                <option value="">선택</option>
+                <option th:each="index : ${#numbers.sequence(2022, 2027)}" th:text="|${index}년|"
+                        th:value="${index}" th:attr="selected=${searchParam.year} eq ${index} ? 'true' : 'false'"></option>
+            </select>
+            <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
+            <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
+                   onkeypress="enterKey(event);" style="font-size: 15px;" />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
+            </div>
+        </div>
+        <div th:if="${#lists.size(allUser) != 0}">
+            <table class="table table-bordered">
+                <thread>
+                    <tr class="pb-3 pt-3">
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">사번</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">이름</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">연차</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|" style="width: 50px;"></th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">합계</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">잔여</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <tr th:each="list, index : ${allUser}" th:onclick="allUserDetail([[${list.user_id}]])">
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_id}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_name}]]</td>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.total}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jan}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.feb}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.mar}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.apr}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.may}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jun}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jul}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.aug}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.sept}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.oct}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.nov}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.dec}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.use}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.result}]]</th>
                 </tr>
-            </thread>
-            <tbody>
-            <tr th:each="list, index : ${allUser}" th:onclick="test([[${list.user_id}]])">
-                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
-                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.total}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jan}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.feb}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.mar}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.apr}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.may}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jun}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.jul}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.aug}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.sept}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.oct}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.nov}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.dec}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.use}]]</th>
-                <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.result}]]</th>
-            </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example" style="font-size: 16px">
+                <ul class="pagination" style="justify-content: center;">
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                            <span aria-hidden="true">처음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li class="page-item"
+                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                            th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link" href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                        </li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">끝</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div th:if="${#lists.size(allUser) == 0}" style="font-size: 25px; text-align: center;">
+            데이터가 없습니다!
+        </div>
     </section>
 </div>
 <script>
-    function test(user){
-        window.location.href = window.location.pathname + "/" + user;
+    function enterKey(e) {
+        if(e.keyCode === 13) {
+            search(1);
+        } else {
+            return true;
+        }
+    }
+
+    function search(pageNum) {
+        let selectYear = document.querySelector('#year').value;
+        let user_name = document.querySelector('#user_name').value;
+
+        window.location.href=`/memberManagement?page=${pageNum}&year=${selectYear}&user_name=${user_name}`;
+    }
+
+    function allUserDetail(user) {
+        let date = new Date();
+        let year = date.getFullYear();
+
+        window.location.href = window.location.pathname + "/" + year + "/" + user;
+    }
+
+     const getValue = (parameter) => {
+        return document.querySelector(parameter).value;
     }
 </script>
 </body>

@@ -149,13 +149,13 @@
         if(paramChecked())
             return;
 
-        if(getValue('#application_year') > getValue('#save_annual')) {
+        if(parseFloat(getValue('#application_year')) > parseFloat(getValue('#save_annual'))) {
             alert('연차가 부족합니다');
             return;
         }
 
         if(getValue('input[name="years"]:checked') != null) {
-            if(getValue('#save_annual') < 0.5) {
+            if(parseFloat(getValue('#save_annual')) < 0.5) {
                 alert('연차가 부족합니다');
                 return;
             }
@@ -178,7 +178,7 @@
             "time" : getValue('input[name="time"]:checked'),
             "reason" : getValue("#reason"),
             "appr_yn" : "N",
-            "cancel_yn" : "Y"
+            "appr_yn2" : "N"
         };
 
        fetch("/application", {

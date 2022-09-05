@@ -31,23 +31,29 @@
                 <table class="table table-bordered">
                     <thread>
                         <tr class="pb-3 pt-3">
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">아이디</th>
+                        	<th scope="col" class="pb-4 pt-4 text-center text-bold">상신일자</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">승인여부</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
                         </tr>
                     </thread>
                     <tbody>
                         <tr th:each="list : ${history}">
+                        	<td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.request_date}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('N')}"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}"></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn.equals('Y')}">미승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn2.equals('Y')}">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn2.equals('Y')}">미승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -104,7 +110,7 @@
 
             window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
         }
-
+        
         function apprHistory(id){
             fetch("/apprHistory/"+id.name, {
                 method: "PUT",
