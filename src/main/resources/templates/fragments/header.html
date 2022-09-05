@@ -23,6 +23,7 @@
                 <a th:href="@{/memberManagement}"> 연차 현황</a>
             </div>
             <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
+                <!-- /userManagement 변경 필요 -->
                 <a th:href="@{/userRegister}"> 회원 관리</a>
             </div>
             <form th:action="@{/mypage}" method="get" class="inline-block">

@@ -4,36 +4,36 @@
 
     <select id="duplicateId" parameterType="String" resultType="int">
         SELECT
-        COUNT(*)
+            COUNT(*)
         FROM
-        USER_INFO
+            USER_INFO
         WHERE
-        USER_ID = #{user_id}
+            USER_ID = #{user_id}
     </select>
 
     <insert id="userRegister" parameterType="User">
-        INSERT INFO USER_INFO (
-        USER_ID,
-        USER_PW,
-        USER_NAME,
-        SEX,
-        RESPONSIBILITIES_OF_OFFICE,
-        DEPARTMENT,
-        BIRTHDAY,
-        START_YEAR,
-        USER_NUMBER,
-        AUTH
+        INSERT INTO USER_INFO (
+            USER_ID,
+            USER_PW,
+            USER_NAME,
+            SEX,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            BIRTHDAY,
+            START_YEAR,
+            USER_NUMBER,
+            AUTH
         ) VALUES (
-        #{user_id},
-        #{user_pw},
-        #{user_name},
-        #{sex},
-        #{responsibilities_of_office},
-        #{department},
-        #{birthday},
-        #{start_year},
-        #{user_number},
-        #{auth}
+            #{user_id},
+            #{user_pw},
+            #{user_name},
+            #{sex},
+            #{responsibilities_of_office},
+            #{department},
+            #{birthday},
+            #{start_year},
+            #{user_number},
+            #{auth}
         )
     </insert>
 </mapper>

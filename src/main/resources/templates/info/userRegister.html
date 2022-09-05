@@ -34,7 +34,7 @@
                         <th>성별</th>
                         <td colspan="4">
                             <label class="sex">
-                                <input type="radio" name="sex" id="male" value="M" th:onchange="removeClass(this)">
+                                <input type="radio" name="sex" id="male" value="M" checked="checked" th:onchange="removeClass(this)">
                                 <span>남</span>
                             </label>
                             <label class="sex">
@@ -46,7 +46,7 @@
                     <tr>
                         <th>직급</th>
                         <td colspan="4">
-                            <select id="responsibilities_of_office" class="custom-select" style="font-size: 15px; width: 30%; text-align: center;" th:onchange="removeClass(this)">
+                            <select id="responsibilities_of_office" class="custom-select" style="font-size: 15px; width: 20%; text-align: center;" th:onchange="removeClass(this)">
                                 <option value="">선택</option>
                                 <option value="매니저">매니저</option>
                                 <option value="책임 매니저">책임 매니저</option>
@@ -60,13 +60,23 @@
                         <th>생년월일</th>
                         <td colspan="4"><input type="text" id="birthday" name="birthday" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"></td>
                         <th>입사일</th>
-                        <td colspan="4"><input type="text" id="start_year" name="start_year" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"></td>
+                        <td colspan="4"><input type="text" id="start_year" name="start_year" readonly="readonly" class="input_text3" style="width: 25%;" th:onchange="removeClass(this)"></td>
+                    </tr>
+                    <tr>
+                        <th>권한</th>
+                        <td colspan="6">
+                            <select id="auth" class="custom-select" style="font-size: 15px; width: 10%; text-align: center;" th:onchange="removeClass(this)">
+                                <option value="">선택</option>
+                                <option value="manager">관리자</option>
+                                <option value="user">일반 사용자</option>
+                            </select>
+                        </td>
                     </tr>
                 </table>
             </div>
         </div>
         <div style="text-align: center;">
-            <button type="button" class="btn btn-outline-secondary" th:onclick="memberRegister()" style="margin-top: 20px; font-size: 13px;">등록</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="userRegister()" style="margin-top: 20px; font-size: 13px;">등록</button>
         </div>
     </section>
 </div>
@@ -126,6 +136,7 @@
             "department" : getValue('#department'),
             "birthday" : getValue('#birthday'),
             "start_year" : getValue('#start_year'),
+            "auth" : getValue('#auth'),
         }
 
         fetch("/userRegister", {
@@ -139,6 +150,8 @@
                 throw response;
             }
             alert('회원이 등록되었습니다');
+            // /userManagement 수정 필요
+            window.location.href='/userRegister';
         }).catch(e => {
             e.json().then(msg => {
                 for (let i = 0; i < msg.errors.length; i++) {
@@ -163,12 +176,10 @@
     jQuery.datetimepicker.setLocale('ko');
         $('#birthday').datetimepicker({
             timepicker: false,
-            minDate: new Date(),
             format: 'Y-m-d'
         });
         $('#start_year').datetimepicker({
             timepicker: false,
-            minDate: new Date(),
             format: 'Y-m-d'
         });
 
