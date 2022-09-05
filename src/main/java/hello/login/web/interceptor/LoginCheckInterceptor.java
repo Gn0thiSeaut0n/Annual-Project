@@ -20,17 +20,17 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         // 개발용
         HttpSession session = request.getSession();
         //세션에 로그인 회원 정보 보관
-        /*
+
         User user = new User();
         user.setUser_id("root");
-        */
+
 //        user.setUser_id("tester");
-        /*
+
         user.setUser_pw("1234");
         user.setUser_name("휴먼엔시스");
-        */
+
 //        user.setUser_name("테스트");
-        /*
+
         user.setSex("M");
         user.setResponsibilities_of_office("관리자");
         user.setDepartment("-");
@@ -38,11 +38,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         user.setStart_year("2022-08-04");
         user.setUser_number("010-0000-0000");
         user.setAuth("admin");
-        */
 //        user.setAuth("tester");
-        /*
+
         session.setAttribute(SessionConst.LOGIN_MEMBER,user);
-        */
+
         // 개발용 end
 
         if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {

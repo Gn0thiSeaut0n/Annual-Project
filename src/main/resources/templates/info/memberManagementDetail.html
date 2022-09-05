@@ -21,7 +21,23 @@
             </tr>
             <tr>
                 <th scope="row" class="p-0 text-center text-bold">합계</th>
-                <td th:each="month : ${#numbers.sequence(3, 15)}" th:text="${monthTot[month]}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getJan()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getFeb()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getMar()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getApr()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getMay()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getJun()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getJul()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getAug()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getSept()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getOct()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getNov()}"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getDec()}"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="p-0 text-center text-bold">총합</th>
+                <td scope="row" colspan="11"></td>
+                <td scope="row" class="p-0 text-center" th:text="${monthTot.getTotal()}"></td>
             </tr>
             </tbody>
         </table>

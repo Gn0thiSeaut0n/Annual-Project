@@ -130,29 +130,20 @@
 
     <select id="selectTotalAnnualMonth" parameterType="Map" resultType="UserAnnual">
         SELECT
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'01')), '0.0') as 'jan',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'02')), '0.0') as 'feb',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'03')), '0.0') as 'mar',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'04')), '0.0') as 'apr',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'05')), '0.0') as 'may',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'06')), '0.0') as 'jun',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'07')), '0.0') as 'jul',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'08')), '0.0') as 'aug',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'09')), '0.0') as 'sept',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'10')), '0.0') as 'oct',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'11')), '0.0') as 'nov',
-            IFNULL((select SUM(APPLICATION_YEAR) from APPLICATION_HISTORY where USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'12')), '0.0') as 'dec'
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'01')), '') as 'jan',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'02')), '') as 'feb',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'03')), '') as 'mar',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'04')), '') as 'apr',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'05')), '') as 'may',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'06')), '') as 'jun',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'07')), '') as 'jul',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'08')), '') as 'aug',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'09')), '') as 'sept',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'10')), '') as 'oct',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'11')), '') as 'nov',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year},'12')), '') as 'dec',
+            IFNULL((SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = #{user_id} AND DATE_FORMAT(START_DATE, '%Y') = #{year}), '0.0') as total;
     </select>
-
-<!--    <select id="findByAllUser" resultType="User">-->
-<!--        SELECT-->
-<!--            USER_ID,-->
-<!--            USER_NAME-->
-<!--        FROM-->
-<!--            USER_INFO-->
-<!--        ORDER BY-->
-<!--            USER_NAME DESC-->
-<!--    </select>-->
 
     <select id="findByAllUserAnnualPaging" parameterType="String" resultType="UserAnnual">
         SELECT
@@ -307,15 +298,5 @@
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
     </select>
-
-<!--    <select id="selectAllDate" parameterType="String" resultType="String">-->
-<!--        SELECT-->
-<!--            USER_PW-->
-<!--        FROM-->
-<!--            USER_INFO-->
-<!--        WHERE-->
-<!--            USER_ID = #{user_id}-->
-<!--    </select>-->
-
 
 </mapper>
