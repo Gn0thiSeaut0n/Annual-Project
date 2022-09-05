@@ -16,8 +16,6 @@ public interface EtcDAO {
 
     List<History> findByHistory(String user_id);
 
-    List<History> findByAllHistory();
-
     void deleteHistory(String history_id);
 
     void updateAppr(Map<String, String> map);
@@ -42,6 +40,4 @@ public interface EtcDAO {
 
     UserAnnual selectTotalAnnualMonth(Map<String, String> year);
 
-
-//    List<String> selectAllDate();
 }

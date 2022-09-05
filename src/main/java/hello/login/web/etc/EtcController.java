@@ -12,11 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -139,15 +136,14 @@ public class EtcController {
     }
 
     @GetMapping("/updatePwd")
-    public String updatePwdPage(HttpServletRequest request, Model model) {
+    public String updatePwdPage() {
         return "info/updatePwd";
     }
 
     @PutMapping("/updatePwd")
     public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
         // 암호화
-        String encrypt_user_pw = JasyptUtil.encrypt(user.getUser_pw());
-        etcService.updatePwd(encrypt_user_pw, loginMember.getUser_id());
+        etcService.updatePwd(JasyptUtil.encrypt(user.getUser_pw()), loginMember.getUser_id());
         return new ResponseEntity(HttpStatus.OK);
     }
 

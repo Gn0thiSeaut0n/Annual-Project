@@ -30,33 +30,6 @@
             HISTORY_ID DESC
     </select>
 
-    <select id="findByAllHistory" resultType="History">
-        SELECT
-            HISTORY_ID,
-            USER_ID,
-            USER_NAME,
-            RESPONSIBILITIES_OF_OFFICE,
-            DEPARTMENT,
-            START_YEAR,
-            BIRTHDAY,
-            SEX,
-            USER_NUMBER,
-            TOTAL_ANNUAL,
-            USE_ANNUAL,
-            START_DATE,
-            END_DATE,
-            TIME,
-            APPLICATION_YEAR,
-            REASON,
-            APPR_YN,
-            APPR_YN2,
-            REQUEST_DATE
-        FROM
-            APPLICATION_HISTORY
-        ORDER BY
-            HISTORY_ID DESC
-    </select>
-
     <insert id="insertApplicationHistory" parameterType="History">
         INSERT INTO
             APPLICATION_HISTORY

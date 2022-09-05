@@ -28,10 +28,6 @@ public class EtcService {
         return etcDAO.findByHistory(user_id);
     }
 
-    public List<History> findByAllHistory() {
-        return etcDAO.findByAllHistory();
-    }
-
     public void deleteHistory(String history_id) {
         etcDAO.deleteHistory(history_id);
     }
@@ -84,7 +80,3 @@ public class EtcService {
     }
 }
 
-//    public List<String> selectAllDate() {
-//        return etcDAO.selectAllDate();
-//    }
-//}
