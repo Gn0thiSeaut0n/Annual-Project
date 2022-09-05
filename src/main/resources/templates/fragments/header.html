@@ -16,18 +16,18 @@
                     <img src="/images/hncis.png">
                 </a>
             </div>
-            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
-                <a th:href="@{/selectAll}"> 전체 조회</a>
+            <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
+                <a th:href="@{/selectAll}">전체 조회</a>
             </div>
-            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
-                <a th:href="@{/memberManagement}"> 연차 현황</a>
+            <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
+                <a th:href="@{/memberManagement}">연차 현황</a>
             </div>
-            <div th:if="${user.auth.equals('admin')}" class="inline-block float m-lg-3">
                 <!-- /userManagement 변경 필요 -->
-                <a th:href="@{/userRegister}"> 회원 관리</a>
+            <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
+                <a th:href="@{/userRegister}">회원 관리</a>
             </div>
             <form th:action="@{/mypage}" method="get" class="inline-block">
-                <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}   |">로그인 사용자 이름</span>
+                <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}|">로그인 사용자 이름</span>
                 <button type="submit" class="btn btn-outline-primary me-2 mypage">마이페이지</button>
             </form>
             <form th:action="@{/logout}" method="post" class="inline-block">

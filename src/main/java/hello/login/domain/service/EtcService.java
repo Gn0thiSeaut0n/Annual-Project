@@ -36,8 +36,8 @@ public class EtcService {
         etcDAO.deleteHistory(history_id);
     }
 
-    public void updateAppr(String history_id) {
-        etcDAO.updateAppr(history_id);
+    public void updateAppr(String history_id, String type) {
+        etcDAO.updateAppr(Map.of("history_id", history_id, "type", type));
     }
 
     public List<UserAnnual> findByAllUserAnnualPaging(Map<String, Object> pageParam) {
