@@ -30,8 +30,8 @@
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn}]]</td>
                         <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn2}]]</td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('N')}"><a href="javascript:void(0)" style="color: red;" th:name="${list.history_id}" th:onclick="deleteHistory(this)">취소</a></td>
-                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}"></td>
+                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn2.equals('N')}"><a href="javascript:void(0)" style="color: red;" th:name="${list.history_id}" th:onclick="deleteHistory(this)">취소</a></td>
+                        <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn2.equals('Y')}"></td>
                     </tr>
                 </tbody>
             </table>

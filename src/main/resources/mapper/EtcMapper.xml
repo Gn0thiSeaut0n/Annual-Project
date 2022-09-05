@@ -61,7 +61,7 @@
         INSERT INTO
             APPLICATION_HISTORY
         VALUES (
-                (SELECT * FROM (SELECT MAX(HISTORY_ID)+1 FROM APPLICATION_HISTORY) NEXT),
+                (SELECT * FROM (SELECT IFNULL(MAX(HISTORY_ID)+1, 1) FROM APPLICATION_HISTORY) NEXT),
                 #{user_id},
                 #{user_name},
                 #{responsibilities_of_office},
@@ -99,11 +99,16 @@
             HISTORY_ID = #{history_id}
     </delete>
 
-    <update id="updateAppr" parameterType="String">
+    <update id="updateAppr" parameterType="Map">
         UPDATE
             APPLICATION_HISTORY
         SET
+        <if test="type == 'manager'">
             APPR_YN = 'Y'
+        </if>
+        <if test="type == 'admin'">
+            APPR_YN2 = 'Y'
+        </if>
         WHERE
             HISTORY_ID = #{history_id}
     </update>

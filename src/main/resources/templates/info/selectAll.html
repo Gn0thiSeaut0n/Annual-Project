@@ -50,8 +50,8 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.appr_yn2}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')}"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')}"></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"></td>
                         </tr>
                     </tbody>
                 </table>

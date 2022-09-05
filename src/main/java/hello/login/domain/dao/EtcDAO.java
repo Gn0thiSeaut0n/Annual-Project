@@ -20,7 +20,7 @@ public interface EtcDAO {
 
     void deleteHistory(String history_id);
 
-    void updateAppr(String history_id);
+    void updateAppr(Map<String, String> map);
 
     List<UserAnnual> findByAllUserAnnualPaging(Map<String, Object> pageParam);
 

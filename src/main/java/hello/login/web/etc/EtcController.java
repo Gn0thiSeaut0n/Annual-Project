@@ -114,8 +114,9 @@ public class EtcController {
     }
 
     @PutMapping("/apprHistory/{history_id}")
-    public ResponseEntity apprHistory(@PathVariable String history_id) {
-        etcService.updateAppr(history_id);
+    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) {
+    	
+        etcService.updateAppr(history_id, loginMember.getAuth());
         return new ResponseEntity(HttpStatus.OK);
     }
 
