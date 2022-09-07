@@ -271,5 +271,34 @@
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
     </select>
+    
+    <select id="calendarHistory" parameterType="String" resultType="History">
+        SELECT
+            HISTORY_ID,
+            USER_ID,
+            USER_NAME,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            START_YEAR,
+            BIRTHDAY,
+            SEX,
+            USER_NUMBER,
+            TOTAL_ANNUAL,
+            USE_ANNUAL,
+            START_DATE,
+            END_DATE,
+            TIME,
+            APPLICATION_YEAR,
+            REASON,
+            APPR_YN,
+            APPR_YN2,
+            REQUEST_DATE
+        FROM
+            APPLICATION_HISTORY
+        WHERE
+            START_DATE LIKE CONCAT('%', DATE_FORMAT(NOW(), '%Y-%m'), '%')
+        ORDER BY
+            HISTORY_ID DESC
+    </select>
 
 </mapper>

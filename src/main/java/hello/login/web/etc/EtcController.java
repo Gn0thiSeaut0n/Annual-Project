@@ -163,4 +163,17 @@ public class EtcController {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
     }
+    
+    
+    @GetMapping("/viewCalendar")
+    public String selectAll(@Login User loginMember,
+				    		@RequestParam(defaultValue = "") String year,
+				            @RequestParam(defaultValue = "") String month,
+              				Model model) {
+
+        model.addAttribute("user", loginMember);
+        model.addAttribute("searchParam", Map.of("year", year, "month", month));
+        model.addAttribute("list", etcService.calendarHistory());
+        return "info/viewCalendar";
+    }
 }
