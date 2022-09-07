@@ -1,5 +1,6 @@
 package hello.login.web.user;
 
+import hello.login.domain.dto.Pagination;
 import hello.login.domain.dto.User;
 import hello.login.domain.service.UserService;
 import hello.login.web.argumentresolver.Login;
@@ -10,10 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +23,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/userManagement")
+    public String userManagement(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
+                                 @RequestParam(defaultValue = "") String user_id,
+                                 @RequestParam(defaultValue = "") String user_name,
+                                 Model model) {
+
+        Pagination pagination = new Pagination(userService.findByAllUserCnt(Map.of("user_id", user_id, "user_name", user_name)), page);
+
+        model.addAttribute("user", loginMember);
+        model.addAttribute("userInfo", userService.findByAllUserPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
+                "user_id", user_id, "user_name", user_name)));
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("searchParam", Map.of("user_name", user_name, "user_id", user_id));
+        return "info/userManagement";
+    }
 
     @GetMapping("/userRegister")
     public String userRegisterPage(@Login User loginMember, Model model) {

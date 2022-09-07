@@ -36,4 +36,44 @@
             #{auth}
         )
     </insert>
+
+    <select id="findByAllUserPaging" parameterType="Map" resultType="User">
+        SELECT
+            USER_ID,
+            USER_NAME,
+            SEX,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            BIRTHDAY,
+            START_YEAR,
+            USER_NUMBER,
+            AUTH
+        FROM
+            USER_INFO
+        WHERE
+            1=1
+        <if test="user_id != ''">
+            AND USER_ID LIKE CONCAT('%', #{user_id}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+        ORDER BY START_YEAR
+        LIMIT #{pageSize} OFFSET #{startIndex}
+    </select>
+
+    <select id="findByAllUserCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            USER_INFO
+        WHERE
+            1=1
+        <if test="user_id != ''">
+            AND USER_ID LIKE CONCAT('%', #{user_id}, '%')
+        </if>
+        <if test="user_name != ''">
+            AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
+        </if>
+    </select>
 </mapper>
