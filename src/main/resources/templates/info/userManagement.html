@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>회원 조회</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+    <div class="container">
+        <section>
+            <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+                <ul>
+                    <a th:href="@{/userManagement}" class='btn_line btn_gray' style="float: left;">조회</a>
+                </ul>
+                <ul>
+                    <a th:href="@{/userRegister}" class='btn_line btn_gray' style="float: left;">등록</a>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;사번: &nbsp;</p>
+                <input type="text" class="form-control" id="user_id" name="user_id" th:value="${searchParam.user_id}"
+                       onkeypress="enterKey(event);" style="font-size: 15px;" />
+                <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
+                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
+                       onkeypress="enterKey(event);" style="font-size: 15px;" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
+                </div>
+            </div>
+            <div th:if="${#lists.size(userInfo) != 0}">
+                <table class="table table-bordered">
+                    <thread>
+                        <tr class="pb-3 pt-3">
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">직책</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">부서</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">생년월일</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">입사일</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">핸드폰 번호</th>
+                        </tr>
+                    </thread>
+                    <tbody>
+                        <tr th:each="user : ${userInfo}" th:onclick="userDetail([[${user.user_id}]])">
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.user_id}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.user_name}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.responsibilities_of_office}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.department}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.birthday}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.start_year}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${user.user_number}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example" style="font-size: 16px">
+                    <ul class="pagination" style="justify-content: center;">
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                                <span aria-hidden="true">처음</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                                <span aria-hidden="true">이전</span>
+                            </a>
+                        </li>
+                        <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                            <li class="page-item"
+                                th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                                th:each="pageButton : ${#numbers.sequence(start, end)}">
+                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                            </li>
+                        </th:block>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                                <span aria-hidden="true">다음</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                                <span aria-hidden="true">끝</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div th:if="${#lists.size(userInfo) == 0}" style="font-size: 25px; text-align: center;">
+                데이터가 없습니다!
+            </div>
+        </section>
+    </div>
+<script>
+    function enterKey(e) {
+        if(e.keyCode === 13) {
+            search(1);
+        } else {
+            return true;
+        }
+    }
+
+    function search(pageNum) {
+        let user_id = document.querySelector('#user_id').value;
+        let user_name = document.querySelector('#user_name').value;
+
+        window.location.href=`/userManagement?page=${pageNum}&user_id=${user_id}&user_name=${user_name}`;
+    }
+
+    function userDetail(user_id) {
+        window.location.href = "/userDetail/" + user_id;
+    }
+</script>
+</body>
+</html>
