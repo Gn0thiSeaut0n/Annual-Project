@@ -52,6 +52,7 @@
             USER_INFO
         WHERE
             1=1
+        AND NOT AUTH = 'ADMIN'
         <if test="user_id != ''">
             AND USER_ID LIKE CONCAT('%', #{user_id}, '%')
         </if>
@@ -69,6 +70,7 @@
             USER_INFO
         WHERE
             1=1
+        AND NOT AUTH = 'ADMIN'
         <if test="user_id != ''">
             AND USER_ID LIKE CONCAT('%', #{user_id}, '%')
         </if>
@@ -76,4 +78,53 @@
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
     </select>
+
+    <select id="findByUserDetail" parameterType="String" resultType="User">
+        SELECT
+            USER_ID,
+            USER_NAME,
+            SEX,
+            RESPONSIBILITIES_OF_OFFICE,
+            DEPARTMENT,
+            BIRTHDAY,
+            START_YEAR,
+            USER_NUMBER,
+            AUTH
+        FROM
+            USER_INFO
+        WHERE
+            USER_ID = #{user_id}
+    </select>
+
+    <update id="userUpdate" parameterType="User">
+        UPDATE
+            USER_INFO
+        SET
+            USER_NAME = #{user_name},
+            USER_NUMBER = #{user_number},
+            SEX = #{sex},
+            RESPONSIBILITIES_OF_OFFICE = #{responsibilities_of_office},
+            DEPARTMENT = #{department},
+            BIRTHDAY = #{birthday},
+            START_YEAR = #{start_year},
+            AUTH = #{auth}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
+
+    <delete id="userDelete" parameterType="User">
+        DELETE FROM
+            USER_INFO
+        WHERE
+            USER_ID = #{user_id}
+    </delete>
+
+    <update id="passwordInit" parameterType="User">
+        UPDATE
+            USER_INFO
+        SET
+            USER_PW = #{user_pw}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
 </mapper>

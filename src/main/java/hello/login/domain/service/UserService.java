@@ -31,4 +31,21 @@ public class UserService {
     public int findByAllUserCnt(Map<String, Object> pageParam) {
         return userDAO.findByAllUserCnt(pageParam);
     }
+
+    public User findByUserDetail(String user_id) {
+        return userDAO.findByUserDetail(user_id);
+    }
+
+    public void userUpdate(User user) {
+        userDAO.userUpdate(user);
+    }
+
+    public void userDelete(User user) {
+        userDAO.userDelete(user);
+    }
+
+    public void passwordInit(User user) {
+        user.setUser_pw(JasyptUtil.encrypt("gbajsdpstltm"));
+        userDAO.passwordInit(user);
+    }
 }

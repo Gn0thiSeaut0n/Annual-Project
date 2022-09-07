@@ -16,4 +16,12 @@ public interface UserDAO {
     List<User> findByAllUserPaging(Map<String, Object> pageParam);
 
     int findByAllUserCnt(Map<String, Object> pageParam);
+
+    User findByUserDetail(String user_id);
+
+    void userUpdate(User user);
+
+    void userDelete(User user);
+
+    void passwordInit(User user);
 }

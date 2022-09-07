@@ -58,4 +58,29 @@ public class UserController {
         userService.userRegister(user);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @GetMapping("/userDetail/{user_id}")
+    public String userDetail(@Login User loginMember, Model model, @PathVariable String user_id) {
+        model.addAttribute("user", loginMember);
+        model.addAttribute("userInfo", userService.findByUserDetail(user_id));
+        return "info/userDetail";
+    }
+
+    @PostMapping("/userUpdate")
+    public ResponseEntity userUpdate(@RequestBody @Validated User user) {
+        userService.userUpdate(user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/userDelete")
+    public ResponseEntity userDelete(@RequestBody User user) {
+        userService.userDelete(user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("/passwordInit")
+    public ResponseEntity passwordInit(@RequestBody User user) {
+        userService.passwordInit(user);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

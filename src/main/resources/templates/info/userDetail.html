@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>회원 등록</title>
+    <title>회원 수정</title>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 <body>
@@ -16,29 +16,28 @@
             </ul>
         </div>
         <div class="sub_content">
-            <div class="sub_panel_box">
+            <div class="sub_panel_box" th:object="${userInfo}">
                 <p class="sub_title">기본정보</p>
                 <table class="sub_table">
                     <tr>
                         <th>사번</th>
-                        <td colspan="3"><input type="text" id="user_id" name="user_id" class="input_text" th:onchange="removeClass(this)"></td>
-                        <td><button type="button" class="btn btn-secondary" style="font-size: 12px;" onclick="duplicateId()">중복체크</button></td>
+                        <td colspan="4"><input type="text" th:field="*{user_id}" class="input_text" readonly="readonly"></td>
                         <input type="hidden" id="origin_id">
                         <th>이름</th>
-                        <td colspan="4"><input type="text" id="user_name" name="user_name" class="input_text" th:onchange="removeClass(this)"></td>
+                        <td colspan="4"><input type="text" th:field="*{user_name}" class="input_text" th:onchange="removeClass(this)"></td>
                     </tr>
                     <tr>
                         <th>핸드폰 번호</th>
-                        <td colspan="4"><input type="text" id="user_number" name="user_number" class="input_text"
+                        <td colspan="4"><input type="text" th:field="*{user_number}" class="input_text"
                                                pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" maxlength="13" th:onchange="removeClass(this)"></td>
                         <th>성별</th>
                         <td colspan="4">
                             <label class="sex">
-                                <input type="radio" name="sex" id="male" value="M" checked="checked" th:onchange="removeClass(this)">
+                                <input type="radio" name="sex" id="male" value="M" th:checked="${userInfo.sex eq 'M'}" th:onchange="removeClass(this)">
                                 <span>남</span>
                             </label>
                             <label class="sex">
-                                <input type="radio" name="sex" id="female" value="F" th:onchange="removeClass(this)">
+                                <input type="radio" name="sex" id="female" value="F" th:checked="${userInfo.sex eq 'F'}" th:onchange="removeClass(this)">
                                 <span>여</span>
                             </label>
                         </td>
@@ -48,27 +47,27 @@
                         <td colspan="4">
                             <select id="responsibilities_of_office" class="custom-select" style="font-size: 15px; width: 20%; text-align: center;" th:onchange="removeClass(this)">
                                 <option value="">선택</option>
-                                <option value="매니저">매니저</option>
-                                <option value="책임 매니저">책임 매니저</option>
-                                <option value="팀장">팀장</option>
+                                <option th:attr="selected=${userInfo.responsibilities_of_office eq '매니저' ? 'true' : 'false'} " value="매니저">매니저</option>
+                                <option th:attr="selected=${userInfo.responsibilities_of_office eq '책임 매니저' ? 'true' : 'false'} " value="책임 매니저">책임 매니저</option>
+                                <option th:attr="selected=${userInfo.responsibilities_of_office eq '팀장' ? 'true' : 'false'} " value="팀장">팀장</option>
                             </select>
                         </td>
                         <th>부서</th>
-                        <td style="width: 32%;"><input type="text" id="department" name="department" class="input_text" th:onchange="removeClass(this)"></td>
+                        <td style="width: 32%;"><input type="text" th:field="*{department}" class="input_text" th:onchange="removeClass(this)"></td>
                     </tr>
                     <tr>
                         <th>생년월일</th>
-                        <td colspan="4"><input type="text" id="birthday" name="birthday" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"></td>
+                        <td colspan="4"><input type="text" th:field="*{birthday}" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"></td>
                         <th>입사일</th>
-                        <td colspan="4"><input type="text" id="start_year" name="start_year" readonly="readonly" class="input_text3" style="width: 25%;" th:onchange="removeClass(this)"></td>
+                        <td colspan="4"><input type="text" th:field="*{start_year}" readonly="readonly" class="input_text3" style="width: 25%;" th:onchange="removeClass(this)"></td>
                     </tr>
                     <tr>
                         <th>권한</th>
                         <td colspan="6">
                             <select id="auth" class="custom-select" style="font-size: 15px; width: 10%; text-align: center;" th:onchange="removeClass(this)">
                                 <option value="">선택</option>
-                                <option value="manager">관리자</option>
-                                <option value="user">일반 사용자</option>
+                                <option th:attr="selected=${userInfo.auth eq 'manager' ? 'true' : 'false'} " value="manager">관리자</option>
+                                <option th:attr="selected=${userInfo.auth eq 'user' ? 'true' : 'false'} " value="user">일반 사용자</option>
                             </select>
                         </td>
                     </tr>
@@ -76,88 +75,101 @@
             </div>
         </div>
         <div style="text-align: center;">
-            <button type="button" class="btn btn-outline-secondary" th:onclick="userRegister()" style="margin-top: 20px; font-size: 13px;">등록</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="userUpdate()" style="margin-top: 20px; font-size: 13px;">수정</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="userDelete()" style="margin-top: 20px; font-size: 13px;">삭제</button>
+            <button type="button" class="btn btn-outline-secondary" th:onclick="passwordInit()" style="margin-top: 20px; font-size: 13px;">비밀번호 초기화</button>
         </div>
     </section>
 </div>
 <script>
-    function duplicateId() {
-        let user_id = getValue('#user_id');
-
-        if(user_id == null || user_id == '') {
-            alert('사번을 입력해주세요');
-        } else {
-            setValue('#origin_id', user_id);
-
+    function userUpdate() {
+        if(confirm("회원을 수정 하시겠습니까?")) {
             let params = {
-                "user_id" : user_id
+                "user_id" : getValue('#user_id'),
+                "user_name" : getValue('#user_name'),
+                "user_number" : getValue('#user_number'),
+                "sex" : getValue('input[name="sex"]:checked'),
+                "responsibilities_of_office" : getValue('#responsibilities_of_office'),
+                "department" : getValue('#department'),
+                "birthday" : getValue('#birthday'),
+                "start_year" : getValue('#start_year'),
+                "auth" : getValue('#auth'),
             }
 
-            fetch("/duplicateId", {
+            fetch("/userUpdate", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(params)
             }).then((response) => {
-                response.text().then(function(data) {
-                    if(data == 1) {
-                        alert('중복된 사번입니다');
-                    } else if(data == 0) {
-                        alert('사용 가능한 사번입니다');
-                        return;
+                if(!response.ok) {
+                    throw response;
+                }
+                alert('회원이 수정 되었습니다');
+                window.location.href='/userManagement';
+            }).catch(e => {
+                e.json().then(msg => {
+                    for (let i = 0; i < msg.errors.length; i++) {
+                        document.querySelector("#" + msg.errors[i].field).className += ' field-error';
                     }
                 });
+            });
+        } else {
+            return;
+        }
+    }
+
+    function userDelete() {
+         if(confirm("회원을 삭제 하시겠습니까?")) {
+            let params = {
+                "user_id" : getValue('#user_id'),
+            }
+
+            fetch("/userDelete", {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                if(!response.ok) {
+                    alert('회원 삭제 중 오류 발생');
+                }
+                alert('회원이 삭제 되었습니다');
+                window.location.href='/userManagement';
+            }).catch(e => {
+                e.json().then(msg => {
+
+                });
+            });
+         }
+    }
+
+    function passwordInit() {
+        if(confirm("비밀번호를 초기화 하시겠습니까?\n비밀번호는 'gbajsdpstltm'로 초기화 됩니다")) {
+            let params = {
+                "user_id" : getValue('#user_id'),
+            }
+
+            fetch("/passwordInit", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                if(!response.ok) {
+                    alert('비밀번호 초기화 중 오류 발생');
+                }
+                alert('비밀번호가 초기화 되었습니다');
+                window.location.href='/userManagement';
             }).catch(e => {
                 e.json().then(msg => {
 
                 });
             });
         }
-    }
-
-    function userRegister() {
-        let user_id = getValue('#user_id');
-        let origin_id = getValue('#origin_id');
-
-        // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크
-        if(origin_id != user_id) {
-            alert("아이디 중복을 확인해주세요");
-            setValue('#user_id', '');
-            return;
-        }
-
-        let params = {
-            "user_id" : getValue('#user_id'),
-            "user_name" : getValue('#user_name'),
-            "user_number" : getValue('#user_number'),
-            "sex" : getValue('input[name="sex"]:checked'),
-            "responsibilities_of_office" : getValue('#responsibilities_of_office'),
-            "department" : getValue('#department'),
-            "birthday" : getValue('#birthday'),
-            "start_year" : getValue('#start_year'),
-            "auth" : getValue('#auth'),
-        }
-
-        fetch("/userRegister", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params)
-        }).then((response) => {
-            if(!response.ok) {
-                throw response;
-            }
-            alert('회원이 등록 되었습니다');
-            window.location.href='/userManagement';
-        }).catch(e => {
-            e.json().then(msg => {
-                for (let i = 0; i < msg.errors.length; i++) {
-                    document.querySelector("#" + msg.errors[i].field).className += ' field-error';
-                }
-            });
-        });
     }
 
     function removeClass(obj){
