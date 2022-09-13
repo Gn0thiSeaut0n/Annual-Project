@@ -301,4 +301,60 @@
             HISTORY_ID DESC
     </select>
 
+    <select id="findByAllAnnual" resultType="AnnualList">
+        SELECT
+            YEAR1,
+            YEAR2,
+            YEAR3,
+            YEAR4,
+            YEAR5,
+            YEAR6,
+            YEAR7,
+            YEAR8,
+            YEAR9,
+            YEAR10,
+            YEAR11,
+            YEAR12,
+            YEAR13,
+            YEAR14,
+            YEAR15,
+            YEAR16,
+            YEAR17,
+            YEAR18,
+            YEAR19,
+            YEAR20,
+            MODIFY_DATETIME,
+            MODIFY_ID
+        FROM
+            ANNUAL_INFO
+    </select>
+
+    <update id="annualUpdate" parameterType="AnnualList">
+        UPDATE
+            ANNUAL_INFO
+        SET
+            YEAR1 = #{year1},
+            YEAR2 = #{year2},
+            YEAR3 = #{year3},
+            YEAR4 = #{year4},
+            YEAR5 = #{year5},
+            YEAR6 = #{year6},
+            YEAR7 = #{year7},
+            YEAR8 = #{year8},
+            YEAR9 = #{year9},
+            YEAR10 = #{year10},
+            YEAR11 = #{year11},
+            YEAR12 = #{year12},
+            YEAR13 = #{year13},
+            YEAR14 = #{year14},
+            YEAR15 = #{year15},
+            YEAR16 = #{year16},
+            YEAR17 = #{year17},
+            YEAR18 = #{year18},
+            YEAR19 = #{year19},
+            YEAR20 = #{year20},
+            MODIFY_DATETIME = NOW(),
+            MODIFY_ID = #{modify_id}
+    </update>
+
 </mapper>

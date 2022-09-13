@@ -1,5 +1,6 @@
 package hello.login.domain.dao;
 
+import hello.login.domain.dto.AnnualList;
 import hello.login.domain.dto.History;
 import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
@@ -42,4 +43,7 @@ public interface EtcDAO {
 
 	List<History> calendarHistory();
 
+    AnnualList findByAllAnnual();
+
+    void annualUpdate(AnnualList annualList);
 }

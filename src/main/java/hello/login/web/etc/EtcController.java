@@ -160,6 +160,22 @@ public class EtcController {
         return "info/memberRegister";
     }
 
+    @GetMapping("/annualManagement")
+    public String annualManagement(@Login User loginMember, Model model) {
+        AnnualList annualList = etcService.findByAllAnnual();
+
+        model.addAttribute("annual", annualList);
+        model.addAttribute("user", loginMember);
+        return "info/annualManagement";
+    }
+
+    @PutMapping("/annualUpdate")
+    public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
+        annualList.setModify_id(loginMember.getUser_id());
+        etcService.annualUpdate(annualList);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     private float getUseAnnual(History history) {
         return Float.valueOf(history.getUse_annual()) + Float.valueOf(history.getApplication_year());
     }
@@ -170,7 +186,6 @@ public class EtcController {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
     }
-    
     
     @GetMapping("/viewCalendar")
     public String viewCalendar(@Login User loginMember,

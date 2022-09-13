@@ -1,6 +1,7 @@
 package hello.login.domain.service;
 
 import hello.login.domain.dao.EtcDAO;
+import hello.login.domain.dto.AnnualList;
 import hello.login.domain.dto.History;
 import hello.login.domain.dto.MonthAndDayList;
 import hello.login.domain.dto.UserAnnual;
@@ -81,6 +82,14 @@ public class EtcService {
     
     public List<History> calendarHistory() {
         return etcDAO.calendarHistory();
+    }
+
+    public AnnualList findByAllAnnual() {
+        return etcDAO.findByAllAnnual();
+    }
+
+    public void annualUpdate(AnnualList annualList) {
+        etcDAO.annualUpdate(annualList);
     }
 }
 
