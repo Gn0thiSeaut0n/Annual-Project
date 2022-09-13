@@ -20,17 +20,12 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         // 개발용
         HttpSession session = request.getSession();
         //세션에 로그인 회원 정보 보관
-
         User user = new User();
         user.setUser_id("root");
-
-//        user.setUser_id("tester");
-
+//        user.setUser_id("tester");       
         user.setUser_pw("1234");
         user.setUser_name("휴먼엔시스");
-
 //        user.setUser_name("테스트");
-
         user.setSex("M");
         user.setResponsibilities_of_office("관리자");
         user.setDepartment("-");

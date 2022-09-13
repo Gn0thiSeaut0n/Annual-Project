@@ -78,5 +78,9 @@ public class EtcService {
     public UserAnnual selectTotalAnnualMonth(String year, String user) {
         return etcDAO.selectTotalAnnualMonth(Map.of("year", year, "user_id", user));
     }
+    
+    public List<History> calendarHistory() {
+        return etcDAO.calendarHistory();
+    }
 }
 
