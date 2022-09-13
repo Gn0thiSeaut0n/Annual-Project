@@ -48,4 +48,8 @@ public class UserService {
         user.setUser_pw(JasyptUtil.encrypt("gbajsdpstltm"));
         userDAO.passwordInit(user);
     }
+
+	public void annualRegister(User user) {
+		userDAO.annualRegister(user);
+	}
 }

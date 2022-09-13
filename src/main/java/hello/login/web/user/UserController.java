@@ -56,6 +56,7 @@ public class UserController {
     @PostMapping("/userRegister")
     public ResponseEntity userRegister(@RequestBody @Validated User user) {
         userService.userRegister(user);
+        userService.annualRegister(user);
         return new ResponseEntity(HttpStatus.OK);
     }
 

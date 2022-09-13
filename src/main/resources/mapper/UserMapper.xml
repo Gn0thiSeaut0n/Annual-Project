@@ -127,4 +127,16 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+    
+    <insert id="annualRegister" parameterType="User">
+        INSERT INTO ANNUAL_STATUS (
+            USER_ID,
+            TOTAL_ANNUAL,
+            USE_ANNUAL
+        ) VALUES (
+            #{user_id},
+            '0',
+           	'0'
+        )
+    </insert>
 </mapper>

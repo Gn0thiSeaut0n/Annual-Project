@@ -29,33 +29,87 @@
          
         </section>
     </div>
-	<script>
+	<script th:inline="javascript">
+	
+	
+    document.addEventListener('DOMContentLoaded', function () {
+        $(function () {
+            var request = $.ajax({
+                url: "/viewAnnual", // 변경하기
+                method: "GET",
+                dataType: "json"
+            });
+
+            request.done(function (data) {
+                console.log(data); // log 로 데이터 찍어주기.
+
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                	googleCalendarApiKey : 'AIzaSyBm760wuxQTEuMXQoFshIoPyvr0_ZQVCcQ',
+                	eventSources: [
+                		{
+                		//구글 캘린더 id
+                		googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
+                        , color: 'white'
+                        , textColor: 'red'
+                		},
+                	],
+                	locale: 'ko',
+                	dayMaxEvents: true,
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    },
+                    
+                    events: data
+                });
+
+                calendar.render();
+            });
+
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+        });
+
+    });
+
+	
+	/*
 	document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        /* 
-        console.log(list);
-        var events = list.map(function(item){
-        	return {
-        		title : item.user_name
-        	}
-        }); 
-        */
+        var gaOrderArrayArg = new Array();
         
+        var orderDetailList = [[${list}]];
+            var gaOrderGoodsinfo = new Object();
+            
+            orderDetailList.forEach(function(item){
+                gaOrderGoodsinfo.id = item.user_name;
+                gaOrderArrayArg.push(gaOrderGoodsinfo);
+            });
+        
+        
+        
+
         var calendar = new FullCalendar.Calendar(calendarEl, {
         	//공휴일(추석 등) 데이터를 구글 캘린더에서 호출
         	//구글 캘린더 api key
         	googleCalendarApiKey : 'AIzaSyBm760wuxQTEuMXQoFshIoPyvr0_ZQVCcQ',
-        	eventSources :[
+        	eventSources: [
         		{
         		//구글 캘린더 id
         		googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
                 , color: 'white'
                 , textColor: 'red'
         		},
-        	]
+        	],
+        	locale: 'ko'
         });
         calendar.render();
     });
+	*/
 	</script>
 </body>
 </html>
