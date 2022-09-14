@@ -272,7 +272,7 @@
         </if>
     </select>
     
-    <select id="calendarHistory" parameterType="String" resultType="History">
+    <select id="calendarHistory" parameterType="Map" resultType="History">
         SELECT
             HISTORY_ID,
             USER_ID,
@@ -280,8 +280,6 @@
             RESPONSIBILITIES_OF_OFFICE,
             DEPARTMENT,
             START_YEAR,
-            BIRTHDAY,
-            SEX,
             USER_NUMBER,
             TOTAL_ANNUAL,
             USE_ANNUAL,
@@ -289,14 +287,18 @@
             END_DATE,
             TIME,
             APPLICATION_YEAR,
-            REASON,
-            APPR_YN,
-            APPR_YN2,
             REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         WHERE
+        <if test="year != '' and month != ''">
+        	START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
+        </if>
+        <if test="year == '' and month == ''">
             START_DATE LIKE CONCAT('%', DATE_FORMAT(NOW(), '%Y-%m'), '%')
+        </if>
+        AND 
+        	APPR_YN2 = 'Y'
         ORDER BY
             HISTORY_ID DESC
     </select>

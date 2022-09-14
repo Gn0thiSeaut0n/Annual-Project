@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,8 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,7 @@ import java.util.Map;
 @Slf4j
 public class EtcController {
 
+	@Autowired
     private final EtcService etcService;
 
     @PostMapping("/application")
@@ -195,45 +194,16 @@ public class EtcController {
 
         model.addAttribute("user", loginMember);
         model.addAttribute("searchParam", Map.of("year", year, "month", month));
-        model.addAttribute("list", etcService.calendarHistory());
         return "info/viewCalendar";
     }
     
     @GetMapping("/viewAnnual")
     @ResponseBody
-    public List<Map<String, Object>> viewAnnual() {
+    public List<Map<String, Object>> viewAnnual(
+    		@RequestParam(defaultValue = "") String year,
+            @RequestParam(defaultValue = "") String month) {
     	
-    	List<History> list = etcService.calendarHistory();
-    	
-    	JSONObject jsonObj = new JSONObject();
-    	JSONArray jsonArr = new JSONArray();
-    	
-    	HashMap<String, Object> hash = new HashMap<>();
-
-    	for(int i = 0; i < list.size(); i++) {
-    		
-    		hash.put("title", list.get(i).getUser_name());
-    		
-    		if(list.get(i).getTime().equals("연차")) {
-        		hash.put("start", list.get(i).getStart_date()+"T09:00:00");
-        		hash.put("end", list.get(i).getEnd_date()+"T18:00:00");
-        		hash.put("allDay", true);
-        		
-    		}else if(list.get(i).getTime().equals("오전")) {
-	    		hash.put("start", list.get(i).getStart_date()+"T09:00:00");
-	    		hash.put("end", list.get(i).getEnd_date());
-	    		hash.put("allDay", false);
-	    		
-    		}else if(list.get(i).getTime().equals("오후")) {    	
-    			hash.put("start", list.get(i).getStart_date()+"T14:00:00");
-    			hash.put("end", list.get(i).getEnd_date());
-    			hash.put("allDay", false);
-    		}
-    		
-    		jsonObj = new JSONObject(hash);
-    		jsonArr.add(jsonObj);
-    	}
-    	log.info("jsonArr: ",jsonArr);
-        return jsonArr;
+    	JSONArray jsonArr = (JSONArray) etcService.calendarHistory(year, month);
+    	return jsonArr;
     }
 }
