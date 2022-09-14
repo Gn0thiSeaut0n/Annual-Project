@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnnualList {
+
+    private String year0;
     private String year1;
     private String year2;
     private String year3;
@@ -26,6 +28,4 @@ public class AnnualList {
     private String year18;
     private String year19;
     private String year20;
-    private String modify_datetime;
-    private String modify_id;
 }

@@ -324,9 +324,7 @@
             YEAR17,
             YEAR18,
             YEAR19,
-            YEAR20,
-            MODIFY_DATETIME,
-            MODIFY_ID
+            YEAR20
         FROM
             ANNUAL_INFO
     </select>
@@ -354,9 +352,7 @@
             YEAR17 = #{year17},
             YEAR18 = #{year18},
             YEAR19 = #{year19},
-            YEAR20 = #{year20},
-            MODIFY_DATETIME = NOW(),
-            MODIFY_ID = #{modify_id}
+            YEAR20 = #{year20}
     </update>
 
 </mapper>

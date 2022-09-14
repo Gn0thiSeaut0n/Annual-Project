@@ -170,7 +170,6 @@ public class EtcController {
 
     @PutMapping("/annualUpdate")
     public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
-        annualList.setModify_id(loginMember.getUser_id());
         etcService.annualUpdate(annualList);
         return new ResponseEntity(HttpStatus.OK);
     }
