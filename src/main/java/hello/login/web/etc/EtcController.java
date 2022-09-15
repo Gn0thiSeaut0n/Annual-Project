@@ -6,13 +6,18 @@ import hello.login.web.argumentresolver.Login;
 import hello.login.web.util.JasyptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.json.simple.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,6 +25,7 @@ import java.util.Map;
 @Slf4j
 public class EtcController {
 
+	@Autowired
     private final EtcService etcService;
 
     @PostMapping("/application")
@@ -153,6 +159,21 @@ public class EtcController {
         return "info/memberRegister";
     }
 
+    @GetMapping("/annualManagement")
+    public String annualManagement(@Login User loginMember, Model model) {
+        AnnualList annualList = etcService.findByAllAnnual();
+
+        model.addAttribute("annual", annualList);
+        model.addAttribute("user", loginMember);
+        return "info/annualManagement";
+    }
+
+    @PutMapping("/annualUpdate")
+    public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
+        etcService.annualUpdate(annualList);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     private float getUseAnnual(History history) {
         return Float.valueOf(history.getUse_annual()) + Float.valueOf(history.getApplication_year());
     }
@@ -164,16 +185,24 @@ public class EtcController {
                 .orElseThrow(() -> new IllegalArgumentException());
     }
     
-    
     @GetMapping("/viewCalendar")
-    public String selectAll(@Login User loginMember,
+    public String viewCalendar(@Login User loginMember,
 				    		@RequestParam(defaultValue = "") String year,
 				            @RequestParam(defaultValue = "") String month,
               				Model model) {
 
         model.addAttribute("user", loginMember);
         model.addAttribute("searchParam", Map.of("year", year, "month", month));
-        model.addAttribute("list", etcService.calendarHistory());
         return "info/viewCalendar";
+    }
+    
+    @GetMapping("/viewAnnual")
+    @ResponseBody
+    public List<Map<String, Object>> viewAnnual(
+    		@RequestParam(defaultValue = "") String year,
+            @RequestParam(defaultValue = "") String month) {
+    	
+    	JSONArray jsonArr = (JSONArray) etcService.calendarHistory(year, month);
+    	return jsonArr;
     }
 }

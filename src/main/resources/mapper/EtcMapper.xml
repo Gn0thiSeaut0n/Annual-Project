@@ -272,7 +272,7 @@
         </if>
     </select>
     
-    <select id="calendarHistory" parameterType="String" resultType="History">
+    <select id="calendarHistory" parameterType="Map" resultType="History">
         SELECT
             HISTORY_ID,
             USER_ID,
@@ -280,8 +280,6 @@
             RESPONSIBILITIES_OF_OFFICE,
             DEPARTMENT,
             START_YEAR,
-            BIRTHDAY,
-            SEX,
             USER_NUMBER,
             TOTAL_ANNUAL,
             USE_ANNUAL,
@@ -289,16 +287,72 @@
             END_DATE,
             TIME,
             APPLICATION_YEAR,
-            REASON,
-            APPR_YN,
-            APPR_YN2,
             REQUEST_DATE
         FROM
             APPLICATION_HISTORY
         WHERE
+        <if test="year != '' and month != ''">
+        	START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
+        </if>
+        <if test="year == '' and month == ''">
             START_DATE LIKE CONCAT('%', DATE_FORMAT(NOW(), '%Y-%m'), '%')
+        </if>
+        AND 
+        	APPR_YN2 = 'Y'
         ORDER BY
             HISTORY_ID DESC
     </select>
+
+    <select id="findByAllAnnual" resultType="AnnualList">
+        SELECT
+            YEAR1,
+            YEAR2,
+            YEAR3,
+            YEAR4,
+            YEAR5,
+            YEAR6,
+            YEAR7,
+            YEAR8,
+            YEAR9,
+            YEAR10,
+            YEAR11,
+            YEAR12,
+            YEAR13,
+            YEAR14,
+            YEAR15,
+            YEAR16,
+            YEAR17,
+            YEAR18,
+            YEAR19,
+            YEAR20
+        FROM
+            ANNUAL_INFO
+    </select>
+
+    <update id="annualUpdate" parameterType="AnnualList">
+        UPDATE
+            ANNUAL_INFO
+        SET
+            YEAR1 = #{year1},
+            YEAR2 = #{year2},
+            YEAR3 = #{year3},
+            YEAR4 = #{year4},
+            YEAR5 = #{year5},
+            YEAR6 = #{year6},
+            YEAR7 = #{year7},
+            YEAR8 = #{year8},
+            YEAR9 = #{year9},
+            YEAR10 = #{year10},
+            YEAR11 = #{year11},
+            YEAR12 = #{year12},
+            YEAR13 = #{year13},
+            YEAR14 = #{year14},
+            YEAR15 = #{year15},
+            YEAR16 = #{year16},
+            YEAR17 = #{year17},
+            YEAR18 = #{year18},
+            YEAR19 = #{year19},
+            YEAR20 = #{year20}
+    </update>
 
 </mapper>

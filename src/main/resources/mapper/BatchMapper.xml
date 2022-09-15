@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.login.domain.dao.BatchDAO">
+
+    <select id="findByAllUser" resultType="User">
+        SELECT
+            USER_ID,
+            START_YEAR
+        FROM
+            USER_INFO
+    </select>
+
+    <select id="findByUserAnnual" parameterType="String" resultType="String">
+        SELECT
+            TIMESTAMPDIFF(YEAR, (SELECT START_YEAR FROM USER_INFO WHERE USER_ID = #{user_id}), DATE_FORMAT(NOW(), '%Y-%m-%d')) AS YEAR
+    </select>
+
+    <select id="findByUserMonth" parameterType="String" resultType="String">
+        SELECT
+            TIMESTAMPDIFF(MONTH, (SELECT START_YEAR FROM USER_INFO WHERE USER_ID = #{user_id}), DATE_FORMAT(NOW(), '%Y-%m-%d')) AS MONTH
+    </select>
+
+    <select id="findByAnnual" parameterType="String" resultType="String">
+        SELECT
+        YEAR${userAnnual}
+        FROM
+        ANNUAL_INFO
+    </select>
+
+    <update id="updateUserAnnual" parameterType="Map">
+        UPDATE
+            ANNUAL_STATUS
+        SET
+            TOTAL_ANNUAL = #{total_annual}
+        WHERE
+            USER_ID = #{user_id}
+    </update>
+
+    <update id="userAnnualInit" parameterType="String">
+        UPDATE
+            ANNUAL_STATUS
+        SET
+            USE_ANNUAL = 0
+        WHERE
+            USER_ID = #{user_id}
+    </update>
+
+</mapper>

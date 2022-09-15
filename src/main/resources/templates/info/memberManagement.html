@@ -7,6 +7,14 @@
 <body>
 <div class="container">
     <section>
+        <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+            <ul>
+                <a th:href="@{/memberManagement}" class='btn_line btn_gray' style="float: left;">현황</a>
+            </ul>
+            <ul>
+                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">관리</a>
+            </ul>
+        </div>
         <div class="input-group mb-3">
             <p style="font-size: 16px; text-align: center; padding-top: 2px;">년도: &nbsp;</p>
             <select id="year" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">

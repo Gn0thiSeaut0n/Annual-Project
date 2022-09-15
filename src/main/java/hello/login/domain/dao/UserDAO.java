@@ -24,4 +24,6 @@ public interface UserDAO {
     void userDelete(User user);
 
     void passwordInit(User user);
+
+	void annualRegister(User user);
 }

@@ -3,6 +3,17 @@
 <head>
     <title>전체 조회</title>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <style type="text/css">
+    	.fc-button-active{
+			border-color: #ffc107 		!important;
+			background-color: #ffc107 	!important;
+			color: #000 				!important;
+			font-weight: bold 			!important;
+		  }
+		.fc-day-sat a{color:#0000FF;}
+		.fc-day-sun a{color:#FF0000;}
+
+    </style>
 </head>
 <body>
     <div class="container">
@@ -29,33 +40,76 @@
          
         </section>
     </div>
-	<script>
-	document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        /* 
-        console.log(list);
-        var events = list.map(function(item){
-        	return {
-        		title : item.user_name
-        	}
-        }); 
-        */
+	<script th:inline="javascript">
+	
+	function calendar(data) { // 데이터 조회(초기 데이터) 후
+        console.log(data); // log 로 데이터 찍어주기.
         
+        var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-        	//공휴일(추석 등) 데이터를 구글 캘린더에서 호출
-        	//구글 캘린더 api key
+        	// 구글 캘린더 연동 api 키, 회사 계정으로 키 발급받아서 사용하는게 좋음, 현재 개인 키
         	googleCalendarApiKey : 'AIzaSyBm760wuxQTEuMXQoFshIoPyvr0_ZQVCcQ',
-        	eventSources :[
+        	eventSources: [
         		{
-        		//구글 캘린더 id
+        		// 구글 캘린더 id, 한국 공휴일 포함된 캘린더
         		googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
                 , color: 'white'
                 , textColor: 'red'
         		},
-        	]
+        	],
+        	// 언어 한국어
+        	locale: 'ko',
+        	// 달력 셀에 데이터 표출 수 제한, false일 경우 달력 셀 하단으로 영역 증가해서 보기 안좋음.
+        	dayMaxEvents: true,
+        	// 캘린더 상단에 생성할 툴바
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listWeek'
+            },
+            // 캘린더 이벤트에 조회한 연차 데이터 기입
+            events: data
         });
-        calendar.render();
+		// 캘린더 그리기
+        calendar.destroy() & calendar.render();
+    }
+	
+	//fullcalendar 영역
+    document.addEventListener('DOMContentLoaded', function () {
+    	$(function () {
+	        var request = $.ajax({
+		        url: "/viewAnnual", 
+		        method: "GET",
+		        dataType: "json"
+	        })
+	        request.done(function(data){
+	        	calendar(data);
+	        })
+			request.fail(function( jqXHR, textStatus ) {
+	            alert( "Request failed: " + textStatus );
+			})
+		});
     });
+	
+	function search() {
+        let selectYear = document.querySelector('#year').value;
+        let selectMonth = document.querySelector('#month').value;
+        $(function () {
+       		var request = $.ajax({
+	        	url: "/viewAnnual",
+	        	data:{year: selectYear, month: selectMonth},
+	        	method: "GET",
+	        	dataType: "json"
+	        });
+	        request.done(function(data){
+	        	calendar(data);
+	        })
+	        request.fail(function(xhr, status, errorThrown){
+	        	alert("Request Failed: " + errorThrown);
+	        })
+    	});
+    }
+
 	</script>
 </body>
 </html>
