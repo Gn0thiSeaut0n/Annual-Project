@@ -38,12 +38,12 @@
             <nav aria-label="Page navigation example" style="font-size: 16px">
                 <ul class="pagination" style="justify-content: center;">
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/mypage?page=1}" aria-label="Previous">
+                        <a class="page-link" th:href="@{/myPage?page=1}" aria-label="Previous">
                             <span aria-hidden="true">처음</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.prevBlock})}" aria-label="Previous">
+                        <a class="page-link" th:href="@{/myPage?page={page} (page = ${pagination.prevBlock})}" aria-label="Previous">
                             <span aria-hidden="true">이전</span>
                         </a>
                     </li>
@@ -51,16 +51,16 @@
                         <li class="page-item"
                             th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
                             th:each="pageButton : ${#numbers.sequence(start, end)}">
-                            <a class="page-link" th:href="@{/mypage?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
+                            <a class="page-link" th:href="@{/myPage?page={page} (page = ${pageButton})}" th:text=${pageButton}></a>
                         </li>
                     </th:block>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.nextBlock})}" aria-label="Next">
+                        <a class="page-link" th:href="@{/myPage?page={page} (page = ${pagination.nextBlock})}" aria-label="Next">
                             <span aria-hidden="true">다음</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/mypage?page={page} (page = ${pagination.totalPageCnt})}" aria-label="Previous">
+                        <a class="page-link" th:href="@{/myPage?page={page} (page = ${pagination.totalPageCnt})}" aria-label="Previous">
                             <span aria-hidden="true">끝</span>
                         </a>
                     </li>
@@ -81,7 +81,7 @@
             if(!response.ok)
                 throw response;
             alert("삭제가 완료되었습니다.");
-            window.location.href="/mypage";
+            window.location.href="/myPage";
         }).catch(e => {
             console.log("에러 발생");
         });

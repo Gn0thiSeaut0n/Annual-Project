@@ -2,13 +2,14 @@ package hello.login.web.etc;
 
 import hello.login.domain.dto.*;
 import hello.login.domain.service.EtcService;
+
 import hello.login.web.argumentresolver.Login;
 import hello.login.web.util.JasyptUtil;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.simple.JSONArray;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,94 +25,21 @@ import java.util.Map;
 @Slf4j
 public class EtcController {
 
-	@Autowired
     private final EtcService etcService;
 
     @PostMapping("/application")
     public ResponseEntity application(@RequestBody @Validated History history) {
         etcService.insertApplicationHistory(history);
-        etcService.updateAnnual(history.getUser_id(), getUseAnnual(history));
+        etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
         log.info(history.toString());
 
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/mypage")
-    public String mypage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
-
-        Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
-
-        model.addAttribute("user", loginMember);
-        model.addAttribute("history", etcService.findByHistoryPaging(pagination.getStartIndex(), pagination.getPageSize(), loginMember.getUser_id()));
-        model.addAttribute("pagination", pagination);
-        return "info/mypage";
-    }
-
-    @GetMapping("/selectAll")
-    public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "") String year,
-                            @RequestParam(defaultValue = "") String month,
-                            @RequestParam(defaultValue = "") String user_name,
-                            Model model) {
-
-        Pagination pagination = new Pagination(etcService.findByAllHistoryCnt(year, month, user_name), page);
-
-        model.addAttribute("user", loginMember);
-        model.addAttribute("history", etcService.findByAllHistoryPaging(Map.of(
-                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
-                "year", year, "month", month, "user_name", user_name)));
-        model.addAttribute("pagination", pagination);
-        model.addAttribute("searchParam", Map.of("year", year, "month", month, "user_name", user_name));
-        return "info/selectAll";
-    }
-
-    @GetMapping("/memberManagement")
-    public String memberManagement(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "") String year,
-                                   @RequestParam(defaultValue = "") String user_name,
-                                   Model model) {
-
-        Pagination pagination = new Pagination(etcService.findByAllUserAnnualCnt(year, user_name), page);
-
-        model.addAttribute("user", loginMember);
-        model.addAttribute("allUser", etcService.findByAllUserAnnualPaging(Map.of(
-                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),
-                "year", year, "user_name", user_name)));
-        model.addAttribute("pagination", pagination);
-        model.addAttribute("searchParam", Map.of("year", year, "user_name", user_name));
-
-        return "info/memberManagement";
-    }
-
-    @GetMapping("/memberManagement/{year}/{user}")
-    public String memberManagementDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
-
-        Map<Integer, Map> bigBox = new HashMap<>();
-        Map<Integer, String> smallBox = new HashMap<>();
-
-        for (int i = 1; i <= 12; i++) {
-            for (int j = 1; j <= 31; j++) {
-                smallBox.put(j, "");
-            }
-            bigBox.put(i, new HashMap<>(smallBox));
-        }
-
-        etcService.selectAnnualMonth(year, user).stream().forEach(
-                (data) -> {
-                    // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
-                    bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
-                }
-        );
-
-        model.addAttribute("monthTot", etcService.selectTotalAnnualMonth(year, user));
-        model.addAttribute("bigBox", bigBox);
-        model.addAttribute("user", loginMember);
-        return "info/memberManagementDetail";
-    }
-
     @DeleteMapping("/deleteHistory/{history_id}")
     public ResponseEntity deleteHistory(@PathVariable String history_id, @Login User loginMember) {
-        etcService.updateAnnual(loginMember.getUser_id(), Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getUse_annual()));
+        etcService.updateAnnual(Map.of(
+                "user_id", loginMember.getUser_id(), "use_annual", Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getUse_annual())));
         etcService.deleteHistory(history_id);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -120,8 +47,21 @@ public class EtcController {
     @PutMapping("/apprHistory/{history_id}")
     public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) {
     	
-        etcService.updateAppr(history_id, loginMember.getAuth());
+        etcService.updateAppr(Map.of("history_id", history_id, "type", loginMember.getAuth()));
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/myPage")
+    public String myPage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
+
+        Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
+
+        model.addAttribute("user", loginMember);
+        model.addAttribute("history", etcService.findByHistoryPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(), "user_id", loginMember.getUser_id()
+        )));
+        model.addAttribute("pagination", pagination);
+        return "info/myPage";
     }
 
     @GetMapping("/selectCurrentPwd")
@@ -149,28 +89,7 @@ public class EtcController {
     @PutMapping("/updatePwd")
     public ResponseEntity updatePwd(@RequestBody User user, @Login User loginMember) {
         // 암호화
-        etcService.updatePwd(JasyptUtil.encrypt(user.getUser_pw()), loginMember.getUser_id());
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @GetMapping("/memberRegister")
-    public String memberRegisterPage(@Login User loginMember, Model model) {
-        model.addAttribute("user", loginMember);
-        return "info/memberRegister";
-    }
-
-    @GetMapping("/annualManagement")
-    public String annualManagement(@Login User loginMember, Model model) {
-        AnnualList annualList = etcService.findByAllAnnual();
-
-        model.addAttribute("annual", annualList);
-        model.addAttribute("user", loginMember);
-        return "info/annualManagement";
-    }
-
-    @PutMapping("/annualUpdate")
-    public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
-        etcService.annualUpdate(annualList);
+        etcService.updatePwd(Map.of("user_pw", JasyptUtil.encrypt(user.getUser_pw()), "user_id", loginMember.getUser_id()));
         return new ResponseEntity(HttpStatus.OK);
     }
 

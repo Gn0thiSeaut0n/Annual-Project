@@ -22,7 +22,7 @@ input,textarea,button,select{font-family:'Noto Sans KR', sans-serif}
 table{width:100%;border-collapse:collapse;border-spacing:0;text-align:left}
 table th, table td{text-align:left}
 
-header, .mypage, .logout {
+header, .myPage, .logout {
     font-size: 15px;
 }
 

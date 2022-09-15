@@ -1,10 +1,8 @@
 package hello.login.domain.service;
 
 import hello.login.domain.dao.EtcDAO;
-import hello.login.domain.dto.AnnualList;
 import hello.login.domain.dto.History;
-import hello.login.domain.dto.MonthAndDayList;
-import hello.login.domain.dto.UserAnnual;
+
 import lombok.RequiredArgsConstructor;
 
 import org.json.simple.JSONArray;
@@ -30,8 +28,8 @@ public class EtcService {
         etcDAO.insertApplicationHistory(history);
     }
 
-    public void updateAnnual(String user_id, Float use_annual) {
-        etcDAO.updateAnnual(Map.of("user_id", user_id, "use_annual", ""+use_annual));
+    public void updateAnnual(Map<String, Object> map) {
+        etcDAO.updateAnnual(map);
     }
 
     public List<History> findByHistory(String user_id) {
@@ -42,61 +40,26 @@ public class EtcService {
         etcDAO.deleteHistory(history_id);
     }
 
-    public void updateAppr(String history_id, String type) {
-        etcDAO.updateAppr(Map.of("history_id", history_id, "type", type));
+    public void updateAppr(Map<String, String> map) {
+        etcDAO.updateAppr(map);
     }
 
-    public List<UserAnnual> findByAllUserAnnualPaging(Map<String, Object> pageParam) {
-        return etcDAO.findByAllUserAnnualPaging(pageParam);
-    }
+	public int findByHistoryAllCnt(String user_id) {
+		return etcDAO.findByHistoryAllCnt(user_id);
+	}
 
-    public int findByHistoryAllCnt(String user_id) {
-        return etcDAO.findByHistoryAllCnt(user_id);
-    }
+	public List<History> findByHistoryPaging(Map<String, Object> pageParam) {
+		return etcDAO.findByHistoryPaging(pageParam);
+	}
 
-    public List<History> findByHistoryPaging(int startIndex, int pageSize, String user_id) {
-        return etcDAO.findByHistoryPaging(Map.of("startIndex", startIndex, "pageSize", pageSize, "user_id", user_id));
-    }
+	public String selectCurrentPwd(String user_id) {
+		return etcDAO.selectCurrentPwd(user_id);
+	}
 
-    public int findByAllHistoryCnt(String year, String month, String user_name) {
-        return etcDAO.findByAllHistoryCnt(Map.of("year", year, "month", month, "user_name", user_name));
-    }
+	public void updatePwd(Map<String, String> map) {
+		etcDAO.updatePwd(map);
+	}
 
-    public List<History> findByAllHistoryPaging(Map<String, Object> pageParam) {
-        return etcDAO.findByAllHistoryPaging(pageParam);
-    }
-
-    public List<MonthAndDayList> selectAnnualMonth(String year, String user) {
-        return etcDAO.selectAnnualMonth(Map.of("year", year,"user_id", user));
-    }
-
-    public String selectCurrentPwd(String user_id) {
-        return etcDAO.selectCurrentPwd(user_id);
-    }
-
-    public void updatePwd(String encrypt_user_pw, String user_id) {
-        Map<String, String> userParam = new HashMap<>();
-        userParam.put("user_pw", encrypt_user_pw);
-        userParam.put("user_id", user_id);
-        etcDAO.updatePwd(userParam);
-    }
-
-    public int findByAllUserAnnualCnt(String year, String user_name) {
-        return etcDAO.findByAllUserAnnualCnt(Map.of("year", year, "user_name", user_name));
-    }
-
-    public UserAnnual selectTotalAnnualMonth(String year, String user) {
-        return etcDAO.selectTotalAnnualMonth(Map.of("year", year, "user_id", user));
-    }
-
-    public AnnualList findByAllAnnual() {
-        return etcDAO.findByAllAnnual();
-    }
-
-    public void annualUpdate(AnnualList annualList) {
-        etcDAO.annualUpdate(annualList);
-    }
-    
     public List<History> calendarHistory(String year, String month) {
     	List<History> list = etcDAO.calendarHistory(Map.of("year", year, "month", month));
 
