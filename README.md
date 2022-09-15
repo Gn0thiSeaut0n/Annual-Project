@@ -16,4 +16,6 @@ This project has a function to manage annual leave and users.
 
 - IntelliJ IDEA or STS4   
 
-***
+## More
+
+Welcome any feedback in our [github](https://github.com/Gn0thiSeaut0n/hncis-annual-project).
