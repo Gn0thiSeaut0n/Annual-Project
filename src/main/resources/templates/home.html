@@ -191,7 +191,7 @@
             if(!response.ok)
                 throw response;
             alert("신청이 완료되었습니다.");
-            window.location.href="/mypage";
+            window.location.href="/myPage";
         }).catch(e => {
             e.json().then(msg => {
                 for (let i = 0; i < msg.errors.length; i++) {

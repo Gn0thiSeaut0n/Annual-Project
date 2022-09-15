@@ -12,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -38,13 +36,13 @@ public class UserController {
                 "user_id", user_id, "user_name", user_name)));
         model.addAttribute("pagination", pagination);
         model.addAttribute("searchParam", Map.of("user_name", user_name, "user_id", user_id));
-        return "info/userManagement";
+        return "user/userManagement";
     }
 
     @GetMapping("/userRegister")
     public String userRegisterPage(@Login User loginMember, Model model) {
         model.addAttribute("user", loginMember);
-        return "info/userRegister";
+        return "user/userRegister";
     }
 
     @PostMapping("/duplicateId")
@@ -64,7 +62,7 @@ public class UserController {
     public String userDetail(@Login User loginMember, Model model, @PathVariable String user_id) {
         model.addAttribute("user", loginMember);
         model.addAttribute("userInfo", userService.findByUserDetail(user_id));
-        return "info/userDetail";
+        return "user/userDetail";
     }
 
     @PostMapping("/userUpdate")

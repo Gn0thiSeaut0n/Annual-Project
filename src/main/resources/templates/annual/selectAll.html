@@ -108,6 +108,10 @@
             let selectMonth = document.querySelector('#month').value;
             let user_name = document.querySelector('#user_name').value;
 
+            if(selectMonth.length == 1) {
+                selectMonth = "0".concat(selectMonth);
+            }
+
             window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
         }
         

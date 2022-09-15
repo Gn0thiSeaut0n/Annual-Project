@@ -19,14 +19,14 @@ public class AnnualScheduler {
 
     private final BatchDAO batchDAO;
 
-//    @Scheduled(cron = "* * * * * *")   // 초(0~59), 분(0~59), 시(0~23), 일(1~31), 월(1~12), 요일(0~7)
+    // "* * * * * *" 초(0~59), 분(0~59), 시(0~23), 일(1~31), 월(1~12), 요일(0~7)
     @Scheduled(cron = "0 0 1 * * *")   // 매일 새벽 1시
     public void annualTest() {
         log.info("연차 초기화 실행");
 
-        List<User> user = batchDAO.findByAllUser();     // 유저 아이디를 구한다
+        List<User> userList = batchDAO.findByAllUser();     // 유저 아이디를 구한다
 
-        for (User userInfo : user) {
+        for (User userInfo : userList) {
             String user_id = userInfo.getUser_id();
             String userAnnual = batchDAO.findByUserAnnual(user_id); // 유저가 몇 년차인지 구한다
 

@@ -31,4 +31,5 @@ public class HomeController {
         model.addAttribute("annual", annual);
         return "home";
     }
+
 }
