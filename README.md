@@ -1,5 +1,5 @@
 # Annual Management System
-This project has a function to manage annual leave and users.
+This project has a function to manage annual leave and members.
 
 ## Technology Stack
 - SpringBoot  
@@ -15,6 +15,19 @@ This project has a function to manage annual leave and users.
 - Mybatis  
 
 - IntelliJ IDEA or STS4   
+
+## Main Function
+1. Member Management
+
+2. Annual Management
+
+3. Login/Logout
+
+4. Calendar
+
+5. My Page
+
+6. Daily batch
 
 ## More
 
