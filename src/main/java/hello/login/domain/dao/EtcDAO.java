@@ -41,8 +41,6 @@ public interface EtcDAO {
 
     UserAnnual selectTotalAnnualMonth(Map<String, String> year);
 
-	List<History> calendarHistory(Map<String, String> map);
-
     AnnualList findByAllAnnual();
 
     void annualUpdate(AnnualList annualList);

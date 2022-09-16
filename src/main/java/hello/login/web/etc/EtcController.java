@@ -185,24 +185,4 @@ public class EtcController {
                 .orElseThrow(() -> new IllegalArgumentException());
     }
     
-    @GetMapping("/viewCalendar")
-    public String viewCalendar(@Login User loginMember,
-				    		@RequestParam(defaultValue = "") String year,
-				            @RequestParam(defaultValue = "") String month,
-              				Model model) {
-
-        model.addAttribute("user", loginMember);
-        model.addAttribute("searchParam", Map.of("year", year, "month", month));
-        return "info/viewCalendar";
-    }
-    
-    @GetMapping("/viewAnnual")
-    @ResponseBody
-    public List<Map<String, Object>> viewAnnual(
-    		@RequestParam(defaultValue = "") String year,
-            @RequestParam(defaultValue = "") String month) {
-    	
-    	JSONArray jsonArr = (JSONArray) etcService.calendarHistory(year, month);
-    	return jsonArr;
-    }
 }

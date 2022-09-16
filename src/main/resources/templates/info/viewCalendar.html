@@ -10,6 +10,7 @@
 			color: #000 				!important;
 			font-weight: bold 			!important;
 		  }
+		 /** 주말 구분 가능하도록 색상 지정 */
 		.fc-day-sat a{color:#0000FF;}
 		.fc-day-sun a{color:#FF0000;}
 
@@ -36,15 +37,29 @@
                 </div>
             </div>
             <div id="calendar"></div>
-         	<!-- AAA --> 
          
         </section>
     </div>
 	<script th:inline="javascript">
 	
-	function calendar(data) { // 데이터 조회(초기 데이터) 후
-        console.log(data); // log 로 데이터 찍어주기.
+	// 데이터 조회(초기 데이터) 후
+	function calendar(data) { 
         
+        var monthFix = document.querySelector('#month').value;
+        var searchDate = '';
+		
+    	// 검색조건(연도,월)을 입력한 경우 검색조건 연도 월로 달력 세팅.(데이터 유뮤 상관없음 )
+    	if(document.querySelector('#year').value != '' && document.querySelector('#month').value != ''){
+    		monthFix = monthFix.padStart(2, '0');
+    		searchDate = document.querySelector('#year').value + '-' + monthFix; 
+        }
+        else {
+        	var today = new Date();
+         	var year = today.getFullYear();
+         	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        	searchDate = year + '-' + month;
+        }
+    	
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
         	// 구글 캘린더 연동 api 키, 회사 계정으로 키 발급받아서 사용하는게 좋음, 현재 개인 키
@@ -57,24 +72,33 @@
                 , textColor: 'red'
         		},
         	],
+        	//initialDate 미지정 시, 데이터 조회 후 render 진행시 표출되는 달력이 현재일자 기준으로 설정됨. 
+        	initialDate: searchDate,
         	// 언어 한국어
         	locale: 'ko',
-        	// 달력 셀에 데이터 표출 수 제한, false일 경우 달력 셀 하단으로 영역 증가해서 보기 안좋음.
+        	// 달력 셀에 이벤트(연차,반차)가 3개 이상일 경우 true로 설정 시, 초과 데이터는 +n more로 표기. false일 경우 이벤트 수만큼 표출
         	dayMaxEvents: true,
-        	// 캘린더 상단에 생성할 툴바
+        	views: {
+        		dayGridMonth: { buttonText: '달력' },
+				listDay: { buttonText: '일간' },
+				listWeek: { buttonText: '주간' },
+				listMonth: { buttonText: '월간' }
+        	},
+        	// 캘린더 상단에 생성할 툴바(<,>,today | YYYY년 MM월 | month, list)
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,listWeek'
+                right: 'dayGridMonth listDay listWeek listMonth'
             },
-            // 캘린더 이벤트에 조회한 연차 데이터 기입
+            // 조회된 연차 데이터를 이벤트로 세팅
             events: data
         });
-		// 캘린더 그리기
-        calendar.destroy() & calendar.render();
+		
+        calendar.destroy();
+		calendar.render();
     }
 	
-	//fullcalendar 영역
+	//달력페이지 최초 접근 시, 접속일자 연도 기준으로 연차데이터 조회 후 달력 render요청
     document.addEventListener('DOMContentLoaded', function () {
     	$(function () {
 	        var request = $.ajax({
@@ -91,24 +115,31 @@
 		});
     });
 	
+	//header 하단의 검색조건으로 조회
 	function search() {
         let selectYear = document.querySelector('#year').value;
         let selectMonth = document.querySelector('#month').value;
-        $(function () {
-       		var request = $.ajax({
-	        	url: "/viewAnnual",
-	        	data:{year: selectYear, month: selectMonth},
-	        	method: "GET",
-	        	dataType: "json"
-	        });
-	        request.done(function(data){
-	        	calendar(data);
-	        })
-	        request.fail(function(xhr, status, errorThrown){
-	        	alert("Request Failed: " + errorThrown);
-	        })
-    	});
-    }
+        
+        if(selectYear != '' && selectMonth != ''){
+        	$(function () {
+           		var request = $.ajax({
+    	        	url: "/viewAnnual",
+    	        	data:{year: selectYear, month: selectMonth},
+    	        	method: "GET",
+    	        	dataType: "json"
+    	        });
+    	        request.done(function(data){
+    	        	calendar(data);
+    	        })
+    	        request.fail(function(xhr, status, errorThrown){
+    	        	alert("Request Failed: " + errorThrown);
+    	        })
+        	});
+        } else{
+        	alert("연도와 월을 설정해주세요.");
+        	return false;
+        }
+	}
 
 	</script>
 </body>

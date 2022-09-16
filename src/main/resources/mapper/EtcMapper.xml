@@ -272,37 +272,7 @@
         </if>
     </select>
     
-    <select id="calendarHistory" parameterType="Map" resultType="History">
-        SELECT
-            HISTORY_ID,
-            USER_ID,
-            USER_NAME,
-            RESPONSIBILITIES_OF_OFFICE,
-            DEPARTMENT,
-            START_YEAR,
-            USER_NUMBER,
-            TOTAL_ANNUAL,
-            USE_ANNUAL,
-            START_DATE,
-            END_DATE,
-            TIME,
-            APPLICATION_YEAR,
-            REQUEST_DATE
-        FROM
-            APPLICATION_HISTORY
-        WHERE
-        <if test="year != '' and month != ''">
-        	START_DATE LIKE CONCAT(#{year}, '-', '%', #{month}, '%')
-        </if>
-        <if test="year == '' and month == ''">
-            START_DATE LIKE CONCAT('%', DATE_FORMAT(NOW(), '%Y-%m'), '%')
-        </if>
-        AND 
-        	APPR_YN2 = 'Y'
-        ORDER BY
-            HISTORY_ID DESC
-    </select>
-
+    
     <select id="findByAllAnnual" resultType="AnnualList">
         SELECT
             YEAR1,
