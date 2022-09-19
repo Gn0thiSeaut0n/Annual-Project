@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class EtcController {
     private final EtcService etcService;
 
     @PostMapping("/application")
-    public ResponseEntity application(@RequestBody @Validated History history) {
+    public ResponseEntity application(@Validated History history) throws IOException {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
         log.info(history.toString());

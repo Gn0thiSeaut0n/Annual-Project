@@ -1,5 +1,6 @@
 package hello.login.domain.dao;
 
+import hello.login.domain.dto.File;
 import hello.login.domain.dto.History;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
@@ -26,4 +27,5 @@ public interface EtcDAO {
 
     void updatePwd(Map<String, String> userParam);
 
+    void insertFile(File file);
 }

@@ -7,6 +7,14 @@
 <body>
 <div class="container">
     <section>
+        <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+            <ul>
+                <a th:href="@{/annualStatus}" class='btn_line btn_gray' style="float: left;">현황</a>
+            </ul>
+            <ul>
+                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">관리</a>
+            </ul>
+        </div>
         <table class="table table-bordered">
             <thread>
                 <tr class="pb-3 pt-3">
@@ -35,8 +43,9 @@
                 <td scope="row" class="p-0 text-center" th:text="${monthTot.getDec()}"></td>
             </tr>
             <tr>
-                <th scope="row" class="p-0 text-center text-bold">총합</th>
-                <td scope="row" colspan="11"></td>
+<!--                <td scope="row"></td>-->
+                <td th:each="day : ${#numbers.sequence(0, 9)}"><td>
+                <td scope="row" class="p-0 text-center text-bold">총합</td>
                 <td scope="row" class="p-0 text-center" th:text="${monthTot.getTotal()}"></td>
             </tr>
             </tbody>

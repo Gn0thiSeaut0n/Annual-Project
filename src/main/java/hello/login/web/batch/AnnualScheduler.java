@@ -21,7 +21,7 @@ public class AnnualScheduler {
 
     // "* * * * * *" 초(0~59), 분(0~59), 시(0~23), 일(1~31), 월(1~12), 요일(0~7)
     @Scheduled(cron = "0 0 1 * * *")   // 매일 새벽 1시
-    public void annualTest() {
+    public void annualInit() {
         log.info("연차 초기화 실행");
 
         List<User> userList = batchDAO.findByAllUser();     // 유저 아이디를 구한다
@@ -33,10 +33,10 @@ public class AnnualScheduler {
             //신입인 경우
             if (userAnnual.equals("0")) {
                 // 유저가 몇 개월차인지 구한다
-                updateUser(user_id, batchDAO.findByUserMonth(user_id));
+                updateUserAnnual(user_id, batchDAO.findByUserMonth(user_id));
             } else {
                 // 유저에 맞는 연차수를 구한다
-                updateUser(user_id, batchDAO.findByAnnual(userAnnual));
+                updateUserAnnual(user_id, batchDAO.findByAnnual(userAnnual));
             }
 
             // 유저 입사일 구하기
@@ -56,7 +56,7 @@ public class AnnualScheduler {
         }
     }
 
-    private void updateUser(String user_id, String month) {
+    private void updateUserAnnual(String user_id, String month) {
         batchDAO.updateUserAnnual(Map.of("user_id", user_id, "total_annual", month));
     }
 }

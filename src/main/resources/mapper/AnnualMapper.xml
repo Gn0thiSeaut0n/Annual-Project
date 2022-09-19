@@ -43,9 +43,11 @@
             REASON,
             APPR_YN,
             APPR_YN2,
-            REQUEST_DATE
+            REQUEST_DATE,
+            HOLIDAY,
+            (SELECT DISTINCT FILE_ID FROM FILE_INFO WHERE FILE_ID = (SELECT HISTORY_ID FROM APPLICATION_HISTORY WHERE HISTORY_ID = AH.HISTORY_ID)) AS FILE_ID
         FROM
-            APPLICATION_HISTORY
+            APPLICATION_HISTORY AH
         WHERE
             1=1
         <if test="year != '' and month != ''">

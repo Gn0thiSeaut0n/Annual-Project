@@ -69,14 +69,14 @@
                     <table class="sub_table">
                         <tr id="putIn">
                             <th>신청연차</th>
-                            <td>
+                            <td colspan="3">
                                 <p>
                                     <input type="text" id="application_year" class="input_text2" readonly/>
                                 </p>
                             </td>
                         </tr>
                         <tr>
-                            <th>기간</th>
+                            <th style="padding-right: 35px;">기간</th>
                             <td>
                                 <p>
                                     <input type="text" value="" id="start_date" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"/>
@@ -98,12 +98,26 @@
                                     </label>
                                 </p>
                             </td>
+                            <td style="font-size: 15px;">
+                                <label class="holiday">
+                                    <input type="radio" id="holiday1" name="holiday" value="공가"> 공가
+                                </label>
+                            </td>
+                            <td style="font-size: 15px;">
+                                <label class="holiday">
+                                    <input type="radio" id="holiday2" name="holiday" value="대휴"> 대체 휴가
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th>사유</th>
-                            <td>
+                            <td colspan="3">
                                 <textarea rows="8" id="reason" class="input_text" th:onchange="removeClass(this)"></textarea>
                             </td>
+                        </tr>
+                        <tr class="uploadFile" style="display: none;">
+                            <th style="padding-bottom: 15px;">첨부파일</th>
+                            <td style="font-size: 13px;" colspan="3"><input type="file" name="uploadFile" id="uploadFile" accept="image/*" multiple="multiple"></td>
                         </tr>
                     </table>
                 </div>
@@ -115,9 +129,7 @@
             </div>
         </section>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
     function yearChecked() {
         if (getValue('input[name="years"]:checked') === 'year') {
             document.getElementById('putIn').hidden = false;
@@ -161,32 +173,40 @@
             }
         }
 
-        let params = {
-            "user_id" : getValue("#user_id"),
-            "user_name" : getValue("#user_name"),
-            "responsibilities_of_office" : getValue("#responsibilities_of_office"),
-            "department" : getValue("#department"),
-            "start_year" : getValue("#start_year"),
-            "birthday" : getValue("#birthday"),
-            "sex" : getValue("#sex"),
-            "user_number" : getValue("#user_number"),
-            "total_annual" : getValue("#total_annual"),
-            "use_annual" : getValue("#use_annual"),
-            "application_year": getValue("#application_year"),
-            "start_date": getValue("#start_date"),
-            "end_date": getValue("#end_date"),
-            "time" : getValue('input[name="time"]:checked'),
-            "reason" : getValue("#reason"),
-            "appr_yn" : "N",
-            "appr_yn2" : "N"
-        };
+        let formData = new FormData();
+        let holiday = "";
+        let file = document.querySelector('#uploadFile');
 
-       fetch("/application", {
+        if(document.querySelector('#holiday1').checked == true || document.querySelector('#holiday2').checked == true) {
+            holiday = getValue('input[name="holiday"]:checked');
+        }
+
+        formData.append('user_id', getValue("#user_id"));
+        formData.append('user_name', getValue("#user_name"));
+        formData.append('responsibilities_of_office', getValue("#responsibilities_of_office"));
+        formData.append('department', getValue("#department"));
+        formData.append('start_year', getValue("#start_year"));
+        formData.append('birthday', getValue("#birthday"));
+        formData.append('sex', getValue("#sex"));
+        formData.append('user_number', getValue("#user_number"));
+        formData.append('total_annual', getValue("#total_annual"));
+        formData.append('use_annual', getValue("#use_annual"));
+        formData.append('application_year', getValue("#application_year"));
+        formData.append('start_date', getValue("#start_date"));
+        formData.append('end_date', getValue("#end_date"));
+        formData.append('reason', getValue("#reason"));
+        formData.append('time', getValue('input[name="time"]:checked'));
+        formData.append('appr_yn', 'N');
+        formData.append('appr_yn2', 'N');
+        formData.append('holiday', holiday);
+
+        for(let i = 0; i < file.files.length; i++) {
+            formData.append('uploadFiles', file.files[i]);
+        }
+
+        fetch("/application", {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params)
+            body: formData
         }).then((response) => {
             if(!response.ok)
                 throw response;
@@ -218,10 +238,6 @@
         return false;
     }
 
-    const getValue = (parameter) => {
-        return document.querySelector(parameter).value;
-    }
-
     jQuery.datetimepicker.setLocale('ko');
     $('#start_date').datetimepicker({
         timepicker: false,
@@ -233,6 +249,16 @@
         minDate: new Date(),
         format: 'Y-m-d'
     });
+
+    document.querySelector('#holiday1').onclick = function() {
+        document.querySelector('.uploadFile').style.display = '';
+    }
+
+    document.querySelector('#holiday2').onclick = function() {
+        document.querySelector('.uploadFile').style.display = 'none';
+        document.querySelector('#uploadFile').value = '';
+    }
+
 </script>
 </body>
 </html>

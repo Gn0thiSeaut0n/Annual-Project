@@ -39,6 +39,8 @@
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">첨부파일</th>
                         </tr>
                     </thread>
                     <tbody>
@@ -54,6 +56,10 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn2.equals('Y')}">미승인</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.holiday != null}">[[${list.holiday}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.holiday != null}">-</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.file_id != null}">다운로드</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.file_id != null}">-</td>
                         </tr>
                     </tbody>
                 </table>

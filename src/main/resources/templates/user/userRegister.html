@@ -164,14 +164,6 @@
         obj.classList.remove("field-error");
     }
 
-    const getValue = (parameter) => {
-        return document.querySelector(parameter).value;
-    }
-
-    const setValue = (name, val) => {
-        document.querySelector(name).value = val;
-    }
-
     jQuery.datetimepicker.setLocale('ko');
         $('#birthday').datetimepicker({
             timepicker: false,

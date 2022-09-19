@@ -21,7 +21,8 @@
             REASON,
             APPR_YN,
             APPR_YN2,
-            REQUEST_DATE
+            REQUEST_DATE,
+            HOLIDAY
         FROM
             APPLICATION_HISTORY
         WHERE
@@ -52,7 +53,8 @@
                 #{reason},
                 #{appr_yn},
                 #{appr_yn2},
-                NOW()
+                NOW(),
+                #{holiday}
                )
     </insert>
 
@@ -101,7 +103,8 @@
             END_DATE,
             TIME,
             APPLICATION_YEAR,
-            REQUEST_DATE
+            REQUEST_DATE,
+            HOLIDAY
         FROM
             APPLICATION_HISTORY
         WHERE
@@ -147,8 +150,9 @@
             REASON,
             APPR_YN,
             APPR_YN2,
-            REQUEST_DATE
-            FROM
+            REQUEST_DATE,
+            HOLIDAY
+        FROM
             APPLICATION_HISTORY
         WHERE
             USER_ID = #{user_id}
@@ -174,4 +178,16 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+
+    <insert id="insertFile" parameterType="UploadFile">
+        INSERT INTO FILE_INFO (
+            FILE_ID,
+            FILE_UUID,
+            ORIGIN_FILE_NAME
+        ) VALUES (
+            (SELECT * FROM (SELECT MAX(HISTORY_ID) FROM APPLICATION_HISTORY) NEXT),
+            #{file_uuid},
+            #{origin_file_name}
+        )
+    </insert>
 </mapper>

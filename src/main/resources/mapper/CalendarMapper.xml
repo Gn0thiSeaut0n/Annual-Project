@@ -16,7 +16,8 @@
             END_DATE,
             TIME,
             APPLICATION_YEAR,
-            REQUEST_DATE
+            REQUEST_DATE,
+            HOLIDAY
         FROM
             APPLICATION_HISTORY
         WHERE
