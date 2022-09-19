@@ -18,8 +18,6 @@ public interface EtcDAO {
 
     void updateAppr(Map<String, String> map);
 
-	List<History> calendarHistory(Map<String, String> map);
-
     int findByHistoryAllCnt(String user_id);
 
     List<History> findByHistoryPaging(Map<String, Object> pageParam);
