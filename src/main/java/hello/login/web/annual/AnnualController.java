@@ -1,20 +1,28 @@
 package hello.login.web.annual;
 
 import hello.login.domain.dto.AnnualList;
+import hello.login.domain.dto.History;
 import hello.login.domain.dto.Pagination;
 import hello.login.domain.dto.User;
 import hello.login.domain.service.AnnualService;
 import hello.login.web.argumentresolver.Login;
 
+import hello.login.web.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +32,7 @@ import java.util.Map;
 public class AnnualController {
 
     private final AnnualService annualService;
+    private final FileStore fileStore;
 
     @GetMapping("/selectAll")
     public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
@@ -100,5 +109,25 @@ public class AnnualController {
     public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
         annualService.annualUpdate(annualList);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/fileDownload/{file_id}")
+    public ResponseEntity<Resource> fileDownload(@PathVariable String file_id) throws MalformedURLException {
+
+        History history = annualService.findByFileId(file_id);
+
+        String storeFileName = history.getFile_uuid();
+        String uploadFileName = history.getOrigin_file_name();
+
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+
+        log.info("FILE NAME = {}", uploadFileName);
+
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
     }
 }

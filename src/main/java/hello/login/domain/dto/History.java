@@ -25,8 +25,11 @@ public class History {
     private String appr_yn2;
     private String request_date;
     private String holiday;
-    private String file_id;
 
+    //파일 필드
+    private String file_id;
+    private String file_uuid;
+    private String origin_file_name;
     private List<MultipartFile> uploadFiles;
 
     @NotNull

@@ -93,3 +93,11 @@ header, .myPage, .logout {
     background-color: #113a6b;
     color: #ffffff;
 }
+
+div.container section div div.view_file_box {bottom:-1px; right: 0; text-align: right;}
+div.container section div div.view_file_box .btn_link span { display: inline-block; vertical-align: middle;}
+div.container section div div.view_file_box .btn_link .txt {font-size: 16px; color:#222d5b;margin:0 20px 0 4px; font-weight: 700;}
+div.container section div div.view_file_box .btn_link .download {top: -1px;}
+div.container section div div.view_file_box .link_list {text-align: left; top: calc(100% + 10px); right:0; border:1px solid #e2e2e2; padding:20px; background: #fff; z-index: 50; max-width:300px}
+div.container section div div.view_file_box .link_list li + li { margin-top: 5px;}
+div.container section div div.view_file_box .link_list a {color:#222d5b; font-size: 14px; text-decoration: underline; max-width: 100%; display: block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}

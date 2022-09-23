@@ -21,6 +21,7 @@ public class FileStore {
     }
 
     public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
+
         List<UploadFile> storeFileResult = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
@@ -28,7 +29,6 @@ public class FileStore {
                 storeFileResult.add(storeFile(multipartFile));
             }
         }
-
         return storeFileResult;
     }
 
@@ -41,16 +41,18 @@ public class FileStore {
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
+
         return new UploadFile(originalFilename, storeFileName);
     }
 
     private String createStoreFileName(String originalFilename) {
         String ext = extractExt(originalFilename);
         String uuid = UUID.randomUUID().toString();
+
         return uuid + "." + ext;
     }
 
-    private String extractExt(String originalFilename) {
+    private String extractExt(String originalFilename) {    // 확장자를 별도로 추출해서 서버 내부에서 관리하는 파일명에도 붙여준다.
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }

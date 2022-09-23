@@ -28,4 +28,6 @@ public interface AnnualDAO {
     AnnualList findByAllAnnual();
 
     void annualUpdate(AnnualList annualList);
+
+    History findByFileId(String file_id);
 }

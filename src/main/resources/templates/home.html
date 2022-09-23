@@ -100,12 +100,12 @@
                             </td>
                             <td style="font-size: 15px;">
                                 <label class="holiday">
-                                    <input type="radio" id="holiday1" name="holiday" value="공가"> 공가
+                                    <input type="checkbox" id="holiday1" name="holiday" value="공가" onclick="noMultiChk(this)"> 공가
                                 </label>
                             </td>
                             <td style="font-size: 15px;">
                                 <label class="holiday">
-                                    <input type="radio" id="holiday2" name="holiday" value="대휴"> 대체 휴가
+                                    <input type="checkbox" id="holiday2" name="holiday" value="대휴" onclick="noMultiChk(this)"> 대체 휴가
                                 </label>
                             </td>
                         </tr>
@@ -117,7 +117,7 @@
                         </tr>
                         <tr class="uploadFile" style="display: none;">
                             <th style="padding-bottom: 15px;">첨부파일</th>
-                            <td style="font-size: 13px;" colspan="3"><input type="file" name="uploadFile" id="uploadFile" accept="image/*" multiple="multiple"></td>
+                            <td style="font-size: 13px;" colspan="3"><input type="file" name="uploadFile" id="uploadFile" accept=".pdf"></td>
                         </tr>
                     </table>
                 </div>
@@ -250,15 +250,25 @@
         format: 'Y-m-d'
     });
 
-    document.querySelector('#holiday1').onclick = function() {
-        document.querySelector('.uploadFile').style.display = '';
+    let holiday1 = document.querySelector('#holiday1');
+    let holiday2 = document.querySelector('#holiday2');
+    let uploadFile = document.querySelector('.uploadFile');
+
+    holiday1.onclick = function() {
+        uploadFile.style.display = '';
+        holiday2.checked = false;
+
+        if(holiday1.checked == false) {
+            uploadFile.style.display = 'none';
+        }
+
     }
 
-    document.querySelector('#holiday2').onclick = function() {
-        document.querySelector('.uploadFile').style.display = 'none';
+    holiday2.onclick = function() {
+        uploadFile.style.display = 'none';
         document.querySelector('#uploadFile').value = '';
+        holiday1.checked = false;
     }
-
 </script>
 </body>
 </html>

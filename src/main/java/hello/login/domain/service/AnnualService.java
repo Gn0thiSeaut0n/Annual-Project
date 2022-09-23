@@ -50,4 +50,8 @@ public class AnnualService {
     public void annualUpdate(AnnualList annualList) {
         annualDAO.annualUpdate(annualList);
     }
+
+    public History findByFileId(String file_id) {
+        return annualDAO.findByFileId(file_id);
+    }
 }

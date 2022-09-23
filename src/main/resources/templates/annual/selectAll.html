@@ -39,8 +39,8 @@
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">첨부파일</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
                         </tr>
                     </thread>
                     <tbody>
@@ -56,13 +56,29 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn2.equals('Y')}">미승인</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
+                                <div class="view_file_box" style="position: absolute;">
+                                    <a href="#" class="btn_link">
+                                        <span class="ic file"></span>
+                                        <span class="txt">
+                                            <p style="margin-bottom: 15px;">다운로드</p>
+                                        </span>
+                                        <span class="ic download"></span>
+                                    </a>
+                                    <div class="link_list" style="display: none; z-index: 1; position: absolute;">
+                                        <ul>
+                                            <li><a th:text="${list.origin_file_name}" th:href="|/fileDownload/${list.file_id}|"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.file_id != null}">-</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.holiday != null}">[[${list.holiday}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.holiday != null}">-</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.file_id != null}">다운로드</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.file_id != null}">-</td>
                         </tr>
                     </tbody>
                 </table>
+
                 <nav aria-label="Page navigation example" style="font-size: 16px">
                     <ul class="pagination" style="justify-content: center;">
                         <li class="page-item">
@@ -138,6 +154,15 @@
                 console.log("에러 발생");
             });
         }
+
+        $(document).on('click', '.view_file_box a.btn_link', function() {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active").next().stop(true, true).slideUp(200);
+            } else {
+                $(this).addClass("active").next().stop(true, true).slideDown(200);
+            }
+            return false;
+        });
     </script>
 </body>
 </html>
