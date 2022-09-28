@@ -1,4 +1,4 @@
-package hello.login.domain;
+package hello.login.web.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;

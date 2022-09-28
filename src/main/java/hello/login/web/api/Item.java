@@ -1,4 +1,4 @@
-package hello.login.domain;
+package hello.login.web.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

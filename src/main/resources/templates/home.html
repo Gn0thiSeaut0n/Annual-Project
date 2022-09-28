@@ -129,7 +129,7 @@
             </div>
         </section>
     </div>
-<script>
+<script th:inline="javascript">
     function yearChecked() {
         if (getValue('input[name="years"]:checked') === 'year') {
             document.getElementById('putIn').hidden = false;
@@ -149,7 +149,33 @@
 
     function removeClass(obj){
         obj.classList.remove("field-error");
-        let result = new Date(Date.parse(getValue("#end_date")) - Date.parse(getValue("#start_date"))).getDate();
+        document.querySelector("#application_year").classList.remove('field-error');
+
+        let start_date = getValue('#start_date');
+        let end_date = getValue('#end_date');
+
+        let count = 0;
+        let holidays = [[${holidays}]];
+        let curDate = new Date(start_date);
+
+        while(curDate <= new Date(end_date)) {
+            if(curDate.getDay()===0 || curDate.getDay()===6)
+                count++;
+            else {
+                holidays.forEach(function(item){
+                    if((curDate.toISOString().split("T")[0].replaceAll('-','') === item.locdate)&&(item.isHoliday === "Y"))
+                        count++;
+                });
+            }
+            curDate.setDate(curDate.getDate() + 1);
+        }
+
+        let day = Date.parse(end_date) - Date.parse(start_date);
+        let result = 0;
+
+        if(day>=0)
+            result = new Date(day).getDate() - count;
+
         if(isNaN(result))
             document.querySelector('#application_year').value = 0;
         else
@@ -227,7 +253,7 @@
             document.querySelector("#end_date").value = getValue("#start_date");
         }
 
-        if (isNaN(getValue("#application_year"))) {
+        if (isNaN(getValue("#application_year")) || getValue("#application_year") == "0") {
             document.querySelector("#application_year").className += ' field-error';
             return true;
         } else if (getValue("#start_date") > getValue("#end_date")) {

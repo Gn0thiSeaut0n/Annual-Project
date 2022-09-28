@@ -1,4 +1,4 @@
-package hello.login.domain;
+package hello.login.web.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ public class RequestUtils {
         urlBuilder.append("&_type=json"); /* json으로 요청 */
 
         URL url = new URL(urlBuilder.toString());
+        log.info("url = {}", url);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -65,6 +66,7 @@ public class RequestUtils {
 
             try {
                 map = mapper.readValue(map.toString(), Map.class);
+                log.info("map = {}", map);
             } catch (IOException e) {
                 e.printStackTrace();
             }
