@@ -19,6 +19,9 @@
                     <img src="/images/hncis.png">
                 </a>
             </div>
+            <div class="inline-block float m-lg-3">
+                <a th:href="@{/}">신청</a>
+            </div>
             <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
                 <a th:href="@{/selectAll}">전체 조회</a>
             </div>
@@ -28,7 +31,7 @@
             <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
                 <a th:href="@{/userManagement}">회원</a>
             </div>
-            <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
+            <div class="inline-block float m-lg-3">
                 <a th:href="@{/viewCalendar}">달력</a>
             </div>
             <form th:action="@{/myPage}" method="get" class="inline-block">

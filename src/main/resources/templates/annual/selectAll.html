@@ -38,7 +38,7 @@
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">승인</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사유</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">첨부파일</th>
                             <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
                         </tr>
@@ -50,12 +50,22 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn.equals('Y')}">승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn.equals('Y')}">미승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.appr_yn2.equals('Y')}">승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.appr_yn2.equals('Y')}">미승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"><a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="(${user.auth.equals('manager')} and ${list.appr_yn.equals('N')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})"></td>
+
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">
+                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인 /</a>
+                                <a th:href="'javascript:companionHistory(' + ${list.history_id} + ', \'' + ${list.user_id} + '\', ' + ${list.application_year} + ');'" style="color: red;">반려</a>
+                            </td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and ${list.appr_yn.equals('Y')}">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')}">승인</td>
+
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})">
+                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
+
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
                                 <div class="view_file_box" style="position: absolute;">
                                     <a href="#" class="btn_link">
@@ -153,6 +163,28 @@
             }).catch(e => {
                 console.log("에러 발생");
             });
+        }
+
+        function companionHistory(history_id, user_id, application_year) {
+            if(confirm("반려 처리 하시겠습니까?")) {
+                fetch("/companionHistory/" + history_id + "/" + user_id + "/" + application_year, {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: {
+                    }
+                }).then((response) => {
+                    if(!response.ok)
+                        throw response;
+                    alert("반려 처리 되었습니다.");
+                    window.location.href="/selectAll";
+                }).catch(e => {
+                    console.log("에러 발생");
+                });
+            } else {
+                return;
+            }
         }
 
         $(document).on('click', '.view_file_box a.btn_link', function() {

@@ -15,7 +15,7 @@
                 <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">관리</a>
             </ul>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="font-size: 14px; font-weight: bold;">
             <thread>
                 <tr class="pb-3 pt-3">
                     <th scope="col" class="p-0 text-center text-bold" style="width: 50px;"></th>
@@ -25,7 +25,9 @@
             <tbody>
             <tr th:each="day : ${#numbers.sequence(1, 31)}">
                 <th scope="row" class="p-0 text-center text-bold" th:text="|${day}일|"></th>
-                <th scope="row" class="p-0 text-center" th:each="month : ${#numbers.sequence(1, 12)}" th:text="${bigBox.get(month).get(day)}"></th>
+                <th scope="row" class="p-0 text-center" th:each="month : ${#numbers.sequence(1, 12)}"
+                    th:style="${bigBox.get(month).get(day).get('holiday')} == '공가' ? 'background-color: red; color: white;' : (${bigBox.get(month).get(day).get('holiday')} == '대휴' ? 'background-color: blue; color: white;' : '')"
+                    th:text="${bigBox.get(month).get(day).get('day')}"></th>
             </tr>
             <tr>
                 <th scope="row" class="p-0 text-center text-bold">합계</th>

@@ -122,10 +122,7 @@
     }
 
     function allUserDetail(user) {
-        let date = new Date();
-        let year = date.getFullYear();
-
-        window.location.href = window.location.pathname + "/" + year + "/" + user;
+        window.location.href = window.location.pathname + "/" + getValue('#year') + "/" + user;
     }
 </script>
 </body>

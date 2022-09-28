@@ -74,19 +74,25 @@ public class AnnualController {
     public String annualStatusDetail(@Login User loginMember, @PathVariable String year, @PathVariable String user, Model model) {
 
         Map<Integer, Map> bigBox = new HashMap<>();
-        Map<Integer, String> smallBox = new HashMap<>();
+        Map<Integer, Map> smallBox = new HashMap<>();
 
         for (int i = 1; i <= 12; i++) {
             for (int j = 1; j <= 31; j++) {
-                smallBox.put(j, "");
+                smallBox.put(j, new HashMap());
             }
             bigBox.put(i, new HashMap<>(smallBox));
         }
 
         annualService.selectAnnualMonth(Map.of("year", year, "user_id", user)).stream().forEach(
                 (data) -> {
-                    // 한 유저의 휴가가 하루에 여러 개를 쓴다면 해당 부분 수정
-                    bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), data.getApplication_year());
+                    Map inSmallBox = new HashMap<>();
+                    inSmallBox.put("day", data.getApplication_year());
+
+                    if(data.getHoliday() != null) {
+                        inSmallBox.put("holiday", data.getHoliday());
+                    }
+
+                    bigBox.get(Integer.valueOf(data.getMonth())).put(Integer.valueOf(data.getDay()), inSmallBox);
                 }
         );
 
@@ -129,5 +135,12 @@ public class AnnualController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
+    }
+
+    @DeleteMapping("/companionHistory/{history_id}/{user_id}/{application_year}")
+    public ResponseEntity companionHistory(@PathVariable String history_id, @PathVariable String user_id, @PathVariable String application_year) {
+        annualService.companionHistory(history_id);
+        annualService.updateHistory(Map.of("user_id", user_id, "application_year", application_year));
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -7,4 +7,5 @@ public class MonthAndDayList {
     String month;
     String day;
     String application_year;
+    String holiday;
 }

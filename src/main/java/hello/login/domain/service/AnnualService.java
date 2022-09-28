@@ -54,4 +54,12 @@ public class AnnualService {
     public History findByFileId(String file_id) {
         return annualDAO.findByFileId(file_id);
     }
+
+    public void companionHistory(String history_id) {
+        annualDAO.companionHistory(history_id);
+    }
+
+    public void updateHistory(Map<String, String> map) {
+        annualDAO.updateHistory(map);
+    }
 }

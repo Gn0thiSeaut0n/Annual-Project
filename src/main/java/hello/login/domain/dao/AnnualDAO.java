@@ -30,4 +30,8 @@ public interface AnnualDAO {
     void annualUpdate(AnnualList annualList);
 
     History findByFileId(String file_id);
+
+    void companionHistory(String history_id);
+
+    void updateHistory(Map<String, String> map);
 }
