@@ -10,5 +10,5 @@ import hello.login.domain.dto.History;
 @Mapper
 public interface CalendarDAO {
 
-	List<History> calendarHistory(Map<String, String> map);
+	List<History> calendarHistory(Map<String, Object> map);
 }
