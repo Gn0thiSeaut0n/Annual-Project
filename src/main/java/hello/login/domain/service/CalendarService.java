@@ -33,15 +33,21 @@ public class CalendarService {
     	Calendar cal = Calendar.getInstance();
     	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
-    	
     	for(int i = 0; i < list.size(); i++) {
     		hash.put("title", list.get(i).getUser_name());
     		hash.put("textColor", "#000000");
 
     		switch (list.get(i).getTime()) {
 	    		case "연차": {
-	    			hash.put("backgroundColor", "#D6F0F3");
-	    			
+	    			if(list.get(i).getHoliday() == null){
+	    				hash.put("backgroundColor", "#ADFF2F");
+	    			} else {
+	    				if(list.get(i).getHoliday().equals("공가")) {
+		    				hash.put("backgroundColor", "#AFEEEE");
+		    			} else {
+		    				hash.put("backgroundColor", "#DCDCDC");
+		    			}
+	    			}
 	    			if(list.get(i).getStart_date().equals(list.get(i).getEnd_date())) {
 	    				hash.put("start", list.get(i).getStart_date());
 	            		hash.put("end", list.get(i).getEnd_date());
@@ -54,30 +60,46 @@ public class CalendarService {
 						}
 	    				cal.setTime(date);
 	    				cal.add(Calendar.DATE, 1);
-
 	    				hash.put("start", list.get(i).getStart_date());
-	            		hash.put("end", df.format(cal.getTime()));
+	            		hash.put("end", df.format(cal.getTime())); 
 	    			}
 	    			break;
 	    		}
 	    		
 	    		case "오전": {
+	    			if(list.get(i).getHoliday() == null){
+	    				hash.put("backgroundColor", "#FF0000");
+	    			} else {
+	    				if(list.get(i).getHoliday().equals("공가")) {
+		    				hash.put("backgroundColor", "#AFEEEE");
+		    			} else {
+		    				hash.put("backgroundColor", "#DCDCDC");
+		    			}
+	    			}
 	    			hash.put("start", list.get(i).getStart_date()+"T09:00:00");
 		    		hash.put("end", list.get(i).getEnd_date());
-		    		hash.put("backgroundColor", "#FF0000");
 		    		break;
 	    		}
 	    		
-	    		case "오후": {	    			
+	    		case "오후": {
+	    			if(list.get(i).getHoliday() == null){
+	    				hash.put("backgroundColor", "#FF0000");
+	    			} else {
+	    				if(list.get(i).getHoliday().equals("공가")) {
+		    				hash.put("backgroundColor", "#AFEEEE");
+		    			} else {
+		    				hash.put("backgroundColor", "#DCDCDC");
+		    			}
+	    			}
 	    			hash.put("start", list.get(i).getStart_date()+"T14:00:00");
 	    			hash.put("end", list.get(i).getEnd_date());
-	    			hash.put("backgroundColor", "#0000FF");
 	    			break;
 	    		}
     		}
     		
     		jsonObj = new JSONObject(hash);
     		jsonArr.add(jsonObj);
+    		System.out.println(jsonObj.toString());
     	}
         return jsonArr;
     }
