@@ -34,4 +34,6 @@ public interface AnnualDAO {
     void companionHistory(String history_id);
 
     void updateHistory(Map<String, String> map);
+
+    List<History> findByFileList(String file_id);
 }

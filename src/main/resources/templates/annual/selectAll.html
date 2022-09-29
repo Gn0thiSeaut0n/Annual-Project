@@ -64,20 +64,18 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
-
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
                                 <div class="view_file_box" style="position: absolute;">
                                     <a href="#" class="btn_link">
                                         <span class="ic file"></span>
                                         <span class="txt">
-                                            <p style="margin-bottom: 15px;">다운로드</p>
+                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="fileList(this)">다운로드</p>
                                         </span>
                                         <span class="ic download"></span>
                                     </a>
                                     <div class="link_list" style="display: none; z-index: 1; position: absolute;">
-                                        <ul>
-                                            <li><a th:text="${list.origin_file_name}" th:href="|/fileDownload/${list.file_id}|"></a></li>
+                                        <ul class="fileArea">
                                         </ul>
                                     </div>
                                 </div>
@@ -188,13 +186,54 @@
         }
 
         $(document).on('click', '.view_file_box a.btn_link', function() {
-            if ($(this).hasClass("active")) {
-                $(this).removeClass("active").next().stop(true, true).slideUp(200);
+            if ($(this).hasClass("active") && document.getElementsByClassName('active').length < 2) {
+                $(this).removeClass("active").next().stop(true, true).slideUp(0);
             } else {
                 $(this).addClass("active").next().stop(true, true).slideDown(200);
             }
+
+            if(document.getElementsByClassName("active").length > 1) {
+                $("a").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
+            }
+
             return false;
         });
+
+        let fileIdx = '';
+
+        function fileList(id) {
+            fetch("/selectFileList/" + id.title, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                response.json().then(function(data) {
+                    let files = data;
+                    let rsHtml = '';
+
+                    if(fileIdx != files[0].file_id) {
+                        $('.fileList').remove("li");
+                    }
+
+                    fileIdx = files[0].file_id;
+
+                    for(let i = 0; i < files.length; i++) {
+                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
+                        rsHtml += files[i].origin_file_name;
+                        rsHtml += '</li>\r\n';
+                    }
+
+                    if(document.querySelector('.fileArea').children.length == 0) {
+                        $('.fileArea').append(rsHtml);
+                    }
+                });
+            }).catch(e => {
+
+            });
+        }
     </script>
 </body>
 </html>

@@ -24,6 +24,7 @@ import org.springframework.web.util.UriUtils;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -142,5 +143,11 @@ public class AnnualController {
         annualService.companionHistory(history_id);
         annualService.updateHistory(Map.of("user_id", user_id, "application_year", application_year));
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/selectFileList/{file_id}")
+    @ResponseBody
+    public List<History> selectFileList(@PathVariable String file_id) {
+        return annualService.findByFileList(file_id);
     }
 }

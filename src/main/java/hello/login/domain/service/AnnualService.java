@@ -62,4 +62,8 @@ public class AnnualService {
     public void updateHistory(Map<String, String> map) {
         annualDAO.updateHistory(map);
     }
+
+    public List<History> findByFileList(String file_id) {
+        return annualDAO.findByFileList(file_id);
+    }
 }
