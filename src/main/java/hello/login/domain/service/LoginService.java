@@ -1,7 +1,6 @@
 package hello.login.domain.service;
 
 import hello.login.domain.dao.EtcDAO;
-import hello.login.domain.dao.UserDAO;
 import hello.login.domain.dto.Annual;
 import hello.login.domain.dto.LoginForm;
 import hello.login.domain.dto.User;

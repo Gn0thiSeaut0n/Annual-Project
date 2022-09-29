@@ -1,15 +1,13 @@
 package hello.login.web.etc;
 
-import hello.login.domain.dto.*;
+import hello.login.domain.dto.History;
+import hello.login.domain.dto.Pagination;
+import hello.login.domain.dto.User;
 import hello.login.domain.service.EtcService;
-
 import hello.login.web.argumentresolver.Login;
 import hello.login.web.util.JasyptUtil;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.json.simple.JSONArray;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Controller

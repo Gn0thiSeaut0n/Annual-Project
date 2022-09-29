@@ -3,22 +3,12 @@ package hello.login.domain.service;
 import hello.login.domain.dao.EtcDAO;
 import hello.login.domain.dto.File;
 import hello.login.domain.dto.History;
-
 import hello.login.domain.dto.UploadFile;
 import hello.login.web.file.FileStore;
 import lombok.RequiredArgsConstructor;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
