@@ -69,7 +69,7 @@
                                     <a href="#" class="btn_link">
                                         <span class="ic file"></span>
                                         <span class="txt">
-                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="fileList(this)">다운로드</p>
+                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="javascript:fileList(this)">다운로드</p>
                                         </span>
                                         <span class="ic download"></span>
                                     </a>
@@ -193,17 +193,17 @@
                 $(this).removeClass("active").next().stop(true, true).slideUp(0);
                 $(this).siblings().removeClass("activeFile");
             } else {
-                $(this).addClass("active").next().stop(true, true).slideDown(200);
+                $(this).addClass("active").next().stop(true, true).slideDown(300);
                 $(this).siblings().addClass("activeFile");
             }
 
             if(document.getElementsByClassName("active").length > 1) {
                 $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
 
-                if (!$(this).siblings().hasClass("activeFile")) {
-                    $(this).siblings().addClass("activeFile");
-                } else {
+                if ($(this).siblings().hasClass("activeFile")) {
                     $(this).siblings().removeClass("activeFile");
+                } else {
+                    $(this).siblings().addClass("activeFile");
                 }
             }
             return false;

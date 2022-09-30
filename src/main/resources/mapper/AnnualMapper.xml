@@ -79,12 +79,10 @@
     </select>
 
     <select id="findByAllUserAnnualPaging" parameterType="String" resultType="UserAnnual">
-        SELECT 
-        	USER_ID,
+        SELECT
+            USER_ID,
             USER_NAME,
-            (SELECT CASE WHEN ADJUST IS NULL THEN TOTAL_ANNUAL ELSE TOTAL_ANNUAL + ADJUST END FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'TOTAL' ,
-            (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'USE',
-            ((SELECT CASE WHEN ADJUST IS NULL THEN TOTAL_ANNUAL ELSE TOTAL_ANNUAL + ADJUST END FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) - (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID)) AS 'RESULT' ,
+            (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '01')) as 'jan',
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '02')) as 'feb',
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '03')) as 'mar',
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '04')) as 'apr',
@@ -95,11 +93,12 @@
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '09')) as 'sept',
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '10')) as 'oct',
             (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '11')) as 'nov',
-            (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '12')) as 'dec'
+            (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y%m') = CONCAT(#{year}, '12')) as 'dec',
+            (SELECT IFNULL(SUM(APPLICATION_YEAR), '0.0') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND DATE_FORMAT(START_DATE, '%Y') = #{year}) as total
         FROM
             USER_INFO U
         WHERE
-            1=1
+        1=1
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
@@ -236,4 +235,32 @@
         WHERE
             FILE_ID = #{history_id}
     </delete>
+
+    <select id="findByAllUserAnnualStatusPaging" parameterType="Map" resultType="UserAnnual">
+        SELECT DISTINCT
+            U.USER_ID,
+            U.USER_NAME,
+            U.DEPARTMENT,
+            (SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'TOTAL',
+            (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) AS 'USE',
+            ((SELECT TOTAL_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID) - (SELECT USE_ANNUAL FROM ANNUAL_STATUS WHERE USER_ID = U.USER_ID)) AS 'RESULT',
+            (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND HOLIDAY = '공가' AND DATE_FORMAT(AH.START_DATE, '%Y') = #{year}) AS 'OFFICIAL_HOLIDAY',
+            (SELECT IFNULL(SUM(APPLICATION_YEAR), '') FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND HOLIDAY = '대휴' AND DATE_FORMAT(AH.START_DATE, '%Y') = #{year}) AS 'SUBSTITUTE_HOLIDAY'
+        FROM
+            USER_INFO U,
+            APPLICATION_HISTORY AH
+        WHERE
+            1=1
+        <if test="year != ''">
+            AND START_DATE LIKE CONCAT(#{year}, '-', '%')
+        </if>
+        LIMIT #{pageSize} OFFSET #{startIndex}
+    </select>
+
+    <select id="findByAllUserAnnualStatusCnt" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            USER_INFO
+    </select>
 </mapper>
