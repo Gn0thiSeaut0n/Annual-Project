@@ -1,7 +1,6 @@
 package hello.login.web.etc;
 
 import hello.login.domain.dto.*;
-import hello.login.domain.service.AnnualService;
 import hello.login.domain.service.EtcService;
 
 import hello.login.web.argumentresolver.Login;
@@ -10,6 +9,7 @@ import hello.login.web.util.JasyptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.JSONArray;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -26,7 +27,6 @@ import java.util.Map;
 public class EtcController {
 
     private final EtcService etcService;
-    private final AnnualService annualService;
 
     @PostMapping("/application")
     public ResponseEntity application(@Validated History history) throws IOException {
@@ -42,7 +42,6 @@ public class EtcController {
         etcService.updateAnnual(Map.of(
                 "user_id", loginMember.getUser_id(), "use_annual", Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getUse_annual())));
         etcService.deleteHistory(history_id);
-        annualService.deleteFileInfo(history_id);
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -1,21 +1,16 @@
 package hello.login.domain.service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import hello.login.domain.dao.CalendarDAO;
+import hello.login.domain.dto.History;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import hello.login.domain.dao.CalendarDAO;
-import hello.login.domain.dto.History;
-import lombok.RequiredArgsConstructor;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +20,6 @@ public class CalendarService {
     public List<History> calendarHistory(String year, String month) {
     	List<History> list = calendarDAO.calendarHistory(Map.of("year", year, "month", month));
 
-    	JSONObject jsonObj = new JSONObject();
     	JSONArray jsonArr = new JSONArray();
     	
     	HashMap<String, Object> hash = new HashMap<>();
@@ -96,11 +90,10 @@ public class CalendarService {
 	    			break;
 	    		}
     		}
-    		
-    		jsonObj = new JSONObject(hash);
-    		jsonArr.add(jsonObj);
-    		System.out.println(jsonObj.toString());
+
+    		jsonArr.add(new JSONObject(hash));
     	}
+
         return jsonArr;
     }
 }
