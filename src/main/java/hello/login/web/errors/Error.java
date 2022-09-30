@@ -15,7 +15,7 @@ public class Error implements ErrorController {
     private String ERROR_TEMPLATES_PATH = "/errors/";
 
     @RequestMapping(value = "/error")
-    public String handleError(HttpServletRequest request) {
+    public String handleError(HttpServletRequest request) throws InterruptedException {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if(status != null){
             int statusCode = Integer.valueOf(status.toString());
@@ -26,8 +26,9 @@ public class Error implements ErrorController {
 //                return ERROR_TEMPLATES_PATH + "500";
 //            }
         }
-        log.info("에러탔다");
+
         log.info("status = {}", status);
+        Thread.sleep(1000);
 
         return "redirect:/";
     }
