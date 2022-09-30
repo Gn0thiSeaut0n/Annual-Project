@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>관리 현황</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+            <ul>
+                <a th:href="|@{/annualStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">사용현황</a>
+            </ul>
+            <ul>
+                <a th:href="|@{/annualManageStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">관리현황</a>
+            </ul>
+            <ul>
+                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">연차부여개수</a>
+            </ul>
+        </div>
+        <div th:if="${#lists.size(allUser) != 0}">
+            <table class="table table-bordered">
+                <thread>
+                    <tr class="pb-3 pt-3">
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">사번</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">이름</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">부서</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">연차 산정기준</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">발생연차</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">사용연차</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">잔여연차</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">공가</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">대휴</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <tr th:each="list : ${allUser}">
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.department}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">입사일 기준</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.total}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.use}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.result}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.official_holiday}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.substitute_holiday}]]</th>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example" style="font-size: 16px">
+                <ul class="pagination" style="justify-content: center;">
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                            <span aria-hidden="true">처음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li class="page-item"
+                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                            th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                        </li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">끝</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div th:if="${#lists.size(allUser) == 0}" style="font-size: 25px; text-align: center;">
+            데이터가 없습니다!
+        </div>
+    </section>
+</div>
+<script>
+    function search(pageNum) {
+        let date = new Date();
+        selectYear = date.getFullYear();
+
+        window.location.href=`/annualManageStatus?page=${pageNum}&year=${selectYear}`;
+    }
+</script>
+</body>
+</html>

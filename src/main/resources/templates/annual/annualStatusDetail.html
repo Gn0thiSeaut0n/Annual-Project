@@ -9,10 +9,13 @@
     <section>
         <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
             <ul>
-                <a th:href="@{/annualStatus}" class='btn_line btn_gray' style="float: left;">현황</a>
+                <a th:href="|@{/annualStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">사용현황</a>
             </ul>
             <ul>
-                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">관리</a>
+                <a th:href="|@{/annualManageStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">관리현황</a>
+            </ul>
+            <ul>
+                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">연차부여개수</a>
             </ul>
         </div>
         <table class="table table-bordered" style="font-size: 14px; font-weight: bold;">

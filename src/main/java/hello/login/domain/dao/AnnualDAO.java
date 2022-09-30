@@ -38,4 +38,8 @@ public interface AnnualDAO {
     List<History> findByFileList(String file_uuid);
 
     void deleteFileInfo(String history_id);
+
+    List<UserAnnual> findByAllUserAnnualStatusPaging(Map<String, Object> pageParam);
+
+    int findByAllUserAnnualStatusCnt();
 }

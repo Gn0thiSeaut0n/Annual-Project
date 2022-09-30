@@ -70,4 +70,12 @@ public class AnnualService {
     public void deleteFileInfo(String history_id) {
         annualDAO.deleteFileInfo(history_id);
     }
+
+    public List<UserAnnual> findByAllUserAnnualStatusPaging(Map<String, Object> pageParam) {
+        return annualDAO.findByAllUserAnnualStatusPaging(pageParam);
+    }
+
+    public int findByAllUserAnnualStatusCnt() {
+        return annualDAO.findByAllUserAnnualStatusCnt();
+    }
 }

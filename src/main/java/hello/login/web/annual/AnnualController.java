@@ -177,4 +177,19 @@ public class AnnualController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
     }
+
+    @GetMapping("/annualManageStatus")
+    public String annualManageStatus(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "") String year,
+                                     Model model) {
+
+        Pagination pagination = new Pagination(annualService.findByAllUserAnnualStatusCnt(), page);
+
+        model.addAttribute("user", loginMember);
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("allUser", annualService.findByAllUserAnnualStatusPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(),"year", year)));
+
+        return "annual/annualManageStatus";
+    }
 }
