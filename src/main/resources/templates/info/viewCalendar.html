@@ -13,6 +13,7 @@
 		 /** 주말 구분 가능하도록 색상 지정 */
 		.fc-day-sat a{color:#0000FF;}
 		.fc-day-sun a{color:#FF0000;}
+		.fc-daygrid-day-number cus{color:#FF0000;}
 
     </style>
 </head>
@@ -44,9 +45,9 @@
 	
 	// 데이터 조회(초기 데이터) 후
 	function calendar(data) { 
-        
-        var monthFix = document.querySelector('#month').value;
-        var searchDate = '';
+        // selectbox 월 
+        let monthFix = document.querySelector('#month').value;
+        let searchDate = '';
 		
     	// 검색조건(연도,월)을 입력한 경우 검색조건 연도 월로 달력 세팅.(데이터 유뮤 상관없음 )
     	if(document.querySelector('#year').value != '' && document.querySelector('#month').value != ''){
@@ -54,30 +55,36 @@
     		searchDate = document.querySelector('#year').value + '-' + monthFix; 
         }
         else {
-        	var today = new Date();
-         	var year = today.getFullYear();
-         	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        	let today = new Date();
+         	let year = today.getFullYear();
+         	let month = ('0' + (today.getMonth() + 1)).slice(-2);
         	searchDate = year + '-' + month;
         }
     	
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        let calendarEl = document.getElementById('calendar');
+        let calendar = new FullCalendar.Calendar(calendarEl, {
+        	// 캘린더 높이 지정
+        	height: 750,
         	// 구글 캘린더 연동 api 키, 회사 계정으로 키 발급받아서 사용하는게 좋음, 현재 개인 키
         	googleCalendarApiKey : 'AIzaSyBm760wuxQTEuMXQoFshIoPyvr0_ZQVCcQ',
         	eventSources: [
         		{
         		// 구글 캘린더 id, 한국 공휴일 포함된 캘린더
         		googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
+                /* , display: 'background' */ 
                 , color: 'white'
                 , textColor: 'red'
         		},
         	],
+        	//달력에서 주말(일요일, 토요일) 제거, dayGridMonth에 적용
+        	/* hiddenDays: [0,6], */
         	//initialDate 미지정 시, 데이터 조회 후 render 진행시 표출되는 달력이 현재일자 기준으로 설정됨. 
         	initialDate: searchDate,
         	// 언어 한국어
         	locale: 'ko',
         	// 달력 셀에 이벤트(연차,반차)가 3개 이상일 경우 true로 설정 시, 초과 데이터는 +n more로 표기. false일 경우 이벤트 수만큼 표출
         	dayMaxEvents: true,
+        	//view 옵션 지정. 세부 옵션은 fullcalendar 문서 참조.
         	views: {
         		dayGridMonth: { buttonText: '달력' },
 				listDay: { buttonText: '일간' },
@@ -93,7 +100,6 @@
             // 조회된 연차 데이터를 이벤트로 세팅
             events: data
         });
-		
         calendar.destroy();
 		calendar.render();
     }
@@ -101,7 +107,7 @@
 	//달력페이지 최초 접근 시, 접속일자 연도 기준으로 연차데이터 조회 후 달력 render요청
     document.addEventListener('DOMContentLoaded', function () {
     	$(function () {
-	        var request = $.ajax({
+	        let request = $.ajax({
 		        url: "/viewAnnual", 
 		        method: "GET",
 		        dataType: "json"
@@ -122,7 +128,7 @@
         
         if(selectYear != '' && selectMonth != ''){
         	$(function () {
-           		var request = $.ajax({
+           		let request = $.ajax({
     	        	url: "/viewAnnual",
     	        	data:{year: selectYear, month: selectMonth},
     	        	method: "GET",

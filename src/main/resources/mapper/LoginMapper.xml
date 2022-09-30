@@ -22,7 +22,7 @@
     <select id="findByAnnual" resultType="Annual" parameterType="String">
         SELECT
             USER_ID,
-            TOTAL_ANNUAL,
+            CASE WHEN ADJUST IS NULL THEN TOTAL_ANNUAL ELSE TOTAL_ANNUAL + ADJUST END AS TOTAL_ANNUAL,
             USE_ANNUAL
         FROM
             PROJ.ANNUAL_STATUS
