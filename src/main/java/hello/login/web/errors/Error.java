@@ -22,10 +22,9 @@ public class Error implements ErrorController {
             if(statusCode == HttpStatus.NOT_FOUND.value()){
                 return ERROR_TEMPLATES_PATH + "404";
             }
-
-            if(statusCode == HttpStatus.FORBIDDEN.value()){
-                return ERROR_TEMPLATES_PATH + "500";
-            }
+//            if(statusCode == HttpStatus.FORBIDDEN.value()){
+//                return ERROR_TEMPLATES_PATH + "500";
+//            }
         }
         log.info("에러탔다");
         log.info("status = {}", status);
