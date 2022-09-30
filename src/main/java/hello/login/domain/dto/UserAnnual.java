@@ -7,6 +7,7 @@ public class UserAnnual {
 
     private String user_id;
     private String user_name;
+    private String department;
     private String total;
     private String jan;
     private String feb;
@@ -22,4 +23,6 @@ public class UserAnnual {
     private String dec;
     private String use;
     private String result;
+    private String official_holiday;
+    private String substitute_holiday;
 }

@@ -50,4 +50,32 @@ public class AnnualService {
     public void annualUpdate(AnnualList annualList) {
         annualDAO.annualUpdate(annualList);
     }
+
+    public History findByFile(String file_uuid) {
+        return annualDAO.findByFile(file_uuid);
+    }
+
+    public void companionHistory(String history_id) {
+        annualDAO.companionHistory(history_id);
+    }
+
+    public void updateHistory(Map<String, String> map) {
+        annualDAO.updateHistory(map);
+    }
+
+    public List<History> findByFileList(String file_id) {
+        return annualDAO.findByFileList(file_id);
+    }
+
+    public void deleteFileInfo(String history_id) {
+        annualDAO.deleteFileInfo(history_id);
+    }
+
+    public List<UserAnnual> findByAllUserAnnualStatusPaging(Map<String, Object> pageParam) {
+        return annualDAO.findByAllUserAnnualStatusPaging(pageParam);
+    }
+
+    public int findByAllUserAnnualStatusCnt() {
+        return annualDAO.findByAllUserAnnualStatusCnt();
+    }
 }

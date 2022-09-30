@@ -4,6 +4,7 @@ import hello.login.domain.dto.Pagination;
 import hello.login.domain.dto.User;
 import hello.login.domain.service.UserService;
 import hello.login.web.argumentresolver.Login;
+import hello.login.web.batch.AnnualScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final AnnualScheduler annualScheduler;
 
     @GetMapping("/userManagement")
     public String userManagement(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
@@ -55,6 +57,7 @@ public class UserController {
     public ResponseEntity userRegister(@RequestBody @Validated User user) {
         userService.userRegister(user);
         userService.annualRegister(user);
+        annualScheduler.annualInit();
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -68,6 +71,7 @@ public class UserController {
     @PostMapping("/userUpdate")
     public ResponseEntity userUpdate(@RequestBody @Validated User user) {
         userService.userUpdate(user);
+        annualScheduler.annualInit();
         return new ResponseEntity(HttpStatus.OK);
     }
 

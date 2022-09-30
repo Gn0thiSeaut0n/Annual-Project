@@ -1,6 +1,7 @@
 package hello.login.web.etc;
 
 import hello.login.domain.dto.*;
+import hello.login.domain.service.AnnualService;
 import hello.login.domain.service.EtcService;
 
 import hello.login.web.argumentresolver.Login;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +28,10 @@ import java.util.Map;
 public class EtcController {
 
     private final EtcService etcService;
+    private final AnnualService annualService;
 
     @PostMapping("/application")
-    public ResponseEntity application(@RequestBody @Validated History history) {
+    public ResponseEntity application(@Validated History history) throws IOException {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
         log.info(history.toString());
@@ -41,6 +44,7 @@ public class EtcController {
         etcService.updateAnnual(Map.of(
                 "user_id", loginMember.getUser_id(), "use_annual", Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getUse_annual())));
         etcService.deleteHistory(history_id);
+        annualService.deleteFileInfo(history_id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -102,26 +106,5 @@ public class EtcController {
                 .filter(history -> history.getHistory_id().equals(history_id))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException());
-    }
-    
-    @GetMapping("/viewCalendar")
-    public String viewCalendar(@Login User loginMember,
-				    		@RequestParam(defaultValue = "") String year,
-				            @RequestParam(defaultValue = "") String month,
-              				Model model) {
-
-        model.addAttribute("user", loginMember);
-        model.addAttribute("searchParam", Map.of("year", year, "month", month));
-        return "info/viewCalendar";
-    }
-    
-    @GetMapping("/viewAnnual")
-    @ResponseBody
-    public List<Map<String, Object>> viewAnnual(
-    		@RequestParam(defaultValue = "") String year,
-            @RequestParam(defaultValue = "") String month) {
-    	
-    	JSONArray jsonArr = (JSONArray) etcService.calendarHistory(year, month);
-    	return jsonArr;
     }
 }

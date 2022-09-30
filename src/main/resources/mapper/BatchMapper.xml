@@ -22,9 +22,9 @@
 
     <select id="findByAnnual" parameterType="String" resultType="String">
         SELECT
-        YEAR${userAnnual}
+            YEAR${userAnnual}
         FROM
-        ANNUAL_INFO
+            ANNUAL_INFO
     </select>
 
     <update id="updateUserAnnual" parameterType="Map">
@@ -44,5 +44,14 @@
         WHERE
             USER_ID = #{user_id}
     </update>
+
+    <select id="findByUserTotalAnnual" parameterType="String" resultType="String">
+        SELECT
+            TOTAL_ANNUAL
+        FROM
+            ANNUAL_STATUS
+        WHERE
+            USER_ID = #{user_id}
+    </select>
 
 </mapper>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>연차 현황</title>
+    <title>사용 현황</title>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 <body>
@@ -9,10 +9,13 @@
     <section>
         <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
             <ul>
-                <a th:href="@{/annualStatus}" class='btn_line btn_gray' style="float: left;">현황</a>
+                <a th:href="|@{/annualStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">사용현황</a>
             </ul>
             <ul>
-                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">관리</a>
+                <a th:href="|@{/annualManageStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|" class='btn_line btn_gray' style="float: left;">관리현황</a>
+            </ul>
+            <ul>
+                <a th:href="@{/annualManagement}" class='btn_line btn_gray' style="float: left;">연차부여개수</a>
             </ul>
         </div>
         <div class="input-group mb-3">
@@ -35,17 +38,14 @@
                     <tr class="pb-3 pt-3">
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">사번</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">이름</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">연차</th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|" style="width: 50px;"></th>
                         <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">합계</th>
-                        <th scope="col" class="pb-4 pt-4 text-center text-bold" style="width: 50px;">잔여</th>
                     </tr>
                 </thread>
                 <tbody>
                 <tr th:each="list, index : ${allUser}" th:onclick="allUserDetail([[${list.user_id}]])">
                     <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_id}]]</td>
                     <td scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.user_name}]]</td>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.total}]]</th>
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.jan}]]</th>
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.feb}]]</th>
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.mar}]]</th>
@@ -58,8 +58,7 @@
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.oct}]]</th>
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.nov}]]</th>
                     <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.dec}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.use}]]</th>
-                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.result}]]</th>
+                    <th scope="row" class="pb-4 pt-4 text-center table-custom" style="cursor:pointer">[[${list.total}]]</th>
                 </tr>
                 </tbody>
             </table>
@@ -79,7 +78,7 @@
                         <li class="page-item"
                             th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
                             th:each="pageButton : ${#numbers.sequence(start, end)}">
-                            <a class="page-link" href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                            <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
                         </li>
                     </th:block>
                     <li class="page-item">
@@ -122,14 +121,7 @@
     }
 
     function allUserDetail(user) {
-        let date = new Date();
-        let year = date.getFullYear();
-
-        window.location.href = window.location.pathname + "/" + year + "/" + user;
-    }
-
-     const getValue = (parameter) => {
-        return document.querySelector(parameter).value;
+        window.location.href = window.location.pathname + "/" + getValue('#year') + "/" + user;
     }
 </script>
 </body>

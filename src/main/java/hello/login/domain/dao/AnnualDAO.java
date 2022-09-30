@@ -28,4 +28,18 @@ public interface AnnualDAO {
     AnnualList findByAllAnnual();
 
     void annualUpdate(AnnualList annualList);
+
+    History findByFile(String file_id);
+
+    void companionHistory(String history_id);
+
+    void updateHistory(Map<String, String> map);
+
+    List<History> findByFileList(String file_uuid);
+
+    void deleteFileInfo(String history_id);
+
+    List<UserAnnual> findByAllUserAnnualStatusPaging(Map<String, Object> pageParam);
+
+    int findByAllUserAnnualStatusCnt();
 }

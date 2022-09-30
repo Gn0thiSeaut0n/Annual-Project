@@ -1,20 +1,14 @@
 package hello.login.domain.service;
 
 import hello.login.domain.dao.EtcDAO;
+import hello.login.domain.dto.File;
 import hello.login.domain.dto.History;
-
+import hello.login.domain.dto.UploadFile;
+import hello.login.web.file.FileStore;
 import lombok.RequiredArgsConstructor;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +17,22 @@ import java.util.Map;
 public class EtcService {
 
     private final EtcDAO etcDAO;
+    private final FileStore fileStore;
 
-    public void insertApplicationHistory(History history) {
+    public void insertApplicationHistory(History history) throws IOException {
+
         etcDAO.insertApplicationHistory(history);
+
+        if (history.getUploadFiles() != null) {
+            List<UploadFile> uploadFiles = fileStore.storeFiles(history.getUploadFiles());
+
+            for (UploadFile uploadFile : uploadFiles) {
+                File file = new File();
+                file.setFile_uuid(uploadFile.getStoreFileName());
+                file.setOrigin_file_name(uploadFile.getUploadFileName());
+                etcDAO.insertFile(file);
+            }
+        }
     }
 
     public void updateAnnual(Map<String, Object> map) {
@@ -60,73 +67,5 @@ public class EtcService {
 		etcDAO.updatePwd(map);
 	}
 
-    public List<History> calendarHistory(String year, String month) {
-    	List<History> list = etcDAO.calendarHistory(Map.of("year", year, "month", month));
-
-    	JSONObject jsonObj = new JSONObject();
-    	JSONArray jsonArr = new JSONArray();
-    	
-    	HashMap<String, Object> hash = new HashMap<>();
-    	
-    	Calendar cal = Calendar.getInstance();
-    	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    	
-    	
-    	for(int i = 0; i < list.size(); i++) {
-    		
-    		hash.put("title", list.get(i).getUser_name());
-    		hash.put("textColor", "#000000");
-
-    		switch (list.get(i).getTime()) {
-    		
-	    		case "연차": {
-	    			hash.put("backgroundColor", "#FCE4D4");
-	    			
-	    			if(list.get(i).getStart_date().equals(list.get(i).getEnd_date())) {
-	    				
-	    				hash.put("start", list.get(i).getStart_date());
-	            		hash.put("end", list.get(i).getEnd_date());
-	            		//hash.put("allDay", true);
-	    			} else {
-	    				Date date = null;
-	    				try {
-							date = df.parse(list.get(i).getEnd_date());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-	    				cal.setTime(date);
-	    				cal.add(Calendar.DATE, 1);
-
-	    				hash.put("start", list.get(i).getStart_date());
-	            		hash.put("end", df.format(cal.getTime()));
-	            		//hash.put("allDay", true);
-	    			}
-	    			
-	    			break;
-	    		}
-	    		
-	    		case "오전": {
-	    			hash.put("start", list.get(i).getStart_date()+"T09:00:00");
-		    		hash.put("end", list.get(i).getEnd_date());
-		    		hash.put("backgroundColor", "#FF0000");
-		    		//hash.put("allDay", false);
-		    		break;
-	    		}
-	    		
-	    		case "오후": {	    			
-	    			hash.put("start", list.get(i).getStart_date()+"T14:00:00");
-	    			hash.put("end", list.get(i).getEnd_date());
-	    			hash.put("backgroundColor", "#0000FF");
-	    			//hash.put("allDay", false);
-	    			break;
-	    		}
-    		}
-    		
-    		jsonObj = new JSONObject(hash);
-    		jsonArr.add(jsonObj);
-    	}
-        return jsonArr;
-    }
 }
 
