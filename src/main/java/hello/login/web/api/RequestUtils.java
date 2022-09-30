@@ -9,8 +9,10 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Map;
 
 @Slf4j
@@ -20,10 +22,10 @@ public class RequestUtils {
 
     public static Map<String, Object> holidayInfoAPI(String year) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getHoliDeInfo"); /*URL*/
-        urlBuilder.append("?serviceKey=" + secretKey); /*Service Key*/
-        urlBuilder.append("&numOfRows=100"); /*한 페이지 결과 수*/
-        urlBuilder.append("&solYear=" + year); /*연 */
-        urlBuilder.append("&_type=json"); /* json으로 요청 */
+        urlBuilder.append("?" + getEncode("serviceKey") + "=" + secretKey); /*Service Key*/
+        urlBuilder.append("&" + getEncode("numOfRows") + "=" + getEncode("100")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + getEncode("solYear") + "=" + getEncode(year)); /*연 */
+        urlBuilder.append("&" + getEncode("_type") + "=" + getEncode("json")); /* json으로 요청 */
 
         URL url = new URL(urlBuilder.toString());
         log.info("url = {}", url);
@@ -47,6 +49,10 @@ public class RequestUtils {
         conn.disconnect();
 
         return string2Map(sb.toString());
+    }
+
+    private static String getEncode(String data) throws UnsupportedEncodingException {
+        return URLEncoder.encode(data, "UTF-8");
     }
 
     /**
