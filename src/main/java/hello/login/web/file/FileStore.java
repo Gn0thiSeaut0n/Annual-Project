@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-    private final String fileDir = "/Z:/annualFile/";
+    private final String fileDir = File.separator + "Z:" + File.separator + "annualFile" + File.separator;
 
     public String getFullPath(String filename) {
         return fileDir + filename;

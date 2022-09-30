@@ -29,11 +29,13 @@ public interface AnnualDAO {
 
     void annualUpdate(AnnualList annualList);
 
-    History findByFileId(String file_id);
+    History findByFile(String file_id);
 
     void companionHistory(String history_id);
 
     void updateHistory(Map<String, String> map);
 
-    List<History> findByFileList(String file_id);
+    List<History> findByFileList(String file_uuid);
+
+    void deleteFileInfo(String history_id);
 }

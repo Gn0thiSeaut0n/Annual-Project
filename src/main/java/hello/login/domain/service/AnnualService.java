@@ -51,8 +51,8 @@ public class AnnualService {
         annualDAO.annualUpdate(annualList);
     }
 
-    public History findByFileId(String file_id) {
-        return annualDAO.findByFileId(file_id);
+    public History findByFile(String file_uuid) {
+        return annualDAO.findByFile(file_uuid);
     }
 
     public void companionHistory(String history_id) {
@@ -65,5 +65,9 @@ public class AnnualService {
 
     public List<History> findByFileList(String file_id) {
         return annualDAO.findByFileList(file_id);
+    }
+
+    public void deleteFileInfo(String history_id) {
+        annualDAO.deleteFileInfo(history_id);
     }
 }

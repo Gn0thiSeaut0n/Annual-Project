@@ -56,14 +56,13 @@
                                 <a th:href="'javascript:companionHistory(' + ${list.history_id} + ', \'' + ${list.user_id} + '\', ' + ${list.application_year} + ');'" style="color: red;">반려</a>
                             </td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and ${list.appr_yn.equals('Y')}">승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')}">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('Y')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')})">승인</td>
 
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})">
-                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인</a></td>
+                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인</a>
+                            </td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})">승인</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})) or (${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')}))">승인</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
                                 <div class="view_file_box" style="position: absolute;">
@@ -146,21 +145,25 @@
         }
         
         function apprHistory(id){
-            fetch("/apprHistory/"+id.name, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                }
-            }).then((response) => {
-                if(!response.ok)
-                    throw response;
-                alert("승인이 완료되었습니다.");
-                window.location.href="/selectAll";
-            }).catch(e => {
-                console.log("에러 발생");
-            });
+            if(confirm("승인 처리 하시겠습니까?")) {
+                fetch("/apprHistory/"+id.name, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: {
+                    }
+                }).then((response) => {
+                    if(!response.ok)
+                        throw response;
+                    alert("승인이 완료되었습니다.");
+                    window.location.href="/selectAll";
+                }).catch(e => {
+                    console.log("에러 발생");
+                });
+            } else {
+                return;
+            }
         }
 
         function companionHistory(history_id, user_id, application_year) {
@@ -186,16 +189,23 @@
         }
 
         $(document).on('click', '.view_file_box a.btn_link', function() {
-            if ($(this).hasClass("active") && document.getElementsByClassName('active').length < 2) {
+            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
                 $(this).removeClass("active").next().stop(true, true).slideUp(0);
+                $(this).siblings().removeClass("activeFile");
             } else {
                 $(this).addClass("active").next().stop(true, true).slideDown(200);
+                $(this).siblings().addClass("activeFile");
             }
 
             if(document.getElementsByClassName("active").length > 1) {
-                $("a").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
-            }
+                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
 
+                if (!$(this).siblings().hasClass("activeFile")) {
+                    $(this).siblings().addClass("activeFile");
+                } else {
+                    $(this).siblings().removeClass("activeFile");
+                }
+            }
             return false;
         });
 
@@ -216,13 +226,16 @@
 
                     if(fileIdx != files[0].file_id) {
                         $('.fileList').remove("li");
+                        $('.allDownload').remove("a");
                     }
 
                     fileIdx = files[0].file_id;
 
+                    rsHtml += '<a style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none;" class="allDownload">일괄 다운로드</a>\r\n';
+
                     for(let i = 0; i < files.length; i++) {
                         rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
-                        rsHtml += files[i].origin_file_name;
+                        rsHtml += '<a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a>\r\n';
                         rsHtml += '</li>\r\n';
                     }
 
@@ -234,6 +247,34 @@
 
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let iFrameCnt = 0;
+
+            $(document).on('click', '.allDownload', function() { //다운로드 이미지 실행
+                $('.activeFile li[id*="file_"]').each(function(index) {
+                    let file_uuid = this.firstElementChild.name;
+                    let file_name = this.firstElementChild.id;
+
+                    let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
+
+                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성, name 숫자로
+                    $("iframe[name=" + iFrameCnt + "]").attr("src", url);
+                    iFrameCnt++;
+                    fnSleep(1000); //각 파일별 시간 텀을 준다
+                });
+            });
+
+            fnSleep = function (delay) {
+                let start = new Date().getTime();
+                while (start + delay > new Date().getTime());
+            };
+
+            fnCreateIframe = function (name) {
+               let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
+               frm.appendTo("body");
+            }
+        });
     </script>
 </body>
 </html>

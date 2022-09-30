@@ -193,17 +193,6 @@
             YEAR20 = #{year20}
     </update>
 
-    <select id="findByFileId" parameterType="String" resultType="History">
-        SELECT
-            FILE_ID,
-            FILE_UUID,
-            ORIGIN_FILE_NAME
-        FROM
-            FILE_INFO
-        WHERE
-            FILE_ID = #{file_id}
-    </select>
-
     <delete id="companionHistory" parameterType="String">
         DELETE FROM
             APPLICATION_HISTORY
@@ -215,10 +204,21 @@
         UPDATE
             ANNUAL_STATUS
         SET
-            USE_ANNUAL = USE_ANNUAL + #{application_year}
+            USE_ANNUAL = USE_ANNUAL - #{application_year}
         WHERE
             USER_ID = #{user_id}
     </update>
+
+    <select id="findByFile" parameterType="String" resultType="History">
+        SELECT
+            FILE_ID,
+            FILE_UUID,
+            ORIGIN_FILE_NAME
+        FROM
+            FILE_INFO
+        WHERE
+            FILE_UUID = #{file_uuid}
+    </select>
 
     <select id="findByFileList" parameterType="String" resultType="History">
         SELECT
@@ -230,4 +230,11 @@
         WHERE
             FILE_ID = #{file_id}
     </select>
+
+    <delete id="deleteFileInfo" parameterType="String">
+        DELETE FROM
+            FILE_INFO
+        WHERE
+            FILE_ID = #{history_id}
+    </delete>
 </mapper>
