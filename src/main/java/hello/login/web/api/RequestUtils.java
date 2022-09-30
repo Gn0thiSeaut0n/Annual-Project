@@ -56,22 +56,20 @@ public class RequestUtils {
      * @return
      */
     public static Map<String, Object> string2Map(String json) throws ParseException {
+            JSONObject jsonObject = (JSONObject) new JSONParser().parse(json);
+            ObjectMapper mapper = new ObjectMapper();
 
-        JSONObject jsonObject = (JSONObject) new JSONParser().parse(json);
-        ObjectMapper mapper = new ObjectMapper();
+            Map map = (Map) ((Map) jsonObject.get("response")).get("body");
+            if (!map.get("items").equals("")) {
+                map = ((Map) map.get("items"));
 
-        Map map = (Map)((Map) jsonObject.get("response")).get("body");
-        if(!map.get("items").equals("")) {
-            map = ((Map) map.get("items"));
-
-            try {
-                map = mapper.readValue(map.toString(), Map.class);
-                log.info("map = {}", map);
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    map = mapper.readValue(map.toString(), Map.class);
+                    log.info("map = {}", map);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-
         return map;
     }
 }

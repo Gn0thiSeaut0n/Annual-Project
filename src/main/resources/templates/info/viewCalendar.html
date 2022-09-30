@@ -44,8 +44,7 @@
 	<script th:inline="javascript">
 	
 	// 데이터 조회(초기 데이터) 후
-	function calendar(data) { 
-        // selectbox 월 
+	const calendar = (data) => {
         let monthFix = document.querySelector('#month').value;
         let searchDate = '';
 		
@@ -63,8 +62,10 @@
     	
         let calendarEl = document.getElementById('calendar');
         let calendar = new FullCalendar.Calendar(calendarEl, {
+
         	// 캘린더 높이 지정
         	height: 750,
+
         	// 구글 캘린더 연동 api 키, 회사 계정으로 키 발급받아서 사용하는게 좋음, 현재 개인 키
         	googleCalendarApiKey : 'AIzaSyBm760wuxQTEuMXQoFshIoPyvr0_ZQVCcQ',
         	eventSources: [
@@ -105,39 +106,39 @@
     }
 	
 	//달력페이지 최초 접근 시, 접속일자 연도 기준으로 연차데이터 조회 후 달력 render요청
-    document.addEventListener('DOMContentLoaded', function () {
-    	$(function () {
+    document.addEventListener('DOMContentLoaded', () => {
+    	$(() => {
 	        let request = $.ajax({
 		        url: "/viewAnnual", 
 		        method: "GET",
 		        dataType: "json"
 	        })
-	        request.done(function(data){
+	        request.done((data) => {
 	        	calendar(data);
 	        })
-			request.fail(function( jqXHR, textStatus ) {
+			request.fail(( jqXHR, textStatus ) => {
 	            alert( "Request failed: " + textStatus );
 			})
 		});
     });
 	
 	//header 하단의 검색조건으로 조회
-	function search() {
+	const search = () => {
         let selectYear = document.querySelector('#year').value;
         let selectMonth = document.querySelector('#month').value;
         
         if(selectYear != '' && selectMonth != ''){
-        	$(function () {
+        	$(() => {
            		let request = $.ajax({
     	        	url: "/viewAnnual",
     	        	data:{year: selectYear, month: selectMonth},
     	        	method: "GET",
     	        	dataType: "json"
     	        });
-    	        request.done(function(data){
+    	        request.done((data) => {
     	        	calendar(data);
     	        })
-    	        request.fail(function(xhr, status, errorThrown){
+    	        request.fail((xhr, status, errorThrown) => {
     	        	alert("Request Failed: " + errorThrown);
     	        })
         	});
