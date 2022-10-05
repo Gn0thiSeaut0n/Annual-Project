@@ -5,125 +5,212 @@
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 <body>
-    <div class="container">
-        <section>
-            <div class="input-group mb-3">
-                <p style="font-size: 16px; text-align: center; padding-top: 2px;">년도: &nbsp;</p>
-                <select id="year" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">
-                    <option value="">선택</option>
-                    <option th:each="index : ${#numbers.sequence(2022, 2027)}" th:text="|${index}년|"
-                            th:value="${index}" th:attr="selected=${searchParam.year} eq ${index} ? 'true' : 'false'"></option>
-                </select>
-                <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;월: &nbsp;</p>
-                <select id="month" class="custom-select" style="font-size: 15px; width: 7%; text-align: center;">
-                    <option value="">선택</option>
-                    <option th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|"
-                            th:value="${index}" th:attr="selected=${searchParam.month} eq ${index} ? 'true' : 'false'"></option>
-                </select>
-                <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
-                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
-                       onkeypress="enterKey(event);" style="font-size: 15px;" />
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
-                </div>
+<div class="container">
+    <section>
+        <div class="input-group mb-3">
+            <p style="font-size: 16px; text-align: center; padding-top: 2px;">년도: &nbsp;</p>
+            <select id="year" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">
+                <option value="">선택</option>
+                <option th:each="index : ${#numbers.sequence(2022, 2027)}" th:text="|${index}년|"
+                        th:value="${index}" th:attr="selected=${searchParam.year} eq ${index} ? 'true' : 'false'"></option>
+            </select>
+            <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;월: &nbsp;</p>
+            <select id="month" class="custom-select" style="font-size: 15px; width: 7%; text-align: center;">
+                <option value="">선택</option>
+                <option th:each="index : ${#numbers.sequence(1, 12)}" th:text="|${index}월|"
+                        th:value="${index}" th:attr="selected=${searchParam.month} eq ${index} ? 'true' : 'false'"></option>
+            </select>
+            <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
+            <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
+                   onkeypress="enterKey(event);" style="font-size: 15px;" />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
             </div>
-            <div th:if="${#lists.size(history) != 0}">
-                <table class="table table-bordered">
-                    <thread>
-                        <tr class="pb-3 pt-3">
-                        	<th scope="col" class="pb-4 pt-4 text-center text-bold">상신일자</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사유</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">첨부파일</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
-                        </tr>
-                    </thread>
-                    <tbody>
-                        <tr th:each="list : ${history}">
-                        	<td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.request_date}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
+        </div>
+        <div th:if="${#lists.size(history) != 0}">
+            <table class="table table-bordered">
+                <thread>
+                    <tr class="pb-3 pt-3">
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">상신일자</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">이름</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">사용연차</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">날짜</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">결정권자</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">사유</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">첨부파일</th>
+                        <th scope="col" class="pb-4 pt-4 text-center text-bold">비고</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <tr th:each="list : ${history}">
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.request_date}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.application_year}]]일 / [[${list.time}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.start_date}]] ~ [[${list.end_date}]]</td>
 
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">
-                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인 /</a>
-                                <a th:href="'javascript:companionHistory(' + ${list.history_id} + ', \'' + ${list.user_id} + '\', ' + ${list.application_year} + ');'" style="color: red;">반려</a>
-                            </td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('Y')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')})">승인</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">
+                        <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인 /</a>
+                        <a th:href="'javascript:companionHistory(' + ${list.history_id} + ', \'' + ${list.user_id} + '\', ' + ${list.application_year} + ');'" style="color: red;">반려</a>
+                    </td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('manager')} and ${list.appr_yn.equals('Y')}) or (${user.auth.equals('admin')} and ${list.appr_yn.equals('Y')})">승인</td>
 
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})">
-                                <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인</a>
-                            </td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})) or (${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')}))">승인</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
-                                <div class="view_file_box" style="position: absolute;">
-                                    <a href="#" class="btn_link">
-                                        <span class="ic file"></span>
-                                        <span class="txt">
-                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="javascript:fileList(this)">다운로드</p>
-                                        </span>
-                                        <span class="ic download"></span>
-                                    </a>
-                                    <div class="link_list" style="display: none; z-index: 1; position: absolute;">
-                                        <ul class="fileArea">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.file_id != null}">-</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.holiday != null}">[[${list.holiday}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.holiday != null}">-</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')})">
+                        <a href="javascript:void(0)" style="color: blue;" th:name="${list.history_id}" th:onclick="apprHistory(this)">미승인</a>
+                    </td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})) or (${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')}))">승인</td>
 
-                <nav aria-label="Page navigation example" style="font-size: 16px">
-                    <ul class="pagination" style="justify-content: center;">
-                        <li class="page-item">
-                            <a class="page-link" href="javascript:search(1);" aria-label="Previous">
-                                <span aria-hidden="true">처음</span>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
+                        <div class="view_file_box" style="position: absolute;">
+                            <a href="javascript:void(0)" class="btn_link">
+                                <span class="txt">
+                                    <p th:title="${list.file_id}" style="margin-bottom: 15px;" onclick="javascript:fileList(this)">다운로드</p>
+                                </span>
                             </a>
+                            <div class="link_list" style="display: none; z-index: 2; position: fixed;">
+                                <ul class="fileArea">
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.file_id != null}">-</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${list.holiday != null}">[[${list.holiday}]]</td>
+                    <td scope="row" class="pb-4 pt-4 text-center table-custom" th:unless="${list.holiday != null}">-</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example" style="font-size: 16px">
+                <ul class="pagination" style="justify-content: center;">
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                            <span aria-hidden="true">처음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li class="page-item"
+                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                            th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
                         </li>
-                        <li class="page-item">
-                            <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
-                                <span aria-hidden="true">이전</span>
-                            </a>
-                        </li>
-                        <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
-                            <li class="page-item"
-                                th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
-                                th:each="pageButton : ${#numbers.sequence(start, end)}">
-                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
-                            </li>
-                        </th:block>
-                        <li class="page-item">
-                            <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
-                                <span aria-hidden="true">다음</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
-                                <span aria-hidden="true">끝</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div th:if="${#lists.size(history) == 0}" style="font-size: 25px; text-align: center;">
-                데이터가 없습니다!
-            </div>
-        </section>
-    </div>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">끝</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div th:if="${#lists.size(history) == 0}" style="font-size: 25px; text-align: center;">
+            데이터가 없습니다!
+        </div>
+    </section>
+</div>
     <script>
+        let fileIdx = '';
+
+        function fileList(id) {
+            fetch("/selectFileList/" + id.title, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                response.json().then(function(data) {
+                    let files = data;
+                    let rsHtml = '';
+                    const fileCnt = files.length;
+
+                    if(fileIdx != files[0].file_id) {
+                        $('.fileList').remove("li");
+                        $('.allDownload').remove("a");
+                    }
+
+                    fileIdx = files[0].file_id;
+
+                    rsHtml += '<a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>\r\n';
+
+                    for(let i = 0; i < fileCnt; i++) {
+                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
+                        rsHtml += '<a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a>\r\n';
+                        rsHtml += '</li>\r\n';
+                    }
+
+                    if(document.querySelector('.fileArea').children.length == 0) {
+                        $('.fileArea').append(rsHtml);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let iFrameCnt = 0;
+
+            $(document).on('click', '.allDownload', function() { //다운로드 이미지 실행
+                $('.activeFile li[id*="file_"]').each(function(index) {
+                    let file_uuid = this.firstElementChild.name;
+                    let file_name = this.firstElementChild.id;
+
+                    let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
+
+                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성, name 숫자로
+                    $("iframe[name=" + iFrameCnt + "]").attr("src", url);
+                    iFrameCnt++;
+                    fnSleep(1000); //각 파일별 시간 텀을 준다
+                });
+            });
+
+            fnSleep = function (delay) {
+                let start = new Date().getTime();
+                while (start + delay > new Date().getTime());
+            };
+
+            fnCreateIframe = function (name) {
+               let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
+               frm.appendTo("body");
+            }
+        });
+
+        $(document).on('click', '.view_file_box a.btn_link', function() {
+            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
+                $(this).removeClass("active").next().stop(true, true).slideUp(0);
+                $(this).siblings().removeClass("activeFile");
+            } else {
+                $(this).addClass("active").next().stop(true, true).slideDown(450);
+                $(this).siblings().addClass("activeFile");
+            }
+
+            if(document.getElementsByClassName("active").length > 1) {
+                $('.fileList').remove("li");
+                $('.allDownload').remove("a");
+                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
+
+                if ($(this).siblings().hasClass("activeFile")) {
+                    $(this).siblings().removeClass("activeFile");
+                } else {
+                    $(this).siblings().addClass("activeFile");
+                }
+            }
+        });
+
         function enterKey(e) {
             if(e.keyCode === 13) {
                 search(1);
@@ -143,7 +230,7 @@
 
             window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
         }
-        
+
         function apprHistory(id){
             if(confirm("승인 처리 하시겠습니까?")) {
                 fetch("/apprHistory/"+id.name, {
@@ -187,94 +274,6 @@
                 return;
             }
         }
-
-        $(document).on('click', '.view_file_box a.btn_link', function() {
-            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
-                $(this).removeClass("active").next().stop(true, true).slideUp(0);
-                $(this).siblings().removeClass("activeFile");
-            } else {
-                $(this).addClass("active").next().stop(true, true).slideDown(300);
-                $(this).siblings().addClass("activeFile");
-            }
-
-            if(document.getElementsByClassName("active").length > 1) {
-                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
-
-                if ($(this).siblings().hasClass("activeFile")) {
-                    $(this).siblings().removeClass("activeFile");
-                } else {
-                    $(this).siblings().addClass("activeFile");
-                }
-            }
-            return false;
-        });
-
-        let fileIdx = '';
-
-        function fileList(id) {
-            fetch("/selectFileList/" + id.title, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: {
-                }
-            }).then((response) => {
-                response.json().then(function(data) {
-                    let files = data;
-                    let rsHtml = '';
-
-                    if(fileIdx != files[0].file_id) {
-                        $('.fileList').remove("li");
-                        $('.allDownload').remove("a");
-                    }
-
-                    fileIdx = files[0].file_id;
-
-                    rsHtml += '<a style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none;" class="allDownload">일괄 다운로드</a>\r\n';
-
-                    for(let i = 0; i < files.length; i++) {
-                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
-                        rsHtml += '<a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a>\r\n';
-                        rsHtml += '</li>\r\n';
-                    }
-
-                    if(document.querySelector('.fileArea').children.length == 0) {
-                        $('.fileArea').append(rsHtml);
-                    }
-                });
-            }).catch(e => {
-
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let iFrameCnt = 0;
-
-            $(document).on('click', '.allDownload', function() { //다운로드 이미지 실행
-                $('.activeFile li[id*="file_"]').each(function(index) {
-                    let file_uuid = this.firstElementChild.name;
-                    let file_name = this.firstElementChild.id;
-
-                    let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
-
-                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성, name 숫자로
-                    $("iframe[name=" + iFrameCnt + "]").attr("src", url);
-                    iFrameCnt++;
-                    fnSleep(1000); //각 파일별 시간 텀을 준다
-                });
-            });
-
-            fnSleep = function (delay) {
-                let start = new Date().getTime();
-                while (start + delay > new Date().getTime());
-            };
-
-            fnCreateIframe = function (name) {
-               let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
-               frm.appendTo("body");
-            }
-        });
     </script>
 </body>
 </html>

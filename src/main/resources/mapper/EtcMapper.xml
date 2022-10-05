@@ -53,8 +53,13 @@
                 #{reason},
                 #{appr_yn},
                 #{appr_yn2},
-                NOW(),
-                #{holiday}
+                NOW()
+                <if test="holiday != ''">
+                    ,#{holiday}
+                </if>
+                <if test="holiday == ''">
+                    ,null
+                </if>
                )
     </insert>
 
