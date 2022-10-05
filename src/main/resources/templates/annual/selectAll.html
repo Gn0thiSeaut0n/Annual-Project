@@ -75,8 +75,7 @@
                                         <span class="ic download"></span>
                                     </a>
                                     <div class="link_list" style="display: none; z-index: 1; position: absolute;">
-                                        <ul class="fileArea">
-                                        </ul>
+
                                     </div>
                                 </div>
                             </td>
@@ -197,32 +196,24 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: {
-                }
             }).then((response) => {
                 response.json().then(function(data) {
                     let files = data;
                     let rsHtml = '';
                     const fileCnt = files.length;
 
-                    if(fileIdx != files[0].file_id) {
-                        $('.fileList').remove("li");
-                        $('.allDownload').remove("a");
-                    }
-
                     fileIdx = files[0].file_id;
 
+                    rsHtml += '<ul class="fileArea">\r\n';
                     rsHtml += '<a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>\r\n';
 
                     for(let i = 0; i < fileCnt; i++) {
-                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
-                        rsHtml += '<a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a>\r\n';
-                        rsHtml += '</li>\r\n';
+                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList"><a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a></li>';
                     }
 
-                    if(document.querySelector('.fileArea').children.length == 0) {
-                        $('.fileArea').append(rsHtml);
-                    }
+                    rsHtml += '</ul>\r\n';
+
+                    $('.link_list').html(rsHtml);
                 });
             });
         }
@@ -255,19 +246,17 @@
             }
         });
 
-
         $(document).on('click', '.view_file_box a.btn_link', function() {
             if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
                 $(this).removeClass("active").next().stop(true, true).slideUp(0);
                 $(this).siblings().removeClass("activeFile");
             } else {
-                $(this).addClass("active").next().stop(true, true).slideDown(300);
+                $(this).addClass("active").next().stop(true, true).slideDown(700);
                 $(this).siblings().addClass("activeFile");
             }
 
             if(document.getElementsByClassName("active").length > 1) {
                 $('.fileList').remove("li");
-                $('.allDownload').remove("a");
                 $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
 
                 if ($(this).siblings().hasClass("activeFile")) {
