@@ -31,7 +31,6 @@ public class EtcController {
     public ResponseEntity application(@Validated History history) throws IOException {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
-        log.info(history.toString());
 
         return new ResponseEntity(HttpStatus.OK);
     }

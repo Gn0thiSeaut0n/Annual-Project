@@ -32,7 +32,8 @@
                             <th>생년월일</th>
                             <td><input type="text" id="birthday" class="input_text" th:value="${user.birthday}" readOnly></td>
                             <th>성별</th>
-                            <td><input type="text" id="sex" class="input_text" th:value="${user.sex}" readOnly></td>
+                            <td th:if="${user.sex == 'M'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="남자" readOnly></td>
+                            <td th:if="${user.sex == 'F'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="여자" readOnly></td>
                             <th>연락처</th>
                             <td><input type="text" id="user_number" class="input_text" th:value="${user.user_number}" readOnly></td>
                         </tr>
@@ -213,7 +214,7 @@
         formData.append('department', getValue("#department"));
         formData.append('start_year', getValue("#start_year"));
         formData.append('birthday', getValue("#birthday"));
-        formData.append('sex', getValue("#sex"));
+        formData.append('sex', document.querySelector("#sex").name);
         formData.append('user_number', getValue("#user_number"));
         formData.append('total_annual', getValue("#total_annual"));
         formData.append('use_annual', getValue("#use_annual"));

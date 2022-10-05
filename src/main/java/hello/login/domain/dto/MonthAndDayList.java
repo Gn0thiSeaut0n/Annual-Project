@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class MonthAndDayList {
-    String month;
-    String day;
-    String application_year;
-    String holiday;
+    private String month;
+    private String day;
+    private String application_year;
+    private String holiday;
 }
