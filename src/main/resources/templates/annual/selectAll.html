@@ -63,10 +63,11 @@
                             </td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('N')}) or (${list.appr_yn.equals('N')} and ${list.appr_yn2.equals('N')})">미승인</a></td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" th:if="(${user.auth.equals('admin')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')})) or (${user.auth.equals('manager')} and (${list.appr_yn.equals('Y')} and ${list.appr_yn2.equals('Y')}))">승인</td>
+
                             <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.reason}]]</td>
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
                                 <div class="view_file_box" style="position: absolute;">
-                                    <a href="#" class="btn_link">
+                                    <a href="javascript:void(0)", class="btn_link">
                                         <span class="ic file"></span>
                                         <span class="txt">
                                             <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="javascript:fileList(this)">다운로드</p>
@@ -188,27 +189,6 @@
             }
         }
 
-        $(document).on('click', '.view_file_box a.btn_link', function() {
-            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
-                $(this).removeClass("active").next().stop(true, true).slideUp(0);
-                $(this).siblings().removeClass("activeFile");
-            } else {
-                $(this).addClass("active").next().stop(true, true).slideDown(300);
-                $(this).siblings().addClass("activeFile");
-            }
-
-            if(document.getElementsByClassName("active").length > 1) {
-                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
-
-                if ($(this).siblings().hasClass("activeFile")) {
-                    $(this).siblings().removeClass("activeFile");
-                } else {
-                    $(this).siblings().addClass("activeFile");
-                }
-            }
-            return false;
-        });
-
         let fileIdx = '';
 
         function fileList(id) {
@@ -223,6 +203,7 @@
                 response.json().then(function(data) {
                     let files = data;
                     let rsHtml = '';
+                    const fileCnt = files.length;
 
                     if(fileIdx != files[0].file_id) {
                         $('.fileList').remove("li");
@@ -231,9 +212,9 @@
 
                     fileIdx = files[0].file_id;
 
-                    rsHtml += '<a style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none;" class="allDownload">일괄 다운로드</a>\r\n';
+                    rsHtml += '<a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>\r\n';
 
-                    for(let i = 0; i < files.length; i++) {
+                    for(let i = 0; i < fileCnt; i++) {
                         rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList">\r\n';
                         rsHtml += '<a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a>\r\n';
                         rsHtml += '</li>\r\n';
@@ -243,8 +224,6 @@
                         $('.fileArea').append(rsHtml);
                     }
                 });
-            }).catch(e => {
-
             });
         }
 
@@ -273,6 +252,29 @@
             fnCreateIframe = function (name) {
                let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
                frm.appendTo("body");
+            }
+        });
+
+
+        $(document).on('click', '.view_file_box a.btn_link', function() {
+            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
+                $(this).removeClass("active").next().stop(true, true).slideUp(0);
+                $(this).siblings().removeClass("activeFile");
+            } else {
+                $(this).addClass("active").next().stop(true, true).slideDown(300);
+                $(this).siblings().addClass("activeFile");
+            }
+
+            if(document.getElementsByClassName("active").length > 1) {
+                $('.fileList').remove("li");
+                $('.allDownload').remove("a");
+                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
+
+                if ($(this).siblings().hasClass("activeFile")) {
+                    $(this).siblings().removeClass("activeFile");
+                } else {
+                    $(this).siblings().addClass("activeFile");
+                }
             }
         });
     </script>
