@@ -63,10 +63,6 @@ public class AnnualService {
         annualDAO.updateHistory(map);
     }
 
-    public List<History> findByFileList(String file_id) {
-        return annualDAO.findByFileList(file_id);
-    }
-
     public void deleteFileInfo(String history_id) {
         annualDAO.deleteFileInfo(history_id);
     }
@@ -77,5 +73,9 @@ public class AnnualService {
 
     public int findByAllUserAnnualStatusCnt() {
         return annualDAO.findByAllUserAnnualStatusCnt();
+    }
+
+    public List<History> findByAllFileList() {
+        return annualDAO.findByAllFileList();
     }
 }

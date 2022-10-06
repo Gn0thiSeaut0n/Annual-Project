@@ -21,8 +21,7 @@
                             th:value="${index}" th:attr="selected=${searchParam.month} eq ${index} ? 'true' : 'false'"></option>
                 </select>
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
-                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
-                       onkeypress="enterKey(event);" style="font-size: 15px;" />
+                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}" onkeypress="enterKey(event);" style="font-size: 15px;" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
                 </div>
@@ -68,14 +67,15 @@
                             <td scope="row" class="pb-4 pt-4 text-center table-custom" style="position: relative;" th:if="${list.file_id != null}">
                                 <div class="view_file_box" style="position: absolute;">
                                     <a href="javascript:void(0)", class="btn_link">
-                                        <span class="ic file"></span>
                                         <span class="txt">
-                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;" th:onclick="javascript:fileList(this)">다운로드</p>
+                                            <p th:title="${list.file_id}" style="margin-bottom: 15px;">다운로드</p>
                                         </span>
-                                        <span class="ic download"></span>
                                     </a>
                                     <div class="link_list" style="display: none; z-index: 1; position: absolute;">
-
+                                        <a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>
+                                        <li th:if="${list.file_id} == ${file.file_id}" th:each="file : ${fileList}" th:id="|file_${file.file_id}|" th:name="${file.file_uuid}" class="fileList" >
+                                            <a th:href="@{/fileDownload/{id}(id=${file.file_uuid})}">[[${file.origin_file_name}]]</a>
+                                        </li>
                                     </div>
                                 </div>
                             </td>
@@ -188,47 +188,17 @@
             }
         }
 
-        let fileIdx = '';
-
-        function fileList(id) {
-            fetch("/selectFileList/" + id.title, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }).then((response) => {
-                response.json().then(function(data) {
-                    let files = data;
-                    let rsHtml = '';
-                    const fileCnt = files.length;
-
-                    fileIdx = files[0].file_id;
-
-                    rsHtml += '<ul class="fileArea">\r\n';
-                    rsHtml += '<a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>\r\n';
-
-                    for(let i = 0; i < fileCnt; i++) {
-                        rsHtml += '<li id="file_' + files[i].file_id + '" class="fileList"><a href="/fileDownload/' + files[i].file_uuid + '" id="' + files[i].origin_file_name + '" name= "' + files[i].file_uuid + '">' + files[i].origin_file_name + '</a></li>';
-                    }
-
-                    rsHtml += '</ul>\r\n';
-
-                    $('.link_list').html(rsHtml);
-                });
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             let iFrameCnt = 0;
 
-            $(document).on('click', '.allDownload', function() { //다운로드 이미지 실행
+            $(document).on('click', '.allDownload', function() { //파일 일괄 다운로드
                 $('.activeFile li[id*="file_"]').each(function(index) {
-                    let file_uuid = this.firstElementChild.name;
-                    let file_name = this.firstElementChild.id;
+                    let file_uuid = this.attributes["name"].value;
+                    let file_name = this.innerText.replace(/\n/g, "").replace("\t", "").trim();
 
                     let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
 
-                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성, name 숫자로
+                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성
                     $("iframe[name=" + iFrameCnt + "]").attr("src", url);
                     iFrameCnt++;
                     fnSleep(1000); //각 파일별 시간 텀을 준다
@@ -255,9 +225,10 @@
                 $(this).siblings().addClass("activeFile");
             }
 
+            //다운로드 팝업이 열려있는 상태에서 다른 다운로드 팝업 클릭 시 실행
             if(document.getElementsByClassName("active").length > 1) {
-                $('.fileList').remove("li");
                 $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
+                $(".link_list").not($(this)).removeClass("activeFile");
 
                 if ($(this).siblings().hasClass("activeFile")) {
                     $(this).siblings().removeClass("activeFile");

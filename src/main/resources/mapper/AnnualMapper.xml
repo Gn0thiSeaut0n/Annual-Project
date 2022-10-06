@@ -218,17 +218,6 @@
             FILE_UUID = #{file_uuid}
     </select>
 
-    <select id="findByFileList" parameterType="String" resultType="History">
-        SELECT
-            FILE_ID,
-            FILE_UUID,
-            ORIGIN_FILE_NAME
-        FROM
-            FILE_INFO
-        WHERE
-            FILE_ID = #{file_id}
-    </select>
-
     <delete id="deleteFileInfo" parameterType="String">
         DELETE FROM
             FILE_INFO
@@ -262,5 +251,14 @@
             COUNT(*)
         FROM
             USER_INFO
+    </select>
+
+    <select id="findByAllFileList" resultType="History">
+        SELECT
+            FILE_ID,
+            FILE_UUID,
+            ORIGIN_FILE_NAME
+        FROM
+            FILE_INFO
     </select>
 </mapper>

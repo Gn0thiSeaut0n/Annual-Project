@@ -35,11 +35,11 @@ public interface AnnualDAO {
 
     void updateHistory(Map<String, String> map);
 
-    List<History> findByFileList(String file_uuid);
-
     void deleteFileInfo(String history_id);
 
     List<UserAnnual> findByAllUserAnnualStatusPaging(Map<String, Object> pageParam);
 
     int findByAllUserAnnualStatusCnt();
+
+    List<History> findByAllFileList();
 }
