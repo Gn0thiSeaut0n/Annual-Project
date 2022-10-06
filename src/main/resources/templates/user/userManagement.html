@@ -17,11 +17,9 @@
             </div>
             <div class="input-group mb-3">
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;사번: &nbsp;</p>
-                <input type="text" class="form-control" id="user_id" name="user_id" th:value="${searchParam.user_id}"
-                       onkeypress="enterKey(event);" style="font-size: 15px;" />
+                <input type="text" class="form-control" id="user_id" name="user_id" th:value="${searchParam.user_id}" onkeypress="enterKey(event);" style="font-size: 15px;" />
                 <p style="font-size: 16px; text-align: center; padding-top: 2px;">&nbsp; &nbsp;이름: &nbsp;</p>
-                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}"
-                       onkeypress="enterKey(event);" style="font-size: 15px;" />
+                <input type="text" class="form-control" id="user_name" name="user_name" th:value="${searchParam.user_name}" onkeypress="enterKey(event);" style="font-size: 15px;" />
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
                 </div>
@@ -89,7 +87,7 @@
         </section>
     </div>
 <script>
-    function enterKey(e) {
+    const enterKey = (e) => {
         if(e.keyCode === 13) {
             search(1);
         } else {
@@ -97,14 +95,14 @@
         }
     }
 
-    function search(pageNum) {
+    const search = (pageNum) => {
         let user_id = document.querySelector('#user_id').value;
         let user_name = document.querySelector('#user_name').value;
 
         window.location.href=`/userManagement?page=${pageNum}&user_id=${user_id}&user_name=${user_name}`;
     }
 
-    function userDetail(user_id) {
+    const userDetail = (user_id) => {
         window.location.href = "/userDetail/" + user_id;
     }
 </script>

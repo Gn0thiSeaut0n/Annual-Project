@@ -12,7 +12,7 @@
         <button type="button" class="btn btn-outline-info me-2" onclick="updatePwd();">확인</button>
     </div>
 <script>
-    function enterKey(e) {
+    const enterKey = (e) => {
         if(e.keyCode === 13) {
             updatePwd();
         } else {
@@ -20,7 +20,7 @@
         }
     }
 
-    function updatePwd() {
+    const updatePwd = () => {
         if(confirm("비밀번호를 변경하시겠습니까?")) {
             let user_pw = getValue('#user_pw');
             let user_pw_check = getValue('#user_pw_check');

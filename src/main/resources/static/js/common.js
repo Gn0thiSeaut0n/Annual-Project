@@ -1,5 +1,5 @@
 /* 듀얼 모니터 윈도우 팝업 가운데 정렬 */
-function popupCenter(url, title, w, h, opts) {
+const popupCenter = (url, title, w, h, opts) => {
     let _innerOpts = '';
    if(opts !== null && typeof opts === 'object' ){
        for (let p in opts ) {

@@ -13,29 +13,29 @@
                         <p class='title'>연차</p>
                     </div>
                 </div>
-                <div class="sub_panel_box">
+                <div class="sub_panel_box" th:object="${user}">
                     <p class="sub_title">기본정보</p>
                     <table class="sub_table">
                         <tr>
                             <th>사번</th>
-                            <td><input type="text" id="user_id" class="input_text" th:value="${user.user_id}" readonly>
+                            <td><input type="text" class="input_text" th:field="*{user_id}" readonly>
                             <th>이름</th>
-                            <td><input type="text" id="user_name" class="input_text" th:value="${user.user_name}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{user_name}" readOnly></td>
                             <th>직급</th>
-                            <td><input type="text" id="responsibilities_of_office" class="input_text" th:value="${user.responsibilities_of_office}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{responsibilities_of_office}" readOnly></td>
                             <th>부서</th>
-                            <td><input type="text" id="department" class="input_text" th:value="${user.department}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{department}" readOnly></td>
                         </tr>
                         <tr>
                             <th>입사일자</th>
-                            <td><input type="text" id="start_year" class="input_text" th:value="${user.start_year}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{start_year}" readOnly></td>
                             <th>생년월일</th>
-                            <td><input type="text" id="birthday" class="input_text" th:value="${user.birthday}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{birthday}" readOnly></td>
                             <th>성별</th>
                             <td th:if="${user.sex == 'M'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="남자" readOnly></td>
                             <td th:if="${user.sex == 'F'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="여자" readOnly></td>
                             <th>연락처</th>
-                            <td><input type="text" id="user_number" class="input_text" th:value="${user.user_number}" readOnly></td>
+                            <td><input type="text" class="input_text" th:field="*{user_number}" readOnly></td>
                         </tr>
                     </table>
                 </div>
@@ -131,7 +131,7 @@
         </section>
     </div>
 <script th:inline="javascript">
-    function yearChecked() {
+    const yearChecked = () => {
         if (getValue('input[name="years"]:checked') === 'year') {
             document.getElementById('putIn').hidden = false;
             document.getElementById('tilde').hidden = false;
@@ -148,7 +148,7 @@
         }
     }
 
-    function removeClass(obj){
+    const removeClass = (obj) => {
         obj.classList.remove("field-error");
         document.querySelector("#application_year").classList.remove('field-error');
 
@@ -163,7 +163,7 @@
             if(curDate.getDay()===0 || curDate.getDay()===6)
                 count++;
             else {
-                holidays.forEach(function(item){
+                holidays.forEach((item) => {
                     if((curDate.toISOString().split("T")[0].replaceAll('-','') === item.locdate)&&(item.isHoliday === "Y"))
                         count++;
                 });
@@ -183,7 +183,7 @@
             document.querySelector('#application_year').value = result;
     }
 
-    function application() {
+    const application = () => {
 
         if(paramChecked())
             return;
@@ -248,7 +248,7 @@
         });
     }
 
-    function paramChecked() {
+    const paramChecked = () => {
         if (getValue('input[name="years"]:checked') === 'half-year') {
             document.querySelector('#application_year').value = "0.5";
             document.querySelector("#end_date").value = getValue("#start_date");
@@ -281,7 +281,7 @@
     let holiday2 = document.querySelector('#holiday2');
     let uploadFile = document.querySelector('.uploadFile');
 
-    holiday1.onclick = function() {
+    holiday1.onclick = () => {
         uploadFile.style.display = '';
         holiday2.checked = false;
 
@@ -291,7 +291,7 @@
 
     }
 
-    holiday2.onclick = function() {
+    holiday2.onclick = () => {
         uploadFile.style.display = 'none';
         document.querySelector('#uploadFile').value = '';
         holiday1.checked = false;

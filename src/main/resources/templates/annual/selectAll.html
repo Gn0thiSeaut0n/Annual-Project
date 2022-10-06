@@ -123,120 +123,120 @@
             </div>
         </section>
     </div>
-    <script>
-        function enterKey(e) {
-            if(e.keyCode === 13) {
-                search(1);
-            } else {
-                return true;
-            }
+<script>
+    const enterKey = (e) => {
+        if(e.keyCode === 13) {
+            search(1);
+        } else {
+            return true;
+        }
+    }
+
+    const search = (pageNum) => {
+        let selectYear = document.querySelector('#year').value;
+        let selectMonth = document.querySelector('#month').value;
+        let user_name = document.querySelector('#user_name').value;
+
+        if(selectMonth.length == 1) {
+            selectMonth = "0".concat(selectMonth);
         }
 
-        function search(pageNum) {
-            let selectYear = document.querySelector('#year').value;
-            let selectMonth = document.querySelector('#month').value;
-            let user_name = document.querySelector('#user_name').value;
+        window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
+    }
 
-            if(selectMonth.length == 1) {
-                selectMonth = "0".concat(selectMonth);
-            }
-
-            window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
-        }
-        
-        function apprHistory(id){
-            if(confirm("승인 처리 하시겠습니까?")) {
-                fetch("/apprHistory/"+id.name, {
-                    method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: {
-                    }
-                }).then((response) => {
-                    if(!response.ok)
-                        throw response;
-                    alert("승인이 완료되었습니다.");
-                    window.location.href="/selectAll";
-                }).catch(e => {
-                    console.log("에러 발생");
-                });
-            } else {
-                return;
-            }
-        }
-
-        function companionHistory(history_id, user_id, application_year) {
-            if(confirm("반려 처리 하시겠습니까?")) {
-                fetch("/companionHistory/" + history_id + "/" + user_id + "/" + application_year, {
-                    method: "DELETE",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: {
-                    }
-                }).then((response) => {
-                    if(!response.ok)
-                        throw response;
-                    alert("반려 처리 되었습니다.");
-                    window.location.href="/selectAll";
-                }).catch(e => {
-                    console.log("에러 발생");
-                });
-            } else {
-                return;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let iFrameCnt = 0;
-
-            $(document).on('click', '.allDownload', function() { //파일 일괄 다운로드
-                $('.activeFile li[id*="file_"]').each(function(index) {
-                    let file_uuid = this.attributes["name"].value;
-                    let file_name = this.innerText.replace(/\n/g, "").replace("\t", "").trim();
-
-                    let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
-
-                    fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성
-                    $("iframe[name=" + iFrameCnt + "]").attr("src", url);
-                    iFrameCnt++;
-                    fnSleep(1000); //각 파일별 시간 텀을 준다
-                });
+    const apprHistory = (id) => {
+        if(confirm("승인 처리 하시겠습니까?")) {
+            fetch("/apprHistory/"+id.name, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("승인이 완료되었습니다.");
+                window.location.href="/selectAll";
+            }).catch(e => {
+                console.log("에러 발생");
             });
+        } else {
+            return;
+        }
+    }
 
-            fnSleep = function (delay) {
-                let start = new Date().getTime();
-                while (start + delay > new Date().getTime());
-            };
+    const companionHistory = (history_id, user_id, application_year) => {
+        if(confirm("반려 처리 하시겠습니까?")) {
+            fetch("/companionHistory/" + history_id + "/" + user_id + "/" + application_year, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("반려 처리 되었습니다.");
+                window.location.href="/selectAll";
+            }).catch(e => {
+                console.log("에러 발생");
+            });
+        } else {
+            return;
+        }
+    }
 
-            fnCreateIframe = function (name) {
-               let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
-               frm.appendTo("body");
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+        let iFrameCnt = 0;
+
+        $(document).on('click', '.allDownload', (e) => { //파일 일괄 다운로드
+            $('.activeFile li[id*="file_"]').each((index, element) => {
+                let file_uuid = element.attributes["name"].value;
+                let file_name = element.innerText.replace(/\n/g, "").replace("\t", "").trim();
+
+                let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + file_name;
+
+                fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성
+                $("iframe[name=" + iFrameCnt + "]").attr("src", url);
+                iFrameCnt++;
+                fnSleep(1000); //각 파일별 시간 텀을 준다
+            });
         });
 
-        $(document).on('click', '.view_file_box a.btn_link', function() {
-            if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
-                $(this).removeClass("active").next().stop(true, true).slideUp(0);
+        fnSleep = (delay) => {
+            let start = new Date().getTime();
+            while (start + delay > new Date().getTime());
+        };
+
+        fnCreateIframe = (name) => {
+           let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
+           frm.appendTo("body");
+        }
+    });
+
+    $(document).on('click', '.view_file_box a.btn_link', function() {
+        if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
+            $(this).removeClass("active").next().stop(true, true).slideUp(0);
+            $(this).siblings().removeClass("activeFile");
+        } else {
+            $(this).addClass("active").next().stop(true, true).slideDown(700);
+            $(this).siblings().addClass("activeFile");
+        }
+
+        //다운로드 팝업이 열려있는 상태에서 다른 다운로드 팝업 클릭 시 실행
+        if(document.getElementsByClassName("active").length > 1) {
+            $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
+            $(".link_list").not($(this)).removeClass("activeFile");
+
+            if ($(this).siblings().hasClass("activeFile")) {
                 $(this).siblings().removeClass("activeFile");
             } else {
-                $(this).addClass("active").next().stop(true, true).slideDown(700);
                 $(this).siblings().addClass("activeFile");
             }
-
-            //다운로드 팝업이 열려있는 상태에서 다른 다운로드 팝업 클릭 시 실행
-            if(document.getElementsByClassName("active").length > 1) {
-                $("a.active").not($(this)).removeClass("active").next().stop(true, true).slideUp(0);
-                $(".link_list").not($(this)).removeClass("activeFile");
-
-                if ($(this).siblings().hasClass("activeFile")) {
-                    $(this).siblings().removeClass("activeFile");
-                } else {
-                    $(this).siblings().addClass("activeFile");
-                }
-            }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>

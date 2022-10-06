@@ -77,7 +77,7 @@
         </section>
     </div>
 <script>
-    function deleteHistory(id){
+    const deleteHistory = (id) => {
         fetch("/deleteHistory/"+id.name, {
             method: "DELETE",
             headers: {

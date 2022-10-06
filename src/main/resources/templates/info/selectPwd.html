@@ -11,7 +11,7 @@
         <button type="button" class="btn btn-outline-info me-2" onclick="selectCurrentPwd();">확인</button>
     </div>
 <script>
-    function enterKey(e) {
+    const enterKey = (e) => {
         if(e.keyCode === 13) {
             selectCurrentPwd();
         } else {
@@ -19,7 +19,7 @@
         }
     }
 
-    function selectCurrentPwd() {
+    const selectCurrentPwd = () => {
         if(getValue('#user_pw') == null || getValue('#user_pw') == '') {
             alert('비밀번호를 입력해주세요');
             return;
