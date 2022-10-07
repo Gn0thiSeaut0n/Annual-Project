@@ -18,14 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -51,6 +49,7 @@ public class AnnualController {
                 "year", year, "month", month, "user_name", user_name)));
         model.addAttribute("pagination", pagination);
         model.addAttribute("searchParam", Map.of("year", year, "month", month, "user_name", user_name));
+        model.addAttribute("fileList", annualService.findByAllFileList());
         return "annual/selectAll";
     }
 
@@ -120,21 +119,15 @@ public class AnnualController {
     }
 
     @DeleteMapping("/companionHistory/{history_id}/{user_id}/{application_year}")
-    public ResponseEntity companionHistory(@PathVariable String history_id, @PathVariable String user_id, @PathVariable String application_year) {
-        annualService.companionHistory(history_id);
-        annualService.updateHistory(Map.of("user_id", user_id, "application_year", application_year));
-        annualService.deleteFileInfo(history_id);
+    public ResponseEntity companionHistory(@ModelAttribute History history) {
+        annualService.companionHistory(history.getHistory_id());
+        annualService.updateHistory(Map.of("user_id", history.getUser_id(), "application_year", history.getApplication_year()));
+        annualService.deleteFileInfo(history.getHistory_id());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/selectFileList/{file_id}")
-    @ResponseBody
-    public List<History> selectFileList(@PathVariable String file_id) {
-        return annualService.findByFileList(file_id);
-    }
-
     @GetMapping("/allFileDownload")
-    public void fileDown(@RequestParam Map<String, Object> param, HttpServletResponse response, HttpServletRequest request) throws MalformedURLException {
+    public void fileDown(@RequestParam Map<String, Object> param, HttpServletResponse response) {
         String storeFileName = (String) param.get("file_uuid");
         String uploadFileName = (String) param.get("file_name");
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);

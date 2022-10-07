@@ -46,7 +46,7 @@ public class HomeController {
 
         List<Item> holiday = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             String year = String.valueOf(LocalDate.now().plusYears(i).getYear());
             try {
                 Map<String, Object> body = RequestUtils.holidayInfoAPI(year);

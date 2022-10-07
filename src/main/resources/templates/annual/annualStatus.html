@@ -100,7 +100,7 @@
     </section>
 </div>
 <script>
-    function enterKey(e) {
+    const enterKey = (e) => {
         if(e.keyCode === 13) {
             search(1);
         } else {
@@ -108,7 +108,7 @@
         }
     }
 
-    function search(pageNum) {
+    const search = (pageNum) => {
         let selectYear = document.querySelector('#year').value;
         let user_name = document.querySelector('#user_name').value;
 
@@ -120,7 +120,7 @@
         window.location.href=`/annualStatus?page=${pageNum}&year=${selectYear}&user_name=${user_name}`;
     }
 
-    function allUserDetail(user) {
+    const allUserDetail = (user) => {
         window.location.href = window.location.pathname + "/" + getValue('#year') + "/" + user;
     }
 </script>

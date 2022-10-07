@@ -81,7 +81,7 @@
     </section>
 </div>
 <script>
-    function duplicateId() {
+    const duplicateId = () => {
         let user_id = getValue('#user_id');
 
         if(user_id == null || user_id == '') {
@@ -100,7 +100,7 @@
                 },
                 body: JSON.stringify(params)
             }).then((response) => {
-                response.text().then(function(data) {
+                response.text().then((data) => {
                     if(data == 1) {
                         alert('중복된 사번입니다');
                     } else if(data == 0) {
@@ -116,7 +116,7 @@
         }
     }
 
-    function userRegister() {
+    const userRegister = () => {
         let user_id = getValue('#user_id');
         let origin_id = getValue('#origin_id');
 
@@ -160,7 +160,7 @@
         });
     }
 
-    function removeClass(obj){
+    const removeClass = (obj) => {
         obj.classList.remove("field-error");
     }
 
@@ -174,7 +174,7 @@
             format: 'Y-m-d'
         });
 
-    const autoHypenPhone = function(str) {
+    const autoHypenPhone = (str) => {
         str = str.replace(/[^0-9]/g, '');
         let tmp = '';
 
@@ -230,10 +230,8 @@
         return str;
     }
 
-    let phoneNum = document.getElementById('user_number');
-
-    phoneNum.onkeyup = function() {
-      this.value = autoHypenPhone(this.value);
+    document.getElementById('user_number').onkeyup = (e) => {
+        e.target.value = autoHypenPhone(e.target.value);
     }
 </script>
 </body>

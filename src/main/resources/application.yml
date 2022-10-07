@@ -16,7 +16,13 @@ spring:
     username: root
     # DB password
     password: 1234
+  main:
+    banner-mode: off
 
 mybatis:
   type-aliases-package: hello.login.domain.dto
   mapper-locations: mapper/*.xml
+
+logging:
+  level:
+    root: WARN

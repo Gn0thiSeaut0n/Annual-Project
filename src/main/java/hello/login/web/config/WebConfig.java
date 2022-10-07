@@ -1,4 +1,4 @@
-package hello.login;
+package hello.login.web.config;
 
 import hello.login.web.argumentresolver.LoginMemberArgumentResolver;
 import hello.login.web.interceptor.LoginCheckInterceptor;

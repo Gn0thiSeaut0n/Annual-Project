@@ -82,7 +82,7 @@
     </section>
 </div>
 <script>
-    function userUpdate() {
+    const userUpdate = () => {
         if(confirm("회원을 수정 하시겠습니까?")) {
             let params = {
                 "user_id" : getValue('#user_id'),
@@ -120,7 +120,7 @@
         }
     }
 
-    function userDelete() {
+    const userDelete = () => {
          if(confirm("회원을 삭제 하시겠습니까?")) {
             let params = {
                 "user_id" : getValue('#user_id'),
@@ -146,7 +146,7 @@
          }
     }
 
-    function passwordInit() {
+    const passwordInit = () => {
         if(confirm("비밀번호를 초기화 하시겠습니까?\n비밀번호는 'gbajsdpstltm'로 초기화 됩니다")) {
             let params = {
                 "user_id" : getValue('#user_id'),
@@ -172,7 +172,7 @@
         }
     }
 
-    function removeClass(obj){
+    const removeClass = (obj) => {
         obj.classList.remove("field-error");
     }
 
@@ -186,7 +186,7 @@
             format: 'Y-m-d'
         });
 
-    const autoHypenPhone = function(str) {
+    const autoHypenPhone = (str) => {
         str = str.replace(/[^0-9]/g, '');
         let tmp = '';
 
@@ -242,10 +242,8 @@
         return str;
     }
 
-    let phoneNum = document.getElementById('user_number');
-
-    phoneNum.onkeyup = function() {
-      this.value = autoHypenPhone(this.value);
+    document.getElementById('user_number').onkeyup = (e) => {
+        e.target.value = autoHypenPhone(e.target.value);
     }
 </script>
 </body>
