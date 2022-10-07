@@ -14,7 +14,51 @@
 		.fc-day-sat a{color:#0000FF;}
 		.fc-day-sun a{color:#FF0000;}
 		.fc-daygrid-day-number cus{color:#FF0000;}
-
+		.type-position{
+			display: inline-block;
+			float: right;
+		}
+		.annual{
+			width: 30px;
+			height: 30px;
+			background: #ADFF2F;
+			position: relative;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			display: inline-block;
+		}
+		
+		.half{
+			width: 30px;
+			height: 30px;
+			background: #FF0000;
+			position: relative;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			display: inline-block;
+		}
+		.floating{
+			width: 30px;
+			height: 30px;
+			background: #DCDCDC;
+			position: relative;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			display: inline-block;
+		}
+		.official{
+			width: 30px;
+			height: 30px;
+			background: #AFEEEE;
+			position: relative;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			border-radius: 10px;
+			display: inline-block;
+		}
     </style>
 </head>
 <body>
@@ -36,6 +80,12 @@
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
                 </div>
+                <div class="type-position">
+	                <span class="annual" style="text-align:center;">연차</span>
+		            <span class="half" style="text-align:center;">반차</span>
+		            <span class="floating" style="text-align:center;">대휴</span>
+		            <span class="official" style="text-align:center;">공가</span>
+	            </div>
             </div>
             <div id="calendar"></div>
          
@@ -62,7 +112,6 @@
     	
         let calendarEl = document.getElementById('calendar');
         let calendar = new FullCalendar.Calendar(calendarEl, {
-
         	// 캘린더 높이 지정
         	height: 750,
 
@@ -101,6 +150,7 @@
             // 조회된 연차 데이터를 이벤트로 세팅
             events: data
         });
+        
         calendar.destroy();
 		calendar.render();
     }

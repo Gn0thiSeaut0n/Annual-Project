@@ -25,7 +25,7 @@
         	START_DATE LIKE CONCAT(#{year}, '-', '%')
         </if>
         <if test="year == ''">
-            START_DATE LIKE CONCAT('%', DATE_FORMAT(NOW(), '%Y'), '%')
+            1=1
         </if>
         AND 
         	APPR_YN2 = 'Y'
