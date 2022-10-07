@@ -32,8 +32,8 @@
                             <th>생년월일</th>
                             <td><input type="text" class="input_text" th:field="*{birthday}" readOnly></td>
                             <th>성별</th>
-                            <td th:if="${user.sex == 'M'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="남자" readOnly></td>
-                            <td th:if="${user.sex == 'F'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="여자" readOnly></td>
+                            <td th:if="${user.sex == 'M'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="남" readOnly></td>
+                            <td th:if="${user.sex == 'F'}"><input type="text" class="input_text" th:id="sex" th:name="${user.sex}" th:value="여" readOnly></td>
                             <th>연락처</th>
                             <td><input type="text" class="input_text" th:field="*{user_number}" readOnly></td>
                         </tr>
