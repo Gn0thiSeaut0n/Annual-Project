@@ -18,6 +18,8 @@ spring:
     password: 1234
   main:
     banner-mode: off
+  pid:
+    file: D:/hncis-annual-system/pid/pid.pid
 
 mybatis:
   type-aliases-package: hello.login.domain.dto
