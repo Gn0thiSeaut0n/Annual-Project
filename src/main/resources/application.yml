@@ -23,6 +23,14 @@ spring:
   pid:
     file: D:/hncis-annual-system/pid/pid.pid
 
+  # 파일 크기 설정
+  servlet:
+    multipart:
+      maxFileSize:
+        1GB
+      maxRequestSize:
+        1GB
+
 mybatis:
   type-aliases-package: hello.login.domain.dto
   mapper-locations: mapper/*.xml
@@ -31,3 +39,14 @@ mybatis:
 logging:
   level:
     root: WARN
+
+jasypt:
+  encryptor:
+    bean:
+      jasyptStringEncryptor
+
+## jasypt secret key
+## user password
+cypher:
+  key:
+    gbajsdpstltm

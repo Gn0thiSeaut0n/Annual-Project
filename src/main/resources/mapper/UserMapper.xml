@@ -140,4 +140,18 @@
         )
     </insert>
 
+    <delete id="userDeleteApplication" parameterType="User">
+        DELETE FROM
+            APPLICATION_HISTORY
+        WHERE
+            USER_ID = #{user_id}
+    </delete>
+
+    <delete id="userDeleteAnnualStatus" parameterType="User">
+        DELETE FROM
+            ANNUAL_STATUS
+        WHERE
+            USER_ID = #{user_id}
+    </delete>
+
 </mapper>

@@ -4,6 +4,7 @@ import hello.login.domain.dto.*;
 import hello.login.domain.service.AnnualService;
 import hello.login.web.argumentresolver.Login;
 
+import hello.login.web.batch.AnnualScheduler;
 import hello.login.web.file.FileStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ import java.util.Map;
 public class AnnualController {
 
     private final AnnualService annualService;
+    private final AnnualScheduler annualScheduler;
     private final FileStore fileStore;
 
     @GetMapping("/selectAll")
@@ -115,6 +117,7 @@ public class AnnualController {
     @PutMapping("/annualUpdate")
     public ResponseEntity annualUpdate(@Login User loginMember, @RequestBody AnnualList annualList) {
         annualService.annualUpdate(annualList);
+        annualScheduler.annualInit();
         return new ResponseEntity(HttpStatus.OK);
     }
 
