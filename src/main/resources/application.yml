@@ -16,8 +16,10 @@ spring:
     username: root
     # DB password
     password: 1234
+  # 시작 시, Spring Banner 여부
   main:
     banner-mode: off
+  # pid 생성 위치
   pid:
     file: D:/hncis-annual-system/pid/pid.pid
 
@@ -25,6 +27,7 @@ mybatis:
   type-aliases-package: hello.login.domain.dto
   mapper-locations: mapper/*.xml
 
+# log 설정
 logging:
   level:
     root: WARN
