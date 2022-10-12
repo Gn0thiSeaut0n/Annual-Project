@@ -31,4 +31,4 @@ This project has a function to manage annual leave and members.
 
 ## More
 
-Welcome any feedback in our [github](https://github.com/Gn0thiSeaut0n/hncis-annual-project).
+Welcome any feedback in our [github](https://github.com/Gn0thiSeaut0n/Annual-Project).
