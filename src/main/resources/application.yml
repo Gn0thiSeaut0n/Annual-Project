@@ -11,17 +11,25 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # DB Source URL
-    url: jdbc:mysql://192.168.0.15:3306/proj?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.0.52:3306/annual?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=utf8
     # DB username
-    username: root
+    username: ENC(JgkgO5paCgw/knh3CRmtKA==)
     # DB password
-    password: 1234
+    password: ENC(j0CrIIOyj6E0qxeZvNhcU7MA65E5xRUh)
   # 시작 시, Spring Banner 여부
   main:
     banner-mode: off
   # pid 생성 위치
   pid:
     file: D:/hncis-annual-system/pid/pid.pid
+
+  # 파일 크기 설정
+  servlet:
+    multipart:
+      maxFileSize:
+        1GB
+      maxRequestSize:
+        1GB
 
 mybatis:
   type-aliases-package: hello.login.domain.dto
@@ -31,3 +39,14 @@ mybatis:
 logging:
   level:
     root: WARN
+
+jasypt:
+  encryptor:
+    bean:
+      jasyptStringEncryptor
+
+## jasypt secret key
+## user password
+cypher:
+  key:
+    gbajsdpstltm

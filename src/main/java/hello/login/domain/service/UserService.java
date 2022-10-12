@@ -4,6 +4,7 @@ import hello.login.domain.dao.UserDAO;
 import hello.login.domain.dto.User;
 import hello.login.web.util.JasyptUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.Map;
 @Service
 public class UserService {
 
+    @Value("${cypher.key}")
+    String cypherKey;
+
     private final UserDAO userDAO;
 
     public int duplicateId(String user_id) {
@@ -20,7 +24,7 @@ public class UserService {
     }
 
     public void userRegister(User user) {
-        user.setUser_pw(JasyptUtil.encrypt("gbajsdpstltm"));
+        user.setUser_pw(JasyptUtil.encrypt(cypherKey));
         userDAO.userRegister(user);
     }
 
@@ -41,11 +45,13 @@ public class UserService {
     }
 
     public void userDelete(User user) {
+        userDAO.userDeleteApplication(user);
+        userDAO.userDeleteAnnualStatus(user);
         userDAO.userDelete(user);
     }
 
     public void passwordInit(User user) {
-        user.setUser_pw(JasyptUtil.encrypt("gbajsdpstltm"));
+        user.setUser_pw(JasyptUtil.encrypt(cypherKey));
         userDAO.passwordInit(user);
     }
 
