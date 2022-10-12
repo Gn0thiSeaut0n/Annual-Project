@@ -47,4 +47,4 @@ gradlew
 gradlew.bat
 settings.gradle
 
-application.yml
+**/application.yml
