@@ -11,17 +11,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # DB Source URL
-    url: jdbc:mysql://192.168.0.52:3306/annual?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=utf8
+    url: [mysql url]
     # DB username
-    username: ENC(JgkgO5paCgw/knh3CRmtKA==)
+    username: [user id]
     # DB password
-    password: ENC(j0CrIIOyj6E0qxeZvNhcU7MA65E5xRUh)
+    password: [user password]
   # 시작 시, Spring Banner 여부
   main:
     banner-mode: off
-  # pid 생성 위치
-  pid:
-    file: D:/hncis-annual-system/pid/pid.pid
 
   # 파일 크기 설정
   servlet:
@@ -38,7 +35,7 @@ mybatis:
 # log 설정
 logging:
   level:
-    root: WARN
+    root: INFO
 
 jasypt:
   encryptor:
@@ -49,4 +46,4 @@ jasypt:
 ## user password
 cypher:
   key:
-    gbajsdpstltm
+    annual
