@@ -11,11 +11,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # DB Source URL
-    url: jdbc:mysql://192.168.0.15:3306/proj?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.0.52:3306/annual?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=utf8
     # DB username
-    username: root
+    username: ENC(JgkgO5paCgw/knh3CRmtKA==)
     # DB password
-    password: 1234
+    password: ENC(j0CrIIOyj6E0qxeZvNhcU7MA65E5xRUh)
   # 시작 시, Spring Banner 여부
   main:
     banner-mode: off

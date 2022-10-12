@@ -15,7 +15,7 @@
             USER_NUMBER,
             AUTH
         FROM
-             PROJ.USER_INFO
+             USER_INFO
         WHERE
             USER_ID = #{user_id}
     </select>
@@ -25,7 +25,7 @@
             CASE WHEN ADJUST IS NULL THEN TOTAL_ANNUAL ELSE TOTAL_ANNUAL + ADJUST END AS TOTAL_ANNUAL,
             USE_ANNUAL
         FROM
-            PROJ.ANNUAL_STATUS
+            ANNUAL_STATUS
         WHERE
             USER_ID = #{user_id}
     </select>
