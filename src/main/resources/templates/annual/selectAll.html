@@ -121,6 +121,9 @@
             <div th:if="${#lists.size(history) == 0}" style="font-size: 25px; text-align: center;">
                 데이터가 없습니다!
             </div>
+            <div class="spinner-border loading" role="status">
+                <span class="visually-hidden"></span>
+            </div>
         </section>
     </div>
 <script>
@@ -144,9 +147,10 @@
         window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
     }
 
-    const apprHistory = (id) => {
+    const apprHistory = async (id) => {
         if(confirm("승인 처리 하시겠습니까?")) {
-            fetch("/apprHistory/"+id.name, {
+            loadingShow();
+            await fetch("/apprHistory/"+id.name, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json'
@@ -161,6 +165,7 @@
             }).catch(e => {
                 console.log("에러 발생");
             });
+            loadingHide();
         } else {
             return;
         }

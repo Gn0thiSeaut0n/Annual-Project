@@ -128,6 +128,9 @@
                     </ul>
                 </div>
             </div>
+            <div class="spinner-border loading" role="status">
+                <span class="visually-hidden"></span>
+            </div>
         </section>
     </div>
 <script th:inline="javascript">
@@ -183,69 +186,75 @@
             document.querySelector('#application_year').value = result;
     }
 
-    const application = () => {
+    const application = async () => {
+        if(confirm("신청하시겠습니까?")) {
+            if(paramChecked())
+                return;
 
-        if(paramChecked())
-            return;
-
-        if(parseFloat(getValue('#application_year')) > parseFloat(getValue('#save_annual'))) {
-            alert('연차가 부족합니다');
-            return;
-        }
-
-        if(getValue('input[name="years"]:checked') != null) {
-            if(parseFloat(getValue('#save_annual')) < 0.5) {
+            if(parseFloat(getValue('#application_year')) > parseFloat(getValue('#save_annual'))) {
                 alert('연차가 부족합니다');
                 return;
             }
-        }
 
-        let formData = new FormData();
-        let holiday = "";
-        let file = document.querySelector('#uploadFile');
-
-        if(document.querySelector('#holiday1').checked == true || document.querySelector('#holiday2').checked == true) {
-            holiday = getValue('input[name="holiday"]:checked');
-        }
-
-        formData.append('user_id', getValue("#user_id"));
-        formData.append('user_name', getValue("#user_name"));
-        formData.append('responsibilities_of_office', getValue("#responsibilities_of_office"));
-        formData.append('department', getValue("#department"));
-        formData.append('start_year', getValue("#start_year"));
-        formData.append('birthday', getValue("#birthday"));
-        formData.append('sex', document.querySelector("#sex").name);
-        formData.append('user_number', getValue("#user_number"));
-        formData.append('total_annual', getValue("#total_annual"));
-        formData.append('use_annual', getValue("#use_annual"));
-        formData.append('application_year', getValue("#application_year"));
-        formData.append('start_date', getValue("#start_date"));
-        formData.append('end_date', getValue("#end_date"));
-        formData.append('reason', getValue("#reason"));
-        formData.append('time', getValue('input[name="time"]:checked'));
-        formData.append('appr_yn', 'N');
-        formData.append('appr_yn2', 'N');
-        formData.append('holiday', holiday);
-
-        for(let i = 0; i < file.files.length; i++) {
-            formData.append('uploadFiles', file.files[i]);
-        }
-
-        fetch("/application", {
-            method: "POST",
-            body: formData
-        }).then((response) => {
-            if(!response.ok)
-                throw response;
-            alert("신청이 완료되었습니다.");
-            window.location.href="/myPage";
-        }).catch(e => {
-            e.json().then(msg => {
-                for (let i = 0; i < msg.errors.length; i++) {
-                    document.querySelector("#"+msg.errors[i].field).className += ' field-error';
+            if(getValue('input[name="years"]:checked') != null) {
+                if(parseFloat(getValue('#save_annual')) < 0.5) {
+                    alert('연차가 부족합니다');
+                    return;
                 }
+            }
+
+            loadingShow();
+
+            let formData = new FormData();
+            let holiday = "";
+            let file = document.querySelector('#uploadFile');
+
+            if(document.querySelector('#holiday1').checked == true || document.querySelector('#holiday2').checked == true) {
+                holiday = getValue('input[name="holiday"]:checked');
+            }
+
+            formData.append('user_id', getValue("#user_id"));
+            formData.append('user_name', getValue("#user_name"));
+            formData.append('responsibilities_of_office', getValue("#responsibilities_of_office"));
+            formData.append('department', getValue("#department"));
+            formData.append('start_year', getValue("#start_year"));
+            formData.append('birthday', getValue("#birthday"));
+            formData.append('sex', document.querySelector("#sex").name);
+            formData.append('user_number', getValue("#user_number"));
+            formData.append('total_annual', getValue("#total_annual"));
+            formData.append('use_annual', getValue("#use_annual"));
+            formData.append('application_year', getValue("#application_year"));
+            formData.append('start_date', getValue("#start_date"));
+            formData.append('end_date', getValue("#end_date"));
+            formData.append('reason', getValue("#reason"));
+            formData.append('time', getValue('input[name="time"]:checked'));
+            formData.append('appr_yn', 'N');
+            formData.append('appr_yn2', 'N');
+            formData.append('holiday', holiday);
+
+            for(let i = 0; i < file.files.length; i++) {
+                formData.append('uploadFiles', file.files[i]);
+            }
+
+            await fetch("/application", {
+                method: "POST",
+                body: formData
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("신청이 완료되었습니다.");
+                window.location.href="/myPage";
+            }).catch(e => {
+                e.json().then(msg => {
+                    for (let i = 0; i < msg.errors.length; i++) {
+                        document.querySelector("#"+msg.errors[i].field).className += ' field-error';
+                    }
+                });
             });
-        });
+            loadingHide();
+        } else {
+            return;
+        }
     }
 
     const paramChecked = () => {

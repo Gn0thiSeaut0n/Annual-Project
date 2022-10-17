@@ -158,3 +158,13 @@ div.container section div div.view_file_box .link_list a {color:#222d5b; font-si
     border-radius: 10px;
     display: inline-block;
 }
+
+.loading{
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: 70px;
+    height: 70px;
+}
