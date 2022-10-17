@@ -30,3 +30,25 @@ const getValue = (parameter) => {
 const setValue = (name, val) => {
     document.querySelector(name).value = val;
 }
+
+const loadingShow = () => {
+    let maskHeight = $(document).height();
+    let maskWidth = window.document.body.clientWidth;
+
+    let mask = "<div id = 'mask' style='position:absolute; z-index:100; background-color:#000000; left:0; top:0;'></div>";
+
+    $('body').append(mask);
+
+    $("#mask").css({
+        'width' : maskWidth,
+        'height' : maskHeight,
+        'opacity' : '0.4'
+    })
+
+    $(".loading").show();
+}
+
+const loadingHide = () => {
+    $("#mask").remove();
+    $(".loading").hide();
+}
