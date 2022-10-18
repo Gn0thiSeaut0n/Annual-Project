@@ -79,6 +79,9 @@
             <button type="button" class="btn btn-outline-secondary" th:onclick="userDelete()" style="margin-top: 20px; font-size: 13px;">삭제</button>
             <button type="button" class="btn btn-outline-secondary" th:onclick="passwordInit()" style="margin-top: 20px; font-size: 13px;">비밀번호 초기화</button>
         </div>
+        <div class="spinner-border loading" role="status">
+            <span class="visually-hidden"></span>
+        </div>
     </section>
 </div>
 <script>
@@ -120,13 +123,14 @@
         }
     }
 
-    const userDelete = () => {
+    const userDelete = async () => {
          if(confirm("회원을 삭제 하시겠습니까?")) {
+            loadingShow();
             let params = {
                 "user_id" : getValue('#user_id'),
             }
 
-            fetch("/userDelete", {
+            await fetch("/userDelete", {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json'
@@ -143,6 +147,7 @@
 
                 });
             });
+            loadingHide();
          }
     }
 

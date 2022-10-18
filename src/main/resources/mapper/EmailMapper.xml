@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.login.domain.dao.EmailDAO">
+
+	<select id="selectToManager" resultType="String">
+        SELECT
+     		EMAIL
+     	FROM 
+     		USER_INFO
+     	WHERE
+     		AUTH = 'manager'
+		AND
+			EMAIL IS NOT NULL;
+    </select>
+    
+    <select id="selectFrom" parameterType="String" resultType="User">
+        SELECT
+     		EMAIL
+     	FROM 
+     		USER_INFO
+     	WHERE
+     		USER_ID = #{user}
+    </select>
+    
+    <select id="selectToUser" parameterType="String" resultType="History">
+        SELECT
+     		HISTORY.USER_ID,
+     		HISTORY.USER_NAME,
+     		HISTORY.START_DATE,
+     		HISTORY.END_DATE,
+     		HISTORY.TIME,
+     		HISTORY.HOLIDAY,
+     		HISTORY.REASON,
+     		USER.EMAIL
+     	FROM 
+     		APPLICATION_HISTORY HISTORY 
+     	LEFT OUTER JOIN USER_INFO USER ON
+     		HISTORY.USER_ID = USER.USER_ID 
+     	WHERE
+     		HISTORY_ID = #{history}
+    </select>
+    
+    <select id="selectToAdmin" resultType="String">
+        SELECT
+     		EMAIL
+     	FROM 
+     		USER_INFO
+     	WHERE
+     		AUTH = 'admin'
+    </select>
+
+</mapper>

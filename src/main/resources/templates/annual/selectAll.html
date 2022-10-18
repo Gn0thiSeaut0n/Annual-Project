@@ -171,9 +171,10 @@
         }
     }
 
-    const companionHistory = (history_id, user_id, application_year) => {
+    const companionHistory = async (history_id, user_id, application_year) => {
         if(confirm("반려 처리 하시겠습니까?")) {
-            fetch("/companionHistory/" + history_id + "/" + user_id + "/" + application_year, {
+            loadingShow();
+            await fetch("/companionHistory/" + history_id + "/" + user_id + "/" + application_year, {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json'
@@ -188,6 +189,7 @@
             }).catch(e => {
                 console.log("에러 발생");
             });
+            loadingHide();
         } else {
             return;
         }

@@ -1,9 +1,11 @@
 package hello.login.web.etc;
 
+import hello.login.domain.dao.EmailDAO;
 import hello.login.domain.dto.History;
 import hello.login.domain.dto.Pagination;
 import hello.login.domain.dto.User;
 import hello.login.domain.service.AnnualService;
+import hello.login.domain.service.EmailService;
 import hello.login.domain.service.EtcService;
 import hello.login.web.argumentresolver.Login;
 import hello.login.web.util.JasyptUtil;
@@ -26,12 +28,14 @@ public class EtcController {
 
     private final EtcService etcService;
     private final AnnualService annualService;
+    private final EmailService emailService;
+    private final EmailDAO emailDAO;
 
     @PostMapping("/application")
-    public ResponseEntity application(@Validated History history) throws IOException {
+    public ResponseEntity application(@Validated History history, @Login User loginMember) throws Exception {
         etcService.insertApplicationHistory(history);
         etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
-
+        emailService.sendMail("상신", history, loginMember);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -45,9 +49,10 @@ public class EtcController {
     }
 
     @PutMapping("/apprHistory/{history_id}")
-    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) {
-    	
+    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) throws Exception{
         etcService.updateAppr(Map.of("history_id", history_id, "type", loginMember.getAuth()));
+        History history = emailDAO.selectToUser(history_id);
+        emailService.sendMail("승인", history, loginMember);
         return new ResponseEntity(HttpStatus.OK);
     }
 
