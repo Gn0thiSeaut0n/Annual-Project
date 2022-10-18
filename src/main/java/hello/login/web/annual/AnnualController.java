@@ -1,7 +1,9 @@
 package hello.login.web.annual;
 
+import hello.login.domain.dao.EmailDAO;
 import hello.login.domain.dto.*;
 import hello.login.domain.service.AnnualService;
+import hello.login.domain.service.EmailService;
 import hello.login.web.argumentresolver.Login;
 
 import hello.login.web.batch.AnnualScheduler;
@@ -35,6 +37,8 @@ public class AnnualController {
     private final AnnualService annualService;
     private final AnnualScheduler annualScheduler;
     private final FileStore fileStore;
+    private final EmailService emailService;
+    private final EmailDAO emailDAO;
 
     @GetMapping("/selectAll")
     public String selectAll(@Login User loginMember, @RequestParam(defaultValue = "1") int page,
@@ -122,7 +126,9 @@ public class AnnualController {
     }
 
     @DeleteMapping("/companionHistory/{history_id}/{user_id}/{application_year}")
-    public ResponseEntity companionHistory(@ModelAttribute History history) {
+    public ResponseEntity companionHistory(@ModelAttribute History history, @Login User loginMember) throws Exception{
+        History mailObj = emailDAO.selectToUser(history.getHistory_id());
+        emailService.sendMail("반려", mailObj, loginMember);
         annualService.companionHistory(history.getHistory_id());
         annualService.updateHistory(Map.of("user_id", history.getUser_id(), "application_year", history.getApplication_year()));
         annualService.deleteFileInfo(history.getHistory_id());

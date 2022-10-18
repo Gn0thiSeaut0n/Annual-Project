@@ -42,5 +42,6 @@ public class History {
     private String time;
     @NotEmpty
     private String reason;
-    
+
+    private String email;
 }

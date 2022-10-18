@@ -64,12 +64,16 @@
                     </tr>
                     <tr>
                         <th>권한</th>
-                        <td colspan="6">
+                        <td colspan="4">
                             <select id="auth" class="custom-select" style="font-size: 15px; width: 10%; text-align: center;" th:onchange="removeClass(this)">
                                 <option value="">선택</option>
                                 <option value="manager">관리자</option>
                                 <option value="user">일반 사용자</option>
                             </select>
+                        </td>
+                        <th>이메일</th>
+                        <td>
+                            <input type="text" id="email" name="email" class="input_text" th:onchange="removeClass(this)">
                         </td>
                     </tr>
                 </table>
@@ -116,48 +120,55 @@
         }
     }
 
-    const userRegister = () => {
-        let user_id = getValue('#user_id');
-        let origin_id = getValue('#origin_id');
+    const userRegister = async () => {
+        if(confirm("회원을 등록하시겠습니까?")) {
+            let user_id = getValue('#user_id');
+            let origin_id = getValue('#origin_id');
+            let email = getValue('#email');
+            let emailValid = new RegExp("^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[a-zA-Z]{2,3}$");
 
-        // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크입니다
-        if(origin_id != user_id) {
-            alert("아이디 중복을 확인해주세요");
-            setValue('#user_id', '');
-            return;
-        }
-
-        let params = {
-            "user_id" : getValue('#user_id'),
-            "user_name" : getValue('#user_name'),
-            "user_number" : getValue('#user_number'),
-            "sex" : getValue('input[name="sex"]:checked'),
-            "responsibilities_of_office" : getValue('#responsibilities_of_office'),
-            "department" : getValue('#department'),
-            "birthday" : getValue('#birthday'),
-            "start_year" : getValue('#start_year'),
-            "auth" : getValue('#auth'),
-        }
-
-        fetch("/userRegister", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params)
-        }).then((response) => {
-            if(!response.ok) {
-                throw response;
+            // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크입니다
+            if(origin_id != user_id) {
+                alert("아이디 중복을 확인해주세요");
+                setValue('#user_id', '');
+                return;
             }
-            alert('회원이 등록 되었습니다');
-            window.location.href='/userManagement';
-        }).catch(e => {
-            e.json().then(msg => {
-                for (let i = 0; i < msg.errors.length; i++) {
-                    document.querySelector("#" + msg.errors[i].field).className += ' field-error';
+
+            loadingShow();
+
+            let params = {
+                "user_id" : getValue('#user_id'),
+                "user_name" : getValue('#user_name'),
+                "user_number" : getValue('#user_number'),
+                "sex" : getValue('input[name="sex"]:checked'),
+                "responsibilities_of_office" : getValue('#responsibilities_of_office'),
+                "department" : getValue('#department'),
+                "birthday" : getValue('#birthday'),
+                "start_year" : getValue('#start_year'),
+                "auth" : getValue('#auth'),
+            }
+
+            await fetch("/userRegister", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            }).then((response) => {
+                if(!response.ok) {
+                    throw response;
                 }
+                alert('회원이 등록 되었습니다');
+                window.location.href='/userManagement';
+            }).catch(e => {
+                e.json().then(msg => {
+                    for (let i = 0; i < msg.errors.length; i++) {
+                        document.querySelector("#" + msg.errors[i].field).className += ' field-error';
+                    }
+                });
             });
-        });
+            loadingHide();
+        }
     }
 
     const removeClass = (obj) => {

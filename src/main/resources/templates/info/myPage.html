@@ -74,25 +74,32 @@
             <div th:if="${#lists.size(history) == 0}" style="font-size: 25px; text-align: center;">
                 데이터가 없습니다!
             </div>
+            <div class="spinner-border loading" role="status">
+                <span class="visually-hidden"></span>
+            </div>
         </section>
     </div>
 <script>
-    const deleteHistory = (id) => {
-        fetch("/deleteHistory/"+id.name, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: {
-            }
-        }).then((response) => {
-            if(!response.ok)
-                throw response;
-            alert("삭제가 완료되었습니다.");
-            window.location.href="/myPage";
-        }).catch(e => {
-            console.log("에러 발생");
-        });
+    const deleteHistory = async (id) => {
+        if(confirm("삭제하시겠습니까?")) {
+            loadingShow();
+            await fetch("/deleteHistory/"+id.name, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("삭제가 완료되었습니다.");
+                window.location.href="/myPage";
+            }).catch(e => {
+                console.log("에러 발생");
+            });
+            loadingHide();
+        }
     }
 </script>
 </body>
