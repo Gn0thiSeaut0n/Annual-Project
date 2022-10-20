@@ -284,12 +284,14 @@
     $('#start_date').datetimepicker({
         timepicker: false,
         minDate: new Date(),
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        disabledWeekDays :[0, 6]
     });
     $('#end_date').datetimepicker({
         timepicker: false,
         minDate: new Date(),
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        disabledWeekDays :[0, 6]
     });
 
     let holiday1 = document.querySelector('#holiday1');
