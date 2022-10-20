@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class Error implements ErrorController {
-    private String ERROR_TEMPLATES_PATH = "/errors/";
+    private String ERROR_TEMPLATES_PATH = "errors/";
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request) throws InterruptedException {

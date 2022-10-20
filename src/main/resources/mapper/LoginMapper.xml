@@ -13,7 +13,9 @@
             BIRTHDAY,
             START_YEAR,
             USER_NUMBER,
-            AUTH
+            AUTH,
+            EMAIL,
+            USER_ADDRESS
         FROM
              USER_INFO
         WHERE

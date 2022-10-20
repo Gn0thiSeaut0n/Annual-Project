@@ -22,7 +22,9 @@
             BIRTHDAY,
             START_YEAR,
             USER_NUMBER,
-            AUTH
+            AUTH,
+            EMAIL,
+            USER_ADDRESS
         ) VALUES (
             #{user_id},
             #{user_pw},
@@ -33,7 +35,9 @@
             #{birthday},
             #{start_year},
             #{user_number},
-            #{auth}
+            #{auth},
+            #{email},
+            #{user_address}
         )
     </insert>
 
@@ -59,7 +63,7 @@
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
-        ORDER BY START_YEAR
+        ORDER BY USER_ID
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -89,7 +93,9 @@
             BIRTHDAY,
             START_YEAR,
             USER_NUMBER,
-            AUTH
+            AUTH,
+            EMAIL,
+            USER_ADDRESS
         FROM
             USER_INFO
         WHERE
@@ -107,7 +113,9 @@
             DEPARTMENT = #{department},
             BIRTHDAY = #{birthday},
             START_YEAR = #{start_year},
-            AUTH = #{auth}
+            AUTH = #{auth},
+            EMAIL = #{email},
+            USER_ADDRESS =  #{user_address}
         WHERE
             USER_ID = #{user_id}
     </update>

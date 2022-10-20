@@ -83,7 +83,8 @@ public class Pagination {
         }
 
         /** 11. 이전 블럭(클릭 시, 이전 블럭 마지막 페이지) **/
-        setPrevBlock((block * blockSize) - blockSize);
+//        setPrevBlock((block * blockSize) - blockSize);
+        setPrevBlock(page - 1);
 
         /* === 이전 블럭에 대한 validation === */
         if (prevBlock < 1) {
@@ -91,11 +92,15 @@ public class Pagination {
         }
 
         /** 12. 다음 블럭(클릭 시, 다음 블럭 첫번째 페이지) **/
-        setNextBlock((block * blockSize) + 1);
+//        setNextBlock((block * blockSize) + 1);
+        setNextBlock(page + 1);
 
         /* === 다음 블럭에 대한 validation ===*/
-        if (nextBlock > totalPageCnt) {
-            nextBlock = totalPageCnt;
+//        if (nextBlock > totalPageCnt) {
+//            nextBlock = totalPageCnt;
+//        }
+        if (nextBlock >= totalPageCnt) {
+            this.nextBlock = endPage;
         }
 
         /** 10. DB 접근 시작 index **/

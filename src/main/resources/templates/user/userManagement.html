@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>회원 조회</title>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
 </head>
 <body>
     <div class="container">
@@ -65,7 +65,8 @@
                             <li class="page-item"
                                 th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
                                 th:each="pageButton : ${#numbers.sequence(start, end)}">
-                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}></a>
+                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}
+                                   th:style="${pagination.page} == ${pageButton} ? 'background-color: blue; color: white;' : ''"></a>
                             </li>
                         </th:block>
                         <li class="page-item">

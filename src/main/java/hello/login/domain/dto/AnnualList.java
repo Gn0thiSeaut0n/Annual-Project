@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class AnnualList {
 
-    private String year0;
     private String year1;
     private String year2;
     private String year3;

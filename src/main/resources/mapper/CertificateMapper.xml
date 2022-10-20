@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.login.domain.dao.CertificateDAO">
+    <insert id="insertCertificate" parameterType="Certificate">
+        INSERT INTO annual.certificate_list
+        (
+            `DOC_NO`,
+            `TYPE`,
+            `STATUS_CODE`,
+            `USER_ID`,
+            `USER_ADDRESS`,
+            `DEPARTMENT`,
+            `RESPONSIBILITIES_OF_OFFICE`,
+            `USER_NAME`,
+            `IDENTIFICATION_NO_FRONT`,
+            `IDENTIFICATION_NO_BACK`,
+            `START_YEAR`,
+            `PURPOSE`,
+            `NOTE`,
+            `APPLY_DATE`
+        )
+        VALUES
+            (
+                CONCAT(#{apply_date}, ' - ', LPAD((SELECT nextval('seq_doc_no') FROM DUAL), '3', '0')),
+                #{type},
+                #{status_code},
+                #{user_id},
+                #{user_address},
+                #{department},
+                #{responsibilities_of_office},
+                #{user_name},
+                #{identification_no_front},
+                #{identification_no_back},
+                #{start_year},
+                #{purpose},
+                #{note},
+                NOW()
+            )
+    </insert>
+
+    <select id="selectCertificateAll" resultType="Certificate">
+        SELECT
+               *
+        FROM
+             annual.certificate_list
+        ORDER BY
+            APPLY_DATE
+        DESC
+    </select>
+
+    <select id="findByDocNoDetail" resultType="Certificate" parameterType="String">
+        SELECT
+            *
+        FROM
+            annual.certificate_list
+        WHERE
+            DOC_NO = #{doc_no}
+    </select>
+
+    <update id="approveCertificate" parameterType="String">
+        UPDATE
+            annual.certificate_list
+        SET
+            STATUS_CODE = '1'
+        WHERE
+            DOC_NO = #{doc_no}
+    </update>
+
+    <delete id="deleteCertificate" parameterType="String">
+        DELETE FROM
+            annual.certificate_list
+        WHERE
+            DOC_NO = #{doc_no}
+    </delete>
+
+    <update id="updateSocialNumber" parameterType="Certificate">
+        UPDATE
+            annual.certificate_list
+        SET
+            IDENTIFICATION_NO_BACK = #{identification_no_back}
+        WHERE
+            DOC_NO = #{doc_no}
+    </update>
+
+    <insert id="insertCertificateCareer" parameterType="Certificate">
+        INSERT INTO annual.certificate_list
+        (
+            `DOC_NO`,
+            `TYPE`,
+            `STATUS_CODE`,
+            `USER_ID`,
+            `USER_ADDRESS`,
+            `DEPARTMENT`,
+            `RESPONSIBILITIES_OF_OFFICE`,
+            `USER_NAME`,
+            `PURPOSE`,
+            `NOTE`,
+            `APPLY_DATE`
+        )
+        VALUES
+            (
+                CONCAT(#{apply_date}, ' - ', LPAD((SELECT nextval('seq_doc_no') FROM DUAL), '3', '0')),
+                #{type},
+                #{status_code},
+                CONCAT('tmp', (SELECT DATE_FORMAT(NOW(), '%d')), LPAD((SELECT nextval('seq_tmp_user_id') FROM DUAL), '3', '0')),
+                #{user_address},
+                #{department},
+                #{responsibilities_of_office},
+                #{user_name},
+                #{purpose},
+                #{note},
+                NOW()
+            )
+    </insert>
+
+    <select id="getRecentDocNo" resultType="String">
+        SELECT
+            DOC_NO
+        FROM
+            annual.certificate_list
+        ORDER BY
+            DOC_NO
+        DESC
+            LIMIT 1
+    </select>
+
+    <insert id="insertCertificateEn" parameterType="Certificate">
+        INSERT INTO annual.certificate_list
+        (
+            `DOC_NO`,
+            `TYPE`,
+            `STATUS_CODE`,
+            `USER_ID`,
+            `USER_ADDRESS`,
+            `DEPARTMENT`,
+            `RESPONSIBILITIES_OF_OFFICE`,
+            `USER_NAME`,
+            `PURPOSE`,
+            `NOTE`,
+            `APPLY_DATE`
+        )
+        VALUES
+            (
+                CONCAT(#{apply_date}, ' - ', LPAD((SELECT nextval('seq_doc_no') FROM DUAL), '3', '0')),
+                #{type},
+                #{status_code},
+                CONCAT('tmp', (SELECT DATE_FORMAT(NOW(), '%d')), LPAD((SELECT nextval('seq_tmp_user_id') FROM DUAL), '3', '0')),
+                #{user_address},
+                #{department},
+                #{responsibilities_of_office},
+                #{user_name},
+                #{purpose},
+                #{note},
+                NOW()
+            )
+    </insert>
+</mapper>

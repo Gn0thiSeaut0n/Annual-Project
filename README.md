@@ -29,6 +29,8 @@ This project has a function to manage annual leave and members.
 
 6. Daily batch
 
+7. Mail
+
 ## More
 
 Welcome any feedback in our [github](https://github.com/Gn0thiSeaut0n/Annual-Project).

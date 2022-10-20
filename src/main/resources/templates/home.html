@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>신청</title>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
 </head>
 <body>
     <div class="container">
@@ -41,7 +41,7 @@
                             <th>이메일</th>
                             <td><input type="text" class="input_text" th:field="*{email}" readOnly></td>
                             <th>주소</th>
-                            <td colspan="5"><input type="text" class="input_text" readOnly></td>
+                            <td colspan="5"><input type="text" class="input_text" th:field="*{user_address}" readOnly></td>
                         </tr>
                     </table>
                 </div>
@@ -197,15 +197,17 @@
             if(paramChecked())
                 return;
 
-            if(parseFloat(getValue('#application_year')) > parseFloat(getValue('#save_annual'))) {
-                alert('연차가 부족합니다');
-                return;
-            }
-
-            if(getValue('input[name="years"]:checked') != null) {
-                if(parseFloat(getValue('#save_annual')) < 0.5) {
+            if(document.querySelector('input[name="holiday"]:checked') == null) {
+                if(parseFloat(getValue('#application_year')) > parseFloat(getValue('#save_annual'))) {
                     alert('연차가 부족합니다');
                     return;
+                }
+
+                if(getValue('input[name="years"]:checked') != null) {
+                    if(parseFloat(getValue('#save_annual')) < 0.5) {
+                        alert('연차가 부족합니다');
+                        return;
+                    }
                 }
             }
 

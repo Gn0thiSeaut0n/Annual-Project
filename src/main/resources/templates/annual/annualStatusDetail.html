@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>회원 연차 상세</title>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
 </head>
 <body>
 <div class="container">
@@ -48,7 +48,6 @@
                 <td scope="row" class="p-0 text-center" th:text="${monthTot.getDec()}"></td>
             </tr>
             <tr>
-<!--                <td scope="row"></td>-->
                 <td th:each="day : ${#numbers.sequence(0, 9)}"><td>
                 <td scope="row" class="p-0 text-center text-bold">총합</td>
                 <td scope="row" class="p-0 text-center" th:text="${monthTot.getTotal()}"></td>

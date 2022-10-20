@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>연차부여개수</title>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
 </head>
 <body>
     <div class="container">
@@ -23,53 +23,53 @@
                     <table class="sub_table" th:object="${annual}">
                         <tr>
                             <th>1년차</th>
-                            <td><input type="number" th:field="*{year1}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year1}" class="input_text"></td>
                             <th>2년차</th>
-                            <td><input type="number" th:field="*{year2}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year2}" class="input_text"></td>
                             <th>3년차</th>
-                            <td><input type="number" th:field="*{year3}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year3}" class="input_text"></td>
                             <th>4년차</th>
-                            <td><input type="number" th:field="*{year4}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year4}" class="input_text"></td>
                         </tr>
                         <tr>
                             <th>5년차</th>
-                            <td><input type="number" th:field="*{year5}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year5}" class="input_text"></td>
                             <th>6년차</th>
-                            <td><input type="number" th:field="*{year6}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year6}" class="input_text"></td>
                             <th>7년차</th>
-                            <td><input type="number" th:field="*{year7}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year7}" class="input_text"></td>
                             <th>8년차</th>
-                            <td><input type="number" th:field="*{year8}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year8}" class="input_text"></td>
                         </tr>
                         <tr>
                             <th>9년차</th>
-                            <td><input type="number" th:field="*{year9}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year9}" class="input_text"></td>
                             <th>10년차</th>
-                            <td><input type="number" th:field="*{year10}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year10}" class="input_text"></td>
                             <th>11년차</th>
-                            <td><input type="number" th:field="*{year11}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year11}" class="input_text"></td>
                             <th>12년차</th>
-                            <td><input type="number" th:field="*{year12}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year12}" class="input_text"></td>
                         </tr>
                         <tr>
                             <th>13년차</th>
-                            <td><input type="number" th:field="*{year13}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year13}" class="input_text"></td>
                             <th>14년차</th>
-                            <td><input type="number" th:field="*{year14}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year14}" class="input_text"></td>
                             <th>15년차</th>
-                            <td><input type="number" th:field="*{year15}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year15}" class="input_text"></td>
                             <th>16년차</th>
-                            <td><input type="number" th:field="*{year16}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year16}" class="input_text"></td>
                         </tr>
                         <tr>
                             <th>17년차</th>
-                            <td><input type="number" th:field="*{year17}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year17}" class="input_text"></td>
                             <th>18년차</th>
-                            <td><input type="number" th:field="*{year18}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year18}" class="input_text"></td>
                             <th>19년차</th>
-                            <td><input type="number" th:field="*{year19}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year19}" class="input_text"></td>
                             <th>20년차</th>
-                            <td><input type="number" th:field="*{year20}" class="input_text"></td>
+                            <td><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" th:field="*{year20}" class="input_text"></td>
                         </tr>
                     </table>
                 </div>

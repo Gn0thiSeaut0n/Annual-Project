@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>증명서</title>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class="sub_content">
+            <div>
+                <div class='sub_header'>
+                    <p class='title'>증명서 신청 현황</p>
+                </div>
+                <br>
+                <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+                    <ul>
+                        <a th:href="|@{/certificateList}|" class='btn_line btn_gray' style="float: left;">증명서 신청 리스트</a>
+                    </ul>
+                    <ul>
+                        <a th:href="|@{/applyCertificate/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">재직증명서 신청</a>
+                    </ul>
+                    <ul th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
+                        <a th:href="|@{/applyCertificateEn/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">재직증명서(영문) 신청</a>
+                    </ul>
+                    <ul th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
+                        <a th:href="|@{/applyCareerCertificate/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">경력증명서 신청</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <section>
+                <div>
+                    <table class="table table-bordered">
+                        <tr class="pb-3 pt-3">
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">신청일자</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">문서번호</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">성명</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">종류</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">용도</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자 승인</th>
+                            <th scope="col" class="pb-4 pt-4 text-center text-bold">작업</th>
+                        </tr>
+                        <tr th:each="list: ${certificate}">
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.apply_date.substring(0, 10)}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.doc_no}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
+                                <span th:if="${list.type.equals('A')}">재직증명서</span>
+                                <span th:if="${list.type.equals('B')}">재직증명서(영문)</span>
+                                <span th:if="${list.type.equals('C')}">경력증명서</span>
+                            </td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.purpose}]]</td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
+                                <span th:if="${list.status_code.equals('0')}">
+                                    <a th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" th:name="${list.doc_no}" href="javascript:void(0)" style="color: blue;" th:onclick="approveCertificate(this)">미승인</a>
+                                    <a th:if="${user.auth.equals('user')}">미승인</a>
+                                </span>
+                                <span th:if="${list.status_code.equals('1')}">승인</span>
+                            </td>
+                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
+                                <span th:if="${list.user_name.equals(user.user_name)} or ${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
+                                    <a th:if="${!list.user_id.substring(0, 3).equals('tmp')}" th:href="|@{/viewCertificate/{list}(list=${list.doc_no})}|">조회</a>
+                                    <span th:if="${!list.user_id.substring(0, 3).equals('tmp')}"> / </span>
+                                    <a href="javascript:void(0)" style="color: red;" th:name="${list.doc_no}" th:onclick="deleteCertificate(this)">삭제</a>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </section>
+</div>
+<script>
+    function deleteCertificate(row) {
+        if(confirm("문서번호 '" + row.name + "' 증명서를 삭제 하시겠습니까?")) {
+            fetch("/delete/" + row.name, {
+                method: "DELETE"
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("승인이 완료되었습니다.");
+                window.location.href="/certificateList";
+            }).catch(e => {
+                console.log("에러 발생");
+            });
+        } else {
+            return;
+        }
+    }
+
+    function approveCertificate(row) {
+        if(confirm("승인 처리 하시겠습니까?")) {
+            fetch("/approve/"+row.name, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: {
+                }
+            }).then((response) => {
+                if(!response.ok)
+                    throw response;
+                alert("승인이 완료되었습니다.");
+                window.location.href="/certificateList";
+            }).catch(e => {
+                console.log("에러 발생");
+            });
+        } else {
+            return;
+        }
+    }
+</script>
+</body>
+</html>

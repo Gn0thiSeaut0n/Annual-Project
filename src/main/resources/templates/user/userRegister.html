@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>회원 등록</title>
-    <div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
 </head>
 <body>
 <div class="container">
@@ -65,7 +65,7 @@
                     <tr>
                         <th>권한</th>
                         <td colspan="4">
-                            <select id="auth" class="custom-select" style="font-size: 15px; width: 10%; text-align: center;" th:onchange="removeClass(this)">
+                            <select id="auth" class="custom-select" style="font-size: 15px; width: 20%; text-align: center;" th:onchange="removeClass(this)">
                                 <option value="">선택</option>
                                 <option value="manager">관리자</option>
                                 <option value="user">일반 사용자</option>
@@ -76,15 +76,110 @@
                             <input type="text" id="email" name="email" class="input_text" th:onchange="removeClass(this)">
                         </td>
                     </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td colspan="8">
+                            <div id="save_address">
+                                <input type="text" id="sample6_postcode" placeholder="우편번호" class="input_text" style="width: 40%;" readOnly>
+                                <input type="button" id="sample6_button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-outline-secondary" style="vertical-align: baseline; font-size: 13px; width: 10%">
+                                <br>
+                                <input type="text" id="sample6_address" placeholder="주소" class="input_text" style="width: 50%" readOnly>
+                                <br>
+                                <input type="text" id="sample6_detailAddress" placeholder="상세주소" class="input_text" style="width: 50%">
+                                <br>
+                                <input type="text" id="sample6_extraAddress" placeholder="참고항목" class="input_text" style="width: 40%" readOnly>
+                                <input type="button" id="address_save" th:onclick="combine_address()" th:value="저장" class="btn btn-outline-secondary" style="vertical-align: baseline; font-size: 13px; width: 10%">
+                            </div>
+                            <div id="modify_address" style="display: none">
+                                <input type="text" id="user_address" name="address" class="input_text" style="width: 89%">
+                                <input type="button" id="address_modify" th:onclick="modify_address()" th:value="수정" class="btn btn-outline-secondary" style="vertical-align: baseline; font-size: 13px; width: 10%">
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
         <div style="text-align: center;">
             <button type="button" class="btn btn-outline-secondary" th:onclick="userRegister()" style="margin-top: 20px; font-size: 13px;">등록</button>
         </div>
+        <div class="spinner-border loading" role="status">
+            <span class="visually-hidden"></span>
+        </div>
     </section>
 </div>
 <script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("sample6_extraAddress").value = extraAddr;
+
+                } else {
+                    document.getElementById("sample6_extraAddress").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.getElementById("sample6_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample6_detailAddress").focus();
+
+
+            }
+        }).open();
+    }
+
+    function combine_address() {
+        if(document.getElementById('sample6_postcode').value == '' || document.getElementById('sample6_postcode').value == null) {
+            alert('주소를 입력하세요');
+        } else {
+            document.getElementById('user_address').value = '('
+                + document.getElementById('sample6_postcode').value
+                + ') '
+                + document.getElementById("sample6_address").value
+                + ' '
+                + document.getElementById('sample6_extraAddress').value
+                + ' '
+                + document.getElementById("sample6_detailAddress").value;
+            document.getElementById('save_address').setAttribute('style', 'display: none');
+            document.getElementById('modify_address').setAttribute('style', 'display:');
+        }
+    }
+
+    function modify_address() {
+        document.getElementById('save_address').setAttribute('style', 'display:');
+        document.getElementById('modify_address').setAttribute('style', 'display:none');
+    }
+
     const duplicateId = () => {
         let user_id = getValue('#user_id');
 
@@ -124,10 +219,8 @@
         if(confirm("회원을 등록하시겠습니까?")) {
             let user_id = getValue('#user_id');
             let origin_id = getValue('#origin_id');
-            let email = getValue('#email');
-            let emailValid = new RegExp("^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\\.[a-zA-Z]{2,3}$");
 
-            // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크입니다
+            // 기존에 입력한 아이디 값과 바뀐 아이디 값 체크
             if(origin_id != user_id) {
                 alert("아이디 중복을 확인해주세요");
                 setValue('#user_id', '');
@@ -146,6 +239,8 @@
                 "birthday" : getValue('#birthday'),
                 "start_year" : getValue('#start_year'),
                 "auth" : getValue('#auth'),
+                "email" : getValue('#email'),
+                "user_address" : getValue('#user_address')
             }
 
             await fetch("/userRegister", {
@@ -164,6 +259,15 @@
                 e.json().then(msg => {
                     for (let i = 0; i < msg.errors.length; i++) {
                         document.querySelector("#" + msg.errors[i].field).className += ' field-error';
+
+                        if(msg.errors[i].field == 'email') {
+                            alert('이메일 형식 오류입니다');
+                            return;
+                        }
+                        if(msg.errors[i].field == 'user_number') {
+                            alert('핸드폰 번호 형식 오류입니다');
+                            return;
+                        }
                     }
                 });
             });

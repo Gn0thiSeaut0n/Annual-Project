@@ -28,4 +28,6 @@ public interface EtcDAO {
     void updatePwd(Map<String, String> userParam);
 
     void insertFile(File file);
+
+    void updateHistory(Map<String, Object> map);
 }

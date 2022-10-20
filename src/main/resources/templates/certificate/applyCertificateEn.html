@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>CERTIFICATE</title>
+    <div th:replace="fragments/header.html :: fragment-header"></div>
+    <script type = "text/javascript" th:src = "@{/js/nanummyeongjo.js}"></script>
+    <script type = "text/javascript" th:src = "@{/js/jspdf.js}"></script>
+    <script type = "text/javascript" th:src = "@{/js/autotable.js}"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class="sub_content">
+            <div>
+                <div class='sub_header'>
+                    <p class='title'>재직증명서(영문) 신청</p>
+                </div>
+                <br>
+                <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+                    <ul>
+                        <a th:href="|@{/certificateList}|" class='btn_line btn_gray' style="float: left;">증명서 신청 리스트</a>
+                    </ul>
+                    <ul>
+                        <a th:href="|@{/applyCertificate/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">재직증명서 신청</a>
+                    </ul>
+                    <ul th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
+                        <a th:href="|@{/applyCertificateEn/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">재직증명서(영문) 신청</a>
+                    </ul>
+                    <ul th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
+                        <a th:href="|@{/applyCareerCertificate/{user}(user=${user.user_id})}|" class='btn_line btn_gray' style="float: left;">경력증명서 신청</a>
+                    </ul>
+                </div>
+                <div>
+                    <!--                    <input type="hidden" id="user_id">-->
+                    <input type="hidden" id="doc_no">
+                    <input type="hidden" id="user_address" value="기재 생략">
+                    <input type="hidden" id="department" value="주식회사 TEST">
+                    <input type="hidden" id="responsibilities_of_office">
+                    <input type="hidden" id="user_name">
+                    <input type="hidden" id="purpose">
+                    <input type="hidden" id="note">
+                    <input type="hidden" id="type">
+                    <input type="hidden" id="apply_date">
+                    <input type="hidden" id="status_code">
+                    <span id="prev_company_seal" style="display:none">
+                        <img id="seal" src="/images/seal.jpg">
+                    </span>
+
+                    <div class="sub_panel_box">
+                        <table>
+                            <tr>
+                                <td>
+                                    <span class="sub_title prev">PREVIEW</span>
+                                    <div id="certificate_preview" class="certificate_preview">
+                                        <span id="prev_doc_no">Document No.　<span id="fake_doc_no"></span></span>
+                                        <br>
+                                        <div id="prev_type">CERTIFICATE OF EMPLOYMENT</div>
+                                        <br>
+                                        <table id="prev_table">
+                                            <tr>
+                                                <th colspan="2">Personal details</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Name in full</th>
+                                                <td><span id="prev_user_name"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Identification No.</th>
+                                                <td><span id="prev_identification_no_front"></span>-<span id="prev_identification_no_back"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Address</th>
+                                                <td><span id="prev_user_address"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2">Employment details</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Department</th>
+                                                <td><span id="prev_department"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Position</th>
+                                                <td><span id="prev_responsibilities_of_office"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Period</th>
+                                                <td><span id="prev_period"><span id="prev_start_year"></span> - <span id="prev_end_year"></span></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Address</th>
+                                                <td><span id="prev_company_address"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="en">Usage</th>
+                                                <td><span id="prev_purpose"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td id="prev_foot" colspan="2">
+                                                    <div id="prev_type_text">
+                                                        This is to certify that the above mentioned fact is true and correct.
+<!--                                                        상기인은 당사에서 <span id="prev_start_year"></span> 부터-->
+<!--                                                        <span id="prev_end_year"></span> 까지 <br> 근무한 경력이 있음을 증명함.-->
+                                                    </div>
+                                                    <br>
+                                                    <div id="prev_apply_date"></div>
+                                                    <br>
+                                                    <div id="prev_company_signature">
+                                                        <div id="prev_company_signature1">TEST Co.,Ltd.</div>
+<!--                                                        <div id="prev_company_signature2">대표이사　홍　길　동</div>-->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td class="input_info">
+                                    <p class="sub_title">개인정보</p>
+                                    <table class="sub_table">
+                                        <colgroup>
+                                            <col style="width:120px;" />
+                                            <col style="width:330px;" />
+                                        </colgroup>
+                                        <tr>
+                                            <th>성명</th>
+                                            <td><input type="text" id="input_user_name" class="disabled input_text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>주민등록번호</th>
+                                            <td>
+                                                <input type="text" id="input_identification_no_front" class="input_text" style="width: 49%">-
+                                                <input type="text" id="input_identification_no_back" class="input_text" style="width: 49%">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>주소</th>
+                                            <td><input type="text" id="input_user_address" class="input_text"></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <p class="sub_title">재직내역</p>
+                                    <table class="sub_table">
+                                        <colgroup>
+                                            <col style="width:120px;" />
+                                            <col style="width:330px;" />
+                                        </colgroup>
+                                        <tr>
+                                            <th>소속</th>
+                                            <td><input type="text" id="input_department" class="disabled input_text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>직책</th>
+                                            <td><input type="text" id="input_responsibilities_of_office" class="disabled input_text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>입사일자</th>
+                                            <td>
+                                                <input type="date" id="input_start_year" name="start_year" class="disabled input_text"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>퇴사일자</th>
+                                            <td>
+                                                <input type="date" id="input_end_year" name="end_year" class="disabled input_text"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>주소</th>
+                                            <td>
+                                                <input type="text" id="input_company_address" class="disabled input_text"
+                                                       value="Test-gu, Seoul, Korea"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>용도</th>
+                                            <td>
+                                                <input type="text" id="input_purpose" style="width:100%;" class="req-data input_text"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <p class="sub_title">비고</p>
+                                    <table class="sub_table">
+                                        <colgroup>
+                                            <col style="width:120px;" />
+                                            <col style="width:330px;" />
+                                        </colgroup>
+                                        <tr>
+                                            <th class="multi_td">비고</th>
+                                            <td class="multi_td">
+                                                <textarea id="input_note" name="note" class="sub_textarea input_text" rows="8" cols="0"></textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <span id="save" class="btn_save">Save</span>
+                                    <span id="toPDF" class="btn_pdf" style="display: none">
+                                        <a class="btn_pdf_a" id="btn_pdf_a" th:onclick="savePDF()" href="javascript:void(0)"> Save document as PDF file </a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    window.jsPDF = window.jspdf.jsPDF;
+    document.getElementById('save').onclick = function () {
+        insert();
+        document.getElementById('toPDF').setAttribute('style', 'display:');
+        document.getElementById('btn_pdf_a').setAttribute('style', 'margin: 10px');
+        document.getElementById('save').setAttribute('style', 'display:none');
+    }
+
+    function getToday(){
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = ("0" + (1 + date.getMonth())).slice(-2);
+        var day = ("0" + date.getDate()).slice(-2);
+
+        return year + "-" + month + "-" + day;
+    }
+
+    function setEngMM(month) {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return monthNames[month - 1]
+    }
+
+    function setMMYYYY(str) {
+        //YYYY-MM-DD >> mmm. YYYY
+        return setEngMM(str.substring(5, 7)) + '. ' + str.substring(0, 4);
+    }
+
+    function setMMDDYYYY(str) {
+        //YYYY-MM-DD >> mmm. DD. YYYY
+        return setEngMM(str.substring(5, 7)) + '. ' + str.substring(8, 10) + '. ' + str.substring(0, 4);
+    }
+
+    function setYYYYMMDD(str) {
+        //YYYY-MM-DD >> YYYY. MM. DD.
+        return str.substring(0,4) + '. ' + str.substring(5, 7) + '. ' + str.substring(8, 10) + '.';
+    }
+
+    function setYYMMDD(str) {
+        //YYYY-MM-DD >> YYMMDD
+        return str.substring(2, 4) + str.substring(5, 7) + str.substring(8, 10);
+    }
+
+    function setKorYYYYMMDD(str) {
+        //YYYY-MM-DD >> YYYY년 MM월 DD일
+        return str.substring(0, 4) + '년 ' + str.substring(5, 7)+ '월 ' + str.substring(8, 10) + '일';
+    }
+
+    const blindNumber = function(str) {
+        let temp = '';
+        for(let i = 0; i < str.length; i++) {
+            temp += '*';
+        }
+        temp = temp.substring(0, 7);
+        return temp;
+    }
+
+    document.getElementById('prev_company_address').innerText = document.getElementById('input_company_address').value;
+
+    document.getElementById('input_user_address').onkeyup = function() {
+        document.getElementById('prev_user_address').innerText = this.value;
+    }
+
+    document.getElementById('input_department').onkeyup = function() {
+        document.getElementById('prev_department').innerText = this.value;
+    }
+
+    document.getElementById("input_purpose").onkeyup = function() {
+        document.getElementById("prev_purpose").innerText = this.value;
+    }
+    document.getElementById("input_department").onkeyup = function() {
+        document.getElementById("prev_department").innerText = this.value;
+    }
+    document.getElementById("input_identification_no_front").onkeyup = function() {
+        this.value = this.value.substring(0, 6);
+        document.getElementById('prev_identification_no_front').innerText = this.value;
+    }
+    document.getElementById("input_identification_no_back").onkeyup = function() {
+        this.value = this.value.substring(0, 7);
+        document.getElementById("prev_identification_no_back").innerText = this.value;
+    }
+    document.getElementById("input_start_year").onchange = function () {
+        document.getElementById("prev_start_year").innerText = setMMYYYY(this.value);
+    }
+    document.getElementById("input_end_year").onchange = function () {
+        document.getElementById("prev_end_year").innerText = setMMYYYY(this.value);
+    }
+    document.getElementById("input_user_name").onkeyup = function () {
+        document.getElementById("prev_user_name").innerText = this.value;
+    }
+    document.getElementById("input_responsibilities_of_office").onkeyup = function() {
+        document.getElementById("prev_responsibilities_of_office").innerText = this.value;
+    }
+    document.getElementById("fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
+    document.getElementById("prev_apply_date").innerText = setMMDDYYYY(getToday());
+
+    function insert() {
+        let formData = new FormData();
+        //formData.append('user_id', '퇴직');
+        formData.append('user_address', 'CANNOT SAVE');
+        formData.append('department', document.getElementById("prev_department").innerText);
+        formData.append('responsibilities_of_office', document.getElementById("prev_responsibilities_of_office").innerText);
+        formData.append('user_name', document.getElementById("prev_user_name").innerText);
+        formData.append('purpose', document.getElementById("prev_purpose").innerText);
+        formData.append('note', document.getElementById("input_note").value);
+        formData.append('type', 'B');
+        formData.append('status_code', '1');
+        formData.append('apply_date', setYYMMDD(getToday()));
+
+        document.getElementById('input_responsibilities_of_office').readOnly = true;
+        document.getElementById('input_user_name').readOnly = true;
+        document.getElementById('input_identification_no_front').readOnly = true;
+        document.getElementById('input_identification_no_back').readOnly = true;
+        document.getElementById('input_start_year').readOnly = true;
+        document.getElementById('input_end_year').readOnly = true;
+        document.getElementById('input_purpose').readOnly = true;
+        document.getElementById('input_note').readOnly = true;
+        document.getElementById('input_user_address').readOnly = true;
+
+        if(confirm("신청 하시겠습니까?")) {
+            fetch("/applyEn", {
+                method: "POST",
+                body: formData
+            }).then((response) => response.json()).then((data) => {
+                document.getElementById('doc_no').value = data.getDocNo;
+            }).catch(e => {
+                e.json().then(msg => {
+                    for (let i = 0; i < msg.errors.length; i++) {
+                        document.querySelector("#"+msg.errors[i].field).className += ' field-error';
+                    }
+                });
+            });
+        } else {
+            return;
+        }
+    }
+
+    function savePDF() {
+        if(confirm("PDF 파일로 저장 하시겠습니까?")) {
+            var doc = new jsPDF("p", "mm", "a4");
+            doc.addFileToVFS("MyFont.ttf", myFont);
+            doc.addFont("MyFont.ttf", "MyFont", "normal");
+            doc.setFont("MyFont");
+            doc.setFontSize(10);
+            doc.text(30, 30, 'Document No. ' + document.getElementById('doc_no').value);
+            doc.setFontSize(25);
+            doc.text(105, 50, document.getElementById('prev_type').innerText, 'center');
+            doc.autoTable({
+                startY: 65,
+                margin: { left: 30, right: 30 },
+                tableWidth: 150,
+                theme: 'grid',
+                styles: { font: "MyFont", fontStyle: "normal", cellPadding: 3 },
+                body: [
+                    [
+                        {content: 'Personal details', styles: { halign: "center" }, colSpan: 2 }
+                    ],
+                    [
+                        {content: 'Name in full', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_user_name').innerText }
+                    ],
+                    [
+                        {content: 'Identification No.', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_identification_no_front').innerText.substring(0, 6) + '-' + document.getElementById('prev_identification_no_back').innerText.substring(0, 7)}
+                    ],
+                    [
+                        {content: 'Address', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_user_address').innerText }
+                    ],
+                    [
+                        {content: 'Employment details', styles: { halign: "center" }, colSpan: 2 }
+                    ],
+                    [
+                        {content: 'Department', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_department').innerText }
+                    ],
+                    [
+                        {content: 'Position', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_responsibilities_of_office').innerText }
+                    ],
+                    [
+                        {content: 'Period', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_period').innerText }
+                    ],
+                    [
+                        {content: 'Address', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_company_address').innerText }
+                    ],
+                    [
+                        {content: 'Usage', styles: { halign: "center", cellWidth: 33} },
+                        {content: document.getElementById('prev_purpose').innerText }
+                    ],
+                    [
+                        {content: '\n\n\nThis is to certify that the above mentioned fact is true and correct.\n\n\n\n' + document.getElementById('prev_apply_date').innerText + '\n\n\n\n\n\n',
+                            colSpan: 2,
+                            styles: { halign: "center", fontSize: 12 }
+                        }
+                    ]
+                ],
+                bodyStyles: {
+                    //lineWidth: 0.5,
+                    lineColor: 0
+                }
+            });
+            doc.setFontSize(20);
+            doc.text(105, 230, document.getElementById('prev_company_signature1').innerText, 'center');
+            //doc.text(105, 230, document.getElementById('prev_company_signature2').innerText, 'center');
+            //doc.addImage(document.getElementById('seal'), 'JPEG', 145, 210);
+            doc.save(document.getElementById('doc_no').value + ' CERTIFICATE OF EMPLOYMENT.pdf');
+        } else {
+            return;
+        }
+    }
+</script>
+</body>
+</html>

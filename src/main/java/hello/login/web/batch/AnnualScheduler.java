@@ -30,12 +30,11 @@ public class AnnualScheduler {
             String user_id = userInfo.getUser_id();
             String userAnnual = batchDAO.findByUserAnnual(user_id); // 유저가 몇 년차인지 구한다
 
-            //신입인 경우
             if (userAnnual.equals("0")) {
-                // 유저가 몇 개월차인지 구한다
+                // 신입인 경우 몇 개월차인지 구한 후 해당 개월 수 만큼 총 연차 수 업데이트(한 달에 한번 연차 발생)
                 updateUserAnnual(user_id, batchDAO.findByUserMonth(user_id));
             } else {
-                // 유저에 맞는 연차수를 구한다
+                // 해당 연차에 맞는 총 연차를 가져와 업데이트
                 updateUserAnnual(user_id, batchDAO.findByAnnual(userAnnual));
             }
 
