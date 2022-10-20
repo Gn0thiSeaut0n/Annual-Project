@@ -67,5 +67,8 @@ public class EtcService {
 		etcDAO.updatePwd(map);
 	}
 
+    public void updateHistory(Map<String, Object> map) {
+        etcDAO.updateHistory(map);
+    }
 }
 

@@ -10,13 +10,15 @@
         WHERE
             1=1
         <if test="year != '' and month != ''">
-            AND START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
+            AND (START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
+                OR END_DATE LIKE CONCAT(#{year}, '-', #{month}, '%'))
         </if>
         <if test="year != ''">
             AND START_DATE LIKE CONCAT(#{year}, '-', '%')
         </if>
         <if test="month != ''">
-            AND START_DATE LIKE CONCAT('%', '-', #{month}, '-', '%')
+            AND (START_DATE LIKE CONCAT('%', '-', #{month}, '-', '%')
+            OR END_DATE LIKE CONCAT('%', '-', #{month}, '-', '%'))
         </if>
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
@@ -51,18 +53,20 @@
         WHERE
             1=1
         <if test="year != '' and month != ''">
-            AND START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
+            AND (START_DATE LIKE CONCAT(#{year}, '-', #{month}, '%')
+            OR END_DATE LIKE CONCAT(#{year}, '-', #{month}, '%'))
         </if>
         <if test="year != ''">
             AND START_DATE LIKE CONCAT(#{year}, '-', '%')
         </if>
         <if test="month != ''">
-            AND START_DATE LIKE CONCAT('%', '-', #{month}, '-', '%')
+            AND (START_DATE LIKE CONCAT('%', '-', #{month}, '-', '%')
+                OR END_DATE LIKE CONCAT('%', '-', #{month}, '-', '%'))
         </if>
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
-        ORDER BY REQUEST_DATE DESC
+        ORDER BY REQUEST_DATE DESC, USER_ID
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -73,6 +77,7 @@
             USER_INFO
         WHERE
             1=1
+        AND NOT AUTH = 'ADMIN'
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
@@ -98,11 +103,12 @@
         FROM
             USER_INFO U
         WHERE
-        1=1
+            1=1
+        AND NOT AUTH = 'ADMIN'
         <if test="user_name != ''">
             AND USER_NAME LIKE CONCAT('%', #{user_name}, '%')
         </if>
-        ORDER BY START_YEAR DESC
+        ORDER BY USER_ID
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -237,23 +243,26 @@
             (SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND HOLIDAY = '공가'
             AND DATE(REQUEST_DATE) >=
                 IF(
-                    (SELECT DATE_FORMAT(START_YEAR, '%m%d') FROM USER_INFO WHERE USER_ID = U.USER_ID) > (SELECT DATE_FORMAT(NOW(), '%m%d')),
+                    (SELECT DATE_FORMAT(START_YEAR, '%m%d') FROM USER_INFO WHERE USER_ID = U.USER_ID) >= (SELECT DATE_FORMAT(NOW(), '%m%d')),
                     (SELECT CONCAT(#{year} - 1, '-', (SELECT DATE_FORMAT(START_YEAR, '%m-%d') FROM USER_INFO WHERE USER_ID = U.USER_ID))),
                     (SELECT CONCAT(#{year}, '-', (SELECT DATE_FORMAT(START_YEAR, '%m-%d') FROM USER_INFO WHERE USER_ID = U.USER_ID)))
                 )
-            AND DATE(REQUEST_DATE) <![CDATA[ < ]]> (SELECT DATE_FORMAT(NOW(), '%Y-%m-%d'))) AS 'OFFICIAL_HOLIDAY',
+            AND DATE(REQUEST_DATE) <![CDATA[ <= ]]> (SELECT DATE_FORMAT(NOW(), '%Y-%m-%d'))) AS 'OFFICIAL_HOLIDAY',
 
             (SELECT SUM(APPLICATION_YEAR) FROM APPLICATION_HISTORY WHERE USER_ID = U.USER_ID AND HOLIDAY = '대휴'
             AND DATE(REQUEST_DATE) >=
                 IF(
-                    (SELECT DATE_FORMAT(START_YEAR, '%m%d') FROM USER_INFO WHERE USER_ID = U.USER_ID) > (SELECT DATE_FORMAT(NOW(), '%m%d')),
+                    (SELECT DATE_FORMAT(START_YEAR, '%m%d') FROM USER_INFO WHERE USER_ID = U.USER_ID) >= (SELECT DATE_FORMAT(NOW(), '%m%d')),
                     (SELECT CONCAT(#{year} - 1, '-', (SELECT DATE_FORMAT(START_YEAR, '%m-%d') FROM USER_INFO WHERE USER_ID = U.USER_ID))),
                     (SELECT CONCAT(#{year}, '-', (SELECT DATE_FORMAT(START_YEAR, '%m-%d') FROM USER_INFO WHERE USER_ID = U.USER_ID)))
                 )
-            AND DATE(REQUEST_DATE) <![CDATA[ < ]]> (SELECT DATE_FORMAT(NOW(), '%Y-%m-%d'))) AS 'SUBSTITUTE_HOLIDAY'
+            AND DATE(REQUEST_DATE) <![CDATA[ <= ]]> (SELECT DATE_FORMAT(NOW(), '%Y-%m-%d'))) AS 'SUBSTITUTE_HOLIDAY'
         FROM
-            USER_INFO U,
-            APPLICATION_HISTORY AH
+            USER_INFO U
+        WHERE
+            1=1
+        AND NOT AUTH = 'ADMIN'
+        ORDER BY USER_ID
         LIMIT #{pageSize} OFFSET #{startIndex}
     </select>
 
@@ -262,6 +271,9 @@
             COUNT(*)
         FROM
             USER_INFO
+        WHERE
+            1=1
+        AND NOT AUTH = 'ADMIN'
     </select>
 
     <select id="findByAllFileList" resultType="History">

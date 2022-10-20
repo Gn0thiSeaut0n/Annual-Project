@@ -29,29 +29,32 @@ public class EtcController {
     private final EtcService etcService;
     private final AnnualService annualService;
     private final EmailService emailService;
-    private final EmailDAO emailDAO;
 
     @PostMapping("/application")
     public ResponseEntity application(@Validated History history, @Login User loginMember) throws Exception {
         etcService.insertApplicationHistory(history);
-        etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
+        if (history.getHoliday().equals("")) {
+            etcService.updateAnnual(Map.of("user_id", history.getUser_id(), "use_annual", "" + getUseAnnual(history)));
+        }
         emailService.sendMail("상신", history, loginMember);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteHistory/{history_id}")
     public ResponseEntity deleteHistory(@PathVariable String history_id, @Login User loginMember) {
-        etcService.updateAnnual(Map.of(
-                "user_id", loginMember.getUser_id(), "use_annual", Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getUse_annual())));
+        if (getHistory(loginMember.getUser_id(), history_id).getHoliday() == null) {
+            etcService.updateHistory(Map.of(
+                    "user_id", loginMember.getUser_id(), "application_year", Float.valueOf(getHistory(loginMember.getUser_id(), history_id).getApplication_year())));
+        }
         etcService.deleteHistory(history_id);
         annualService.deleteFileInfo(history_id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PutMapping("/apprHistory/{history_id}")
-    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) throws Exception{
+    public ResponseEntity apprHistory(@PathVariable String history_id, @Login User loginMember) throws Exception {
         etcService.updateAppr(Map.of("history_id", history_id, "type", loginMember.getAuth()));
-        History history = emailDAO.selectToUser(history_id);
+        History history = emailService.selectToUser(history_id);
         emailService.sendMail("승인", history, loginMember);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -66,6 +69,7 @@ public class EtcController {
                 "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(), "user_id", loginMember.getUser_id()
         )));
         model.addAttribute("pagination", pagination);
+        model.addAttribute("fileList", annualService.findByAllFileList());
         return "info/myPage";
     }
 

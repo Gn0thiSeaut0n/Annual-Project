@@ -1,11 +1,15 @@
 package hello.login.domain.service;
 
-import hello.login.domain.dao.EmailDAO;
-import hello.login.domain.dto.History;
-import hello.login.domain.dto.User;
-import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -13,17 +17,24 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.HashMap;
+import hello.login.domain.dao.EmailDAO;
+import hello.login.domain.dto.History;
+import hello.login.domain.dto.User;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class EmailService {
 	private final JavaMailSender emailSender;
 	private final SpringTemplateEngine templateEngine;
+	
 	private final EmailDAO emailDAO;
 	
+
+	public History selectToUser(String history){
+		return emailDAO.selectToUser(history);
+	}
+
 	/**
 	 * 이메일 발송
 	 * @param type 유형
@@ -31,7 +42,6 @@ public class EmailService {
 	 * @param loginMember 결재/반려 업무 대상자
 	 * @throws Exception
 	 */
-
 	@Async
 	public void sendMail(String type, History history, User loginMember) throws MessagingException {
 		MimeMessage message = emailSender.createMimeMessage();
@@ -71,11 +81,11 @@ public class EmailService {
         });
 
         //메일 내용 설정 : 템플릿 프로세스
-        String html = templateEngine.process("mail/mailForm", context);
+        String html = templateEngine.process("mailForm", context);
         helper.setText(html, true);
 
         //템플릿에 들어가는 이미지 cid로 삽입
-//        helper.addInline("image", new ClassPathResource("static/images/xxx.png"));
+        helper.addInline("image", new ClassPathResource("static/images/mail_img.png"));
 
         emailSender.send(message);
 	}

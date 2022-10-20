@@ -94,9 +94,9 @@ header, .myPage, .logout {
     color: #ffffff;
 }
 
-div.container section div div.view_file_box {bottom:-1px; right: 0; text-align: right;}
-div.container section div div.view_file_box .btn_link span { display: inline-block; vertical-align: middle;}
-div.container section div div.view_file_box .btn_link .txt {font-size: 16px; color:#222d5b;margin:0 19px 0 0px; font-weight: 700;}
+div.container section div div.view_file_box {bottom:-1px; right: 0; text-align: right; text-align: center;}
+div.container section div div.view_file_box .btn_link span {vertical-align: middle;}
+div.container section div div.view_file_box .btn_link .txt {font-size: 15px; color:#222d5b; font-weight: 700;}
 div.container section div div.view_file_box .btn_link .download {top: -1px;}
 div.container section div div.view_file_box .link_list {text-align: left; border:1px solid #e2e2e2; padding:20px; background: #fff;}
 div.container section div div.view_file_box .link_list li + li { margin-top: 5px;}
@@ -168,3 +168,29 @@ div.container section div div.view_file_box .link_list a {color:#222d5b; font-si
     width: 70px;
     height: 70px;
 }
+
+.certificate_preview {font-family: 'Nanum Myeongjo'; padding: 70px; width: 800px; height: 1131.2px}
+.certificate_preview .prev_table {padding: 10px; border:1px solid #000;}
+.certificate_preview th {padding: 10px; border:1px solid #000; font-size: medium; text-align: center; width: 130px; height: 30px}
+.certificate_preview .en {padding: 10px; border:1px solid #000; font-size: medium; text-align: center; width: 150px; height: 30px}
+.certificate_preview td {padding: 10px; border:1px solid #000; font-size: medium }
+#prev_table {height:600px}
+#prev_doc_no {font-size: medium}
+#prev_type {margin: 30px; text-align:center; font-size: xx-large}
+#prev_foot {text-align:center; height: 300px}
+#prev_company_signature {margin: 30px}
+#prev_company_signature1 {font-size: x-large}
+#prev_company_signature2 {font-size: x-large}
+#prev_type_text {margin: 30px}
+#prev_date_yyyymmdd {margin: 30px}
+#prev_company_seal {position: absolute; top: 1020px; left: 710px}
+.input_info {vertical-align: top}
+.sub_textarea {resize: none;}
+.btn_save {border: 1px solid #6667AB; color: #6667AB; cursor: default; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px; font-size: small; float: right; margin: 10px}
+.btn_save:hover {border: 1px solid #6667AB; cursor: default; background-color: #6667AB; color: #ffffff}
+.btn_update {border: 1px solid #6667AB; color: #6667AB; cursor: default; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px; font-size: small; float: right; margin: 10px}
+.btn_update:hover {border: 1px solid #6667AB; cursor: default; background-color: #6667AB; color: #ffffff}
+.btn_cancel {border: 1px solid #999; color: #999; cursor: default; padding-left: 15px; padding-right: 15px; padding-bottom: 5px; padding-top: 5px; font-size: small; float: right; margin: 10px}
+.btn_cancel:hover {border: 1px solid #999; cursor: default; background-color: #999; color: #ffffff}
+.btn_pdf_a {border: 1px solid #b30a00; color: #b30a00; cursor: default; padding: 5px; font-size: small; float: right; margin-right: 50px}
+.btn_pdf_a:hover {border: 1px solid #b30a00; cursor: default; background-color: #b30a00; color: #ffffff}

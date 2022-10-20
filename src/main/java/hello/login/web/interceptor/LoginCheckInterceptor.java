@@ -22,7 +22,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 //        user.setUser_id("root");
 ////        user.setUser_id("tester");
 //        user.setUser_pw("1234");
-//        user.setUser_name("휴먼엔시스");
+//        user.setUser_name("TEST");
 ////        user.setUser_name("테스트");
 //        user.setSex("M");
 //        user.setResponsibilities_of_office("관리자");

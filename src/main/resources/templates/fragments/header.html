@@ -12,6 +12,7 @@
     <link th:href="@{/fullcalendar/main.css}" rel="stylesheet">
     <script th:src="@{/fullcalendar/main.js}"></script>
     <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
     <div class="container">
         <div class="col-md-12 text-end">
             <div class="inline-block images float">
@@ -30,6 +31,9 @@
             </div>
             <div class="inline-block float m-lg-3">
                 <a th:href="@{/viewCalendar}">달력</a>
+            </div>
+            <div class="inline-block float m-lg-3">
+                <a th:href="@{/certificateList}">증명서</a>
             </div>
             <form th:action="@{/myPage}" method="get" class="inline-block">
                 <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}|">로그인 사용자 이름</span>
