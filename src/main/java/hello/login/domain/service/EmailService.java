@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import hello.login.domain.dto.Certificate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
@@ -103,5 +104,53 @@ public class EmailService {
 		emailValues.put("date", history.getStart_date() + " ~ " + history.getEnd_date());
 		emailValues.put("type", info);
 		emailValues.put("reason", history.getReason());
+	}
+
+	@Async
+	public void sendCertificateMail(String type, Certificate certificate, User loginMember) throws MessagingException {
+		MimeMessage message = emailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+		//템플릿에 전달할 데이터 설정
+		HashMap<String, String> emailValues = new HashMap<>();
+
+		switch (type) {
+			case "상신": {
+				String[] manager = emailDAO.selectToManager();
+				certificaeMailTemplate(helper, emailValues, certificate, manager, type, " 신청입니다.");
+				break;
+			}
+			case "승인": {
+				String[] user = { certificate.getEmail() };
+				certificaeMailTemplate(helper, emailValues, certificate, user, type, "는 승인되었습니다.");
+				break;
+			}
+			case "반려": {
+				String[] user = { certificate.getEmail() };
+				certificaeMailTemplate(helper, emailValues, certificate, user, type, "는 반려되었습니다.");
+				break;
+			}
+		}
+
+		Context context = new Context();
+		emailValues.forEach((key, value)->{
+			context.setVariable(key, value);
+		});
+
+		//메일 내용 설정 : 템플릿 프로세스
+		String html = templateEngine.process("certificateMailForm", context);
+		helper.setText(html, true);
+
+		//템플릿에 들어가는 이미지 cid로 삽입
+		helper.addInline("image", new ClassPathResource("static/images/mail_img.png"));
+
+		emailSender.send(message);
+	}
+
+	private static void certificaeMailTemplate(MimeMessageHelper helper, HashMap<String, String> emailValues, Certificate certificate, String[] to, String type, String message) throws MessagingException {
+		helper.setSubject("[증명서 "+ type + "] " + certificate.getUser_name() + "님의 재직증명서" + message);
+		helper.setTo(to);
+		emailValues.put("text", certificate.getUser_name() + "님의 재직증명서" + message);
+		emailValues.put("purpose", certificate.getPurpose());
 	}
 }

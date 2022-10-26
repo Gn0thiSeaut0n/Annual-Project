@@ -97,8 +97,8 @@
     }
 
     const search = (pageNum) => {
-        let user_id = document.querySelector('#user_id').value;
-        let user_name = document.querySelector('#user_name').value;
+        let user_id = getValue('#user_id');
+        let user_name = getValue('#user_name');
 
         window.location.href=`/userManagement?page=${pageNum}&user_id=${user_id}&user_name=${user_name}`;
     }

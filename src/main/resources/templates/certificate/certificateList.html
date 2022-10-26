@@ -29,61 +29,115 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <section>
-                <div>
-                    <table class="table table-bordered">
-                        <tr class="pb-3 pt-3">
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">신청일자</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">문서번호</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">성명</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">종류</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">용도</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자 승인</th>
-                            <th scope="col" class="pb-4 pt-4 text-center text-bold">작업</th>
-                        </tr>
-                        <tr th:each="list: ${certificate}">
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.apply_date.substring(0, 10)}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.doc_no}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
-                                <span th:if="${list.type.equals('A')}">재직증명서</span>
-                                <span th:if="${list.type.equals('B')}">재직증명서(영문)</span>
-                                <span th:if="${list.type.equals('C')}">경력증명서</span>
-                            </td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.purpose}]]</td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
+
+        <div class="input-group mb-3">
+            <select id="select_search" class="custom-select" style="font-size: 15px; width: 9%; text-align: center;">
+                <option value="">선택</option>
+                <option th:each="s : ${selection}"
+                        th:text="${s}"
+                        th:value="${selection.indexOf(s)}"
+                        th:selected="${selection.indexOf(s)} == ${searchParam.select_search}">
+                </option>
+            </select>
+            <input type="text" class="form-control" id="input_search" name="input_search" th:value="${searchParam.input_search}" onkeypress="enterKey(event)" style="font-size: 15px;" />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" style="font-size: 14px;" onclick="search(1);">검색</button>
+            </div>
+        </div>
+
+        <div th:if="${#lists.size(certificate) == 0}" style="font-size: 25px; text-align: center;">
+            데이터가 없습니다!
+        </div>
+        <div th:if="${#lists.size(certificate) != 0}">
+
+            <div class="container">
+                <section>
+                    <div>
+                        <table class="table table-bordered">
+                            <tr class="pb-3 pt-3">
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">신청일자</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">문서번호</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">사번</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">성명</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">종류</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">용도</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">담당자 승인</th>
+                                <th scope="col" class="pb-4 pt-4 text-center text-bold">작업</th>
+                            </tr>
+                            <tr th:each="list: ${certificate}">
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.apply_date.substring(0, 10)}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.doc_no}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_id}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.user_name}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.type}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">[[${list.purpose}]]</td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">
                                 <span th:if="${list.status_code.equals('0')}">
                                     <a th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" th:name="${list.doc_no}" href="javascript:void(0)" style="color: blue;" th:onclick="approveCertificate(this)">미승인</a>
                                     <a th:if="${user.auth.equals('user')}">미승인</a>
+                                    <span th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}"> / </span>
+                                    <a th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" href="javascript:void(0)" style="color: red;" th:name="${list.doc_no}" th:onclick="deleteCertificate(this)">반려</a>
+
                                 </span>
-                                <span th:if="${list.status_code.equals('1')}">승인</span>
-                            </td>
-                            <td scope="row" class="pb-4 pt-4 text-center table-custom">
+                                    <span th:if="${list.status_code.equals('1')}">승인</span>
+                                </td>
+                                <td scope="row" class="pb-4 pt-4 text-center table-custom">
                                 <span th:if="${list.user_name.equals(user.user_name)} or ${user.auth.equals('admin')} or ${user.auth.equals('manager')}">
                                     <a th:if="${!list.user_id.substring(0, 3).equals('tmp')}" th:href="|@{/viewCertificate/{list}(list=${list.doc_no})}|">조회</a>
-                                    <span th:if="${!list.user_id.substring(0, 3).equals('tmp')}"> / </span>
-                                    <a href="javascript:void(0)" style="color: red;" th:name="${list.doc_no}" th:onclick="deleteCertificate(this)">삭제</a>
+                                    <span th:if="(${user.auth.equals('admin')} or ${user.auth.equals('manager')}) and ${!list.user_id.substring(0, 3).equals('tmp')} and ${list.status_code.equals('1')}"> / </span>
+                                    <a th:if="(${user.auth.equals('admin')} or ${user.auth.equals('manager')}) and ${list.status_code.equals('1')}" href="javascript:void(0)" style="color: red;" th:name="${list.doc_no}" th:onclick="deleteCertificate(this)">삭제</a>
                                 </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </section>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <nav aria-label="Page navigation example" style="font-size: 16px">
+                <ul class="pagination" style="justify-content: center;">
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:search(1);" aria-label="Previous">
+                            <span aria-hidden="true">처음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.prevBlock} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">이전</span>
+                        </a>
+                    </li>
+                    <th:block th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li class="page-item"
+                            th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
+                            th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text="${pageButton}"
+                               th:style="${pagination.page} == ${pageButton} ? 'background-color: blue; color: white;' : ''"></a>
+                        </li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.nextBlock} + ');'" aria-label="Next">
+                            <span aria-hidden="true">다음</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="'javascript:search(' + ${pagination.totalPageCnt} + ');'" aria-label="Previous">
+                            <span aria-hidden="true">끝</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </section>
 </div>
 <script>
-    function deleteCertificate(row) {
+    const deleteCertificate = (row) => {
         if(confirm("문서번호 '" + row.name + "' 증명서를 삭제 하시겠습니까?")) {
             fetch("/delete/" + row.name, {
                 method: "DELETE"
             }).then((response) => {
                 if(!response.ok)
                     throw response;
-                alert("승인이 완료되었습니다.");
+                alert("삭제가 완료되었습니다.");
                 window.location.href="/certificateList";
             }).catch(e => {
                 console.log("에러 발생");
@@ -93,7 +147,7 @@
         }
     }
 
-    function approveCertificate(row) {
+    const approveCertificate = (row) => {
         if(confirm("승인 처리 하시겠습니까?")) {
             fetch("/approve/"+row.name, {
                 method: "PUT",
@@ -113,6 +167,21 @@
         } else {
             return;
         }
+    }
+
+    const enterKey = (e) => {
+        if(e.keyCode === 13) {
+            search(1);
+        } else {
+            return true;
+        }
+    }
+
+    const search = (pageNum) => {
+        let select_search = document.querySelector('#select_search').value;
+        let input_search = document.querySelector('#input_search').value;
+
+        window.location.href=`/certificateList?page=${pageNum}&select_search=${select_search}&input_search=${input_search}`;
     }
 </script>
 </body>

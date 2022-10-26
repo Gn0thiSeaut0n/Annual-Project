@@ -98,7 +98,7 @@ div.container section div div.view_file_box {bottom:-1px; right: 0; text-align: 
 div.container section div div.view_file_box .btn_link span {vertical-align: middle;}
 div.container section div div.view_file_box .btn_link .txt {font-size: 15px; color:#222d5b; font-weight: 700;}
 div.container section div div.view_file_box .btn_link .download {top: -1px;}
-div.container section div div.view_file_box .link_list {text-align: left; border:1px solid #e2e2e2; padding:20px; background: #fff;}
+div.container section div div.view_file_box .link_list {text-align: left; border:1px solid #e2e2e2; background: #fff; padding: 0 20px 0 20px;}
 div.container section div div.view_file_box .link_list li + li { margin-top: 5px;}
 div.container section div div.view_file_box .link_list a {color:#222d5b; font-size: 14px; text-decoration: underline; max-width: 100%; display: block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
 

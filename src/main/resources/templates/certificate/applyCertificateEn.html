@@ -3,10 +3,6 @@
 <head>
     <title>CERTIFICATE</title>
     <div th:replace="fragments/header.html :: fragment-header"></div>
-    <script type = "text/javascript" th:src = "@{/js/nanummyeongjo.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/jspdf.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/autotable.js}"></script>
-    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
 </head>
 <body>
 <div class="container">
@@ -208,129 +204,78 @@
 </div>
 <script>
     window.jsPDF = window.jspdf.jsPDF;
-    document.getElementById('save').onclick = function () {
+    getId('#save').onclick = function () {
         insert();
-        document.getElementById('toPDF').setAttribute('style', 'display:');
-        document.getElementById('btn_pdf_a').setAttribute('style', 'margin: 10px');
-        document.getElementById('save').setAttribute('style', 'display:none');
+        getId('#toPDF').setAttribute('style', 'display:');
+        getId('#btn_pdf_a').setAttribute('style', 'margin: 10px');
+        getId('#save').setAttribute('style', 'display:none');
     }
 
-    function getToday(){
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = ("0" + (1 + date.getMonth())).slice(-2);
-        var day = ("0" + date.getDate()).slice(-2);
-
-        return year + "-" + month + "-" + day;
+    getId('#prev_company_address').innerText = getValue('#input_company_address');
+    getId('#input_user_address').onkeyup = function() {
+        getId('#prev_user_address').innerText = this.value;
     }
-
-    function setEngMM(month) {
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        return monthNames[month - 1]
+    getId('#input_department').onkeyup = function() {
+        getId('#prev_department').innerText = this.value;
     }
-
-    function setMMYYYY(str) {
-        //YYYY-MM-DD >> mmm. YYYY
-        return setEngMM(str.substring(5, 7)) + '. ' + str.substring(0, 4);
+    getId("#input_purpose").onkeyup = function() {
+        getId("#prev_purpose").innerText = this.value;
     }
-
-    function setMMDDYYYY(str) {
-        //YYYY-MM-DD >> mmm. DD. YYYY
-        return setEngMM(str.substring(5, 7)) + '. ' + str.substring(8, 10) + '. ' + str.substring(0, 4);
+    getId("#input_department").onkeyup = function() {
+        getId("#prev_department").innerText = this.value;
     }
-
-    function setYYYYMMDD(str) {
-        //YYYY-MM-DD >> YYYY. MM. DD.
-        return str.substring(0,4) + '. ' + str.substring(5, 7) + '. ' + str.substring(8, 10) + '.';
-    }
-
-    function setYYMMDD(str) {
-        //YYYY-MM-DD >> YYMMDD
-        return str.substring(2, 4) + str.substring(5, 7) + str.substring(8, 10);
-    }
-
-    function setKorYYYYMMDD(str) {
-        //YYYY-MM-DD >> YYYY년 MM월 DD일
-        return str.substring(0, 4) + '년 ' + str.substring(5, 7)+ '월 ' + str.substring(8, 10) + '일';
-    }
-
-    const blindNumber = function(str) {
-        let temp = '';
-        for(let i = 0; i < str.length; i++) {
-            temp += '*';
-        }
-        temp = temp.substring(0, 7);
-        return temp;
-    }
-
-    document.getElementById('prev_company_address').innerText = document.getElementById('input_company_address').value;
-
-    document.getElementById('input_user_address').onkeyup = function() {
-        document.getElementById('prev_user_address').innerText = this.value;
-    }
-
-    document.getElementById('input_department').onkeyup = function() {
-        document.getElementById('prev_department').innerText = this.value;
-    }
-
-    document.getElementById("input_purpose").onkeyup = function() {
-        document.getElementById("prev_purpose").innerText = this.value;
-    }
-    document.getElementById("input_department").onkeyup = function() {
-        document.getElementById("prev_department").innerText = this.value;
-    }
-    document.getElementById("input_identification_no_front").onkeyup = function() {
+    getId("#input_identification_no_front").onkeyup = function() {
         this.value = this.value.substring(0, 6);
-        document.getElementById('prev_identification_no_front').innerText = this.value;
+        getId('#prev_identification_no_front').innerText = this.value;
     }
-    document.getElementById("input_identification_no_back").onkeyup = function() {
+    getId("#input_identification_no_back").onkeyup = function() {
         this.value = this.value.substring(0, 7);
-        document.getElementById("prev_identification_no_back").innerText = this.value;
+        getId("#prev_identification_no_back").innerText = this.value;
     }
-    document.getElementById("input_start_year").onchange = function () {
-        document.getElementById("prev_start_year").innerText = setMMYYYY(this.value);
+    getId("#input_start_year").onchange = function () {
+        getId("#prev_start_year").innerText = setMMYYYY(this.value);
     }
-    document.getElementById("input_end_year").onchange = function () {
-        document.getElementById("prev_end_year").innerText = setMMYYYY(this.value);
+    getId("#input_end_year").onchange = function () {
+        getId("#prev_end_year").innerText = setMMYYYY(this.value);
     }
-    document.getElementById("input_user_name").onkeyup = function () {
-        document.getElementById("prev_user_name").innerText = this.value;
+    getId("#input_user_name").onkeyup = function () {
+        getId("#prev_user_name").innerText = this.value;
     }
-    document.getElementById("input_responsibilities_of_office").onkeyup = function() {
-        document.getElementById("prev_responsibilities_of_office").innerText = this.value;
+    getId("#input_responsibilities_of_office").onkeyup = function() {
+        getId("#prev_responsibilities_of_office").innerText = this.value;
     }
-    document.getElementById("fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
-    document.getElementById("prev_apply_date").innerText = setMMDDYYYY(getToday());
+    getId("#fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
+    getId("#prev_apply_date").innerText = setMMDDYYYY(getToday());
 
-    function insert() {
+    const insert = () => {
         let formData = new FormData();
         //formData.append('user_id', '퇴직');
         formData.append('user_address', 'CANNOT SAVE');
-        formData.append('department', document.getElementById("prev_department").innerText);
-        formData.append('responsibilities_of_office', document.getElementById("prev_responsibilities_of_office").innerText);
-        formData.append('user_name', document.getElementById("prev_user_name").innerText);
-        formData.append('purpose', document.getElementById("prev_purpose").innerText);
-        formData.append('note', document.getElementById("input_note").value);
-        formData.append('type', 'B');
+        formData.append('department', getInnerText("#prev_department"));
+        formData.append('responsibilities_of_office', getInnerText("#prev_responsibilities_of_office"));
+        formData.append('user_name', getInnerText("#prev_user_name"));
+        formData.append('purpose', getInnerText("#prev_purpose"));
+        formData.append('note', getValue("#input_note"));
+        formData.append('type', '재직증명서(영문)');
         formData.append('status_code', '1');
         formData.append('apply_date', setYYMMDD(getToday()));
 
-        document.getElementById('input_responsibilities_of_office').readOnly = true;
-        document.getElementById('input_user_name').readOnly = true;
-        document.getElementById('input_identification_no_front').readOnly = true;
-        document.getElementById('input_identification_no_back').readOnly = true;
-        document.getElementById('input_start_year').readOnly = true;
-        document.getElementById('input_end_year').readOnly = true;
-        document.getElementById('input_purpose').readOnly = true;
-        document.getElementById('input_note').readOnly = true;
-        document.getElementById('input_user_address').readOnly = true;
+        getId('#input_responsibilities_of_office').readOnly = true;
+        getId('#input_user_name').readOnly = true;
+        getId('#input_identification_no_front').readOnly = true;
+        getId('#input_identification_no_back').readOnly = true;
+        getId('#input_start_year').readOnly = true;
+        getId('#input_end_year').readOnly = true;
+        getId('#input_purpose').readOnly = true;
+        getId('#input_note').readOnly = true;
+        getId('#input_user_address').readOnly = true;
 
         if(confirm("신청 하시겠습니까?")) {
             fetch("/applyEn", {
                 method: "POST",
                 body: formData
             }).then((response) => response.json()).then((data) => {
-                document.getElementById('doc_no').value = data.getDocNo;
+                getId('#doc_no').value = data.getDocNo;
             }).catch(e => {
                 e.json().then(msg => {
                     for (let i = 0; i < msg.errors.length; i++) {
@@ -343,16 +288,16 @@
         }
     }
 
-    function savePDF() {
+    const savePDF = () => {
         if(confirm("PDF 파일로 저장 하시겠습니까?")) {
             var doc = new jsPDF("p", "mm", "a4");
             doc.addFileToVFS("MyFont.ttf", myFont);
             doc.addFont("MyFont.ttf", "MyFont", "normal");
             doc.setFont("MyFont");
             doc.setFontSize(10);
-            doc.text(30, 30, 'Document No. ' + document.getElementById('doc_no').value);
+            doc.text(30, 30, 'Document No. ' + getValue('#doc_no'));
             doc.setFontSize(25);
-            doc.text(105, 50, document.getElementById('prev_type').innerText, 'center');
+            doc.text(105, 50, getInnerText('#prev_type'), 'center');
             doc.autoTable({
                 startY: 65,
                 margin: { left: 30, right: 30 },
@@ -365,41 +310,44 @@
                     ],
                     [
                         {content: 'Name in full', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_user_name').innerText }
+                        {content: getInnerText('#prev_user_name') }
                     ],
                     [
                         {content: 'Identification No.', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_identification_no_front').innerText.substring(0, 6) + '-' + document.getElementById('prev_identification_no_back').innerText.substring(0, 7)}
+                        {content: getInnerText('#prev_identification_no_front').substring(0, 6)
+                                + '-' + getInnerText('#prev_identification_no_back').substring(0, 7)}
                     ],
                     [
                         {content: 'Address', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_user_address').innerText }
+                        {content: getInnerText('#prev_user_address') }
                     ],
                     [
                         {content: 'Employment details', styles: { halign: "center" }, colSpan: 2 }
                     ],
                     [
                         {content: 'Department', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_department').innerText }
+                        {content: getInnerText('#prev_department') }
                     ],
                     [
                         {content: 'Position', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_responsibilities_of_office').innerText }
+                        {content: getInnerText('#prev_responsibilities_of_office') }
                     ],
                     [
                         {content: 'Period', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_period').innerText }
+                        {content: getInnerText('#prev_period') }
                     ],
                     [
                         {content: 'Address', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_company_address').innerText }
+                        {content: getInnerText('#prev_company_address') }
                     ],
                     [
                         {content: 'Usage', styles: { halign: "center", cellWidth: 33} },
-                        {content: document.getElementById('prev_purpose').innerText }
+                        {content: getInnerText('#prev_purpose') }
                     ],
                     [
-                        {content: '\n\n\nThis is to certify that the above mentioned fact is true and correct.\n\n\n\n' + document.getElementById('prev_apply_date').innerText + '\n\n\n\n\n\n',
+                        {content: '\n\n\nThis is to certify that the above mentioned fact is true and correct.\n\n\n\n'
+                                + getInnerText('#prev_apply_date')
+                                + '\n\n\n\n\n\n',
                             colSpan: 2,
                             styles: { halign: "center", fontSize: 12 }
                         }
@@ -411,10 +359,10 @@
                 }
             });
             doc.setFontSize(20);
-            doc.text(105, 230, document.getElementById('prev_company_signature1').innerText, 'center');
+            doc.text(105, 230, getInnerText('#prev_company_signature1'), 'center');
             //doc.text(105, 230, document.getElementById('prev_company_signature2').innerText, 'center');
             //doc.addImage(document.getElementById('seal'), 'JPEG', 145, 210);
-            doc.save(document.getElementById('doc_no').value + ' CERTIFICATE OF EMPLOYMENT.pdf');
+            doc.save(getValue('#doc_no') + ' CERTIFICATE OF EMPLOYMENT.pdf');
         } else {
             return;
         }

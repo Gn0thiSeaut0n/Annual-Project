@@ -1,5 +1,8 @@
 package hello.login.web;
 
+import hello.login.domain.dto.Pagination;
+import hello.login.domain.service.AnnualService;
+import hello.login.domain.service.EtcService;
 import hello.login.web.api.Item;
 import hello.login.web.api.RequestUtils;
 import hello.login.domain.dto.Annual;
@@ -12,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,6 +29,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HomeController {
     private final LoginService loginService;
+    private final EtcService etcService;
+    private final AnnualService annualService;
 
     @GetMapping("/")
     public String homeLogin(@Login User loginMember, Model model) {
@@ -40,6 +46,20 @@ public class HomeController {
         model.addAttribute("annual", annual);
         model.addAttribute("holidays", holiday());
         return "home";
+    }
+
+    @GetMapping("/annualList")
+    public String myPage(@Login User loginMember, @RequestParam(defaultValue = "1") int page, Model model) {
+
+        Pagination pagination = new Pagination(etcService.findByHistoryAllCnt(loginMember.getUser_id()), page);
+
+        model.addAttribute("user", loginMember);
+        model.addAttribute("history", etcService.findByHistoryPaging(Map.of(
+                "startIndex", pagination.getStartIndex(), "pageSize", pagination.getPageSize(), "user_id", loginMember.getUser_id()
+        )));
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("fileList", annualService.findByAllFileList());
+        return "annualList";
     }
 
     List<Item> holiday(){

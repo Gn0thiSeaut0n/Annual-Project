@@ -4,12 +4,13 @@ import hello.login.domain.dto.Certificate;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CertificateDAO {
     void insertCertificate(Certificate certificate);
 
-    List<Certificate> selectCertificateAll();
+    List<Certificate> selectCertificateAll(Map<String, Object> pageParam);
 
     void approveCertificate(String doc_no);
 
@@ -24,4 +25,6 @@ public interface CertificateDAO {
     String getRecentDocNo();
 
     void insertCertificateEn(Certificate certificate);
+
+    int findByAllCertificateCnt(Map<String, String> searchParam);
 }

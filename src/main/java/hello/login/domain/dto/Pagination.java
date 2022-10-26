@@ -96,11 +96,8 @@ public class Pagination {
         setNextBlock(page + 1);
 
         /* === 다음 블럭에 대한 validation ===*/
-//        if (nextBlock > totalPageCnt) {
-//            nextBlock = totalPageCnt;
-//        }
-        if (nextBlock >= totalPageCnt) {
-            this.nextBlock = endPage;
+        if (nextBlock > totalPageCnt) {
+            nextBlock = totalPageCnt;
         }
 
         /** 10. DB 접근 시작 index **/
