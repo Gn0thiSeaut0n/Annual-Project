@@ -72,8 +72,8 @@
                                         </span>
                                     </a>
                                     <div class="link_list" style="display: none; z-index: 1; position: absolute;">
-                                        <a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center;" class="allDownload">일괄 다운로드</a>
-                                        <li th:if="${list.file_id} == ${file.file_id}" th:each="file : ${fileList}" th:id="|file_${file.file_id}|" th:name="${file.file_uuid}" class="fileList">
+                                        <a href="javascript:void(0)" style="font-size: 12px; color: blue; margin-bottom: 12px; cursor: pointer; text-decoration-line: none; text-align: center; padding-top: 20px;" class="allDownload">일괄 다운로드</a>
+                                        <li th:if="${list.file_id} == ${file.file_id}" th:each="file : ${fileList}" th:id="|file_${file.file_id}|" th:name="${file.file_uuid}" th:style="${fileStat.last} == true ? 'padding-bottom: 20px;' : ''" class="fileList">
                                             <a th:href="@{/fileDownload/{id}(id=${file.file_uuid})}">[[${file.origin_file_name}]]</a>
                                         </li>
                                     </div>
@@ -102,7 +102,7 @@
                             <li class="page-item"
                                 th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"
                                 th:each="pageButton : ${#numbers.sequence(start, end)}">
-                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text=${pageButton}
+                                <a class="page-link" th:href="'javascript:search(' + ${pageButton} + ');'" th:text="${pageButton}"
                                    th:style="${pagination.page} == ${pageButton} ? 'background-color: blue; color: white;' : ''"></a>
                             </li>
                         </th:block>
@@ -137,9 +137,9 @@
     }
 
     const search = (pageNum) => {
-        let selectYear = document.querySelector('#year').value;
-        let selectMonth = document.querySelector('#month').value;
-        let user_name = document.querySelector('#user_name').value;
+        let selectYear = getValue('#year');
+        let selectMonth = getValue('#month');
+        let user_name = getValue('#user_name');
 
         if(selectMonth.length == 1) {
             selectMonth = "0".concat(selectMonth);
@@ -223,6 +223,12 @@
            let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
            frm.appendTo("body");
         }
+
+        let lastIndex = document.querySelectorAll("li:nth-last-child(1).fileList");
+
+        for(let i = 0; i < lastIndex.length; i++) {
+            lastIndex[i].style.padding = '0 0 20px';
+        }
     });
 
     $(document).on('click', '.view_file_box a.btn_link', function() {
@@ -230,7 +236,7 @@
             $(this).removeClass("active").next().stop(true, true).slideUp(0);
             $(this).siblings().removeClass("activeFile");
         } else {
-            $(this).addClass("active").next().stop(true, true).slideDown(700);
+            $(this).addClass("active").next().stop(true, true).slideDown(800);
             $(this).siblings().addClass("activeFile");
         }
 

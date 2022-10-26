@@ -3,15 +3,11 @@
 <head>
     <title>증명서</title>
     <div th:replace="fragments/header.html :: fragment-header"></div>
-    <script type = "text/javascript" th:src = "@{/js/nanummyeongjo.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/jspdf.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/autotable.js}"></script>
-    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
 </head>
 <body>
 <div class="container">
     <section>
-        <div class="sub_content" th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')} or ${user.user_id.equals(docInfo.user_id)}">
+        <div class="sub_content" th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')} or ${user.user_id.equals(userInfo.user_id)}">
             <div>
                 <div class='sub_header'>
                     <p class='title'>재직증명서 신청</p>
@@ -178,85 +174,42 @@
     </section>
 </div>
 <script>
-    document.getElementById('save').onclick = function () {
+    getId('#save').onclick = () => {
         insert();
     }
-
-    function getToday(){
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = ("0" + (1 + date.getMonth())).slice(-2);
-        var day = ("0" + date.getDate()).slice(-2);
-
-        return year + "-" + month + "-" + day;
+    getId("#input_purpose").onkeyup = function() {
+        getId("#prev_purpose").innerText = this.value;
     }
-
-    function setYYYYMMDD(str) {
-        //YYYY-MM-DD >> YYYY. MM. DD.
-        return str.substring(0,4) + '. ' + str.substring(5, 7) + '. ' + str.substring(8, 10) + '.';
-    }
-
-    function setYYMMDD(str) {
-        //YYYY-MM-DD >> YYMMDD
-        return str.substring(2, 4) + str.substring(5, 7) + str.substring(8, 10);
-    }
-
-    const blindNumber = function(str) {
-        let temp = '';
-        for(let i = 0; i < str.length; i++) {
-            temp += '*';
-        }
-        temp = temp.substring(0, 7);
-        return temp;
-    }
-
-    document.getElementById("input_purpose").onkeyup = function() {
-        document.getElementById("prev_purpose").innerText = this.value;
-    }
-
-    document.getElementById("input_identification_no_back").onkeyup = function() {
+    getId("#input_identification_no_back").onkeyup = function() {
         let temp = blindNumber(this.value);
-        document.getElementById("input_identification_no_back").value = document.getElementById("input_identification_no_back").value.replace(/[^0-9]/g, '');
-        document.getElementById("input_identification_no_back").value = document.getElementById("input_identification_no_back").value.substring(0, 7);
-        document.getElementById("prev_identification_no").innerText = document.getElementById("input_identification_no_front").value + '-' + temp;
+        getId("#input_identification_no_back").value = getId("#input_identification_no_back").value.replace(/[^0-9]/g, '');
+        getId("#input_identification_no_back").value = getId("#input_identification_no_back").value.substring(0, 7);
+        getId("#prev_identification_no").innerText = getId("#input_identification_no_front").value + '-' + temp;
     }
+    getId('#input_identification_no_front').value = setYYMMDD(getValue('#input_birthday'));
+    getId("#fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
+    getId("#prev_user_id").innerText = getValue("#input_user_id");
+    getId("#prev_user_address").innerText = getValue("#input_user_address");
+    getId("#prev_department").innerText = getValue("#input_department");
+    getId("#prev_responsibilities_of_office").innerText = getValue("#input_responsibilities_of_office");
+    getId("#prev_user_name").innerText = getValue("#input_user_name");
+    getId("#prev_identification_no").innerText = getValue("#input_identification_no_front");
+    getId("#prev_start_year").innerText = setYYYYMMDD(getValue("#input_start_year"));
+    getId("#prev_date_yyyymmdd").innerText = setYYYYMMDD(getToday());
 
-    let input_birthday = document.getElementById('input_birthday').value;
-    document.getElementById('input_identification_no_front').value = setYYMMDD(input_birthday);
-    document.getElementById("fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
-    document.getElementById("prev_user_id").innerText = document.getElementById("input_user_id").value;
-    document.getElementById("prev_user_address").innerText = document.getElementById("input_user_address").value;
-    document.getElementById("prev_department").innerText = document.getElementById("input_department").value;
-    document.getElementById("prev_responsibilities_of_office").innerText = document.getElementById("input_responsibilities_of_office").value;
-    document.getElementById("prev_user_name").innerText = document.getElementById("input_user_name").value;
-    document.getElementById("prev_identification_no").innerText = document.getElementById("input_identification_no_front").value;
-    document.getElementById("prev_start_year").innerText = setYYYYMMDD(document.getElementById("input_start_year").value);
-    document.getElementById("prev_date_yyyymmdd").innerText = setYYYYMMDD(getToday());
-
-    function insert() {
-        document.getElementById("user_id").value = document.getElementById("prev_user_id").innerText;
-        document.getElementById("department").value = document.getElementById("prev_department").innerText;
-        document.getElementById("responsibilities_of_office").value = document.getElementById("prev_responsibilities_of_office").innerText;
-        document.getElementById("user_name").value = document.getElementById("prev_user_name").innerText;
-        document.getElementById("identification_no_front").value = setYYMMDD(input_birthday);
-        document.getElementById("identification_no_back").value = document.getElementById("input_identification_no_back").value;
-        document.getElementById("start_year").value = document.getElementById("start_year").value;
-        document.getElementById("purpose").value = document.getElementById("prev_purpose").innerText;
-        document.getElementById("note").value = document.getElementById("input_note").value;
-        document.getElementById("status_code").value = '0';
-
+    const insert = () => {
         let formData = new FormData();
-        formData.append('user_id', document.getElementById("prev_user_id").innerText);
-        formData.append('user_address', document.getElementById("prev_user_address").innerText);
-        formData.append('department', document.getElementById("prev_department").innerText);
-        formData.append('responsibilities_of_office', document.getElementById("prev_responsibilities_of_office").innerText);
-        formData.append('user_name', document.getElementById("prev_user_name").innerText);
-        formData.append('identification_no_front', setYYMMDD(input_birthday));
-        formData.append('identification_no_back', document.getElementById("input_identification_no_back").value);
-        formData.append('start_year', setYYMMDD(document.getElementById("input_start_year").value));
-        formData.append('purpose', document.getElementById("prev_purpose").innerText);
-        formData.append('note', document.getElementById("input_note").value);
-        formData.append('type', 'A');
+        formData.append('user_id', getInnerText("#prev_user_id"));
+        formData.append('user_address', getInnerText("#prev_user_address"));
+        formData.append('department', getInnerText("#prev_department"));
+        formData.append('responsibilities_of_office', getInnerText("#prev_responsibilities_of_office"));
+        formData.append('user_name', getInnerText("#prev_user_name"));
+        formData.append('identification_no_front', setYYMMDD(getValue('#input_birthday')));
+        formData.append('identification_no_back', getValue("#input_identification_no_back"));
+        formData.append('start_year', setYYMMDD(getValue("#input_start_year")));
+        formData.append('purpose', getInnerText("#prev_purpose"));
+        formData.append('note', getValue("#input_note"));
+        formData.append('type', '재직증명서');
         formData.append('status_code', '0');
         formData.append('apply_date', setYYMMDD(getToday()));
 

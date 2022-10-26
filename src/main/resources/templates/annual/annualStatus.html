@@ -110,8 +110,8 @@
     }
 
     const search = (pageNum) => {
-        let selectYear = document.querySelector('#year').value;
-        let user_name = document.querySelector('#user_name').value;
+        let selectYear = getValue('#year');
+        let user_name = getValue('#user_name');
 
         if(selectYear == '' || selectYear == null) {
             let date = new Date();

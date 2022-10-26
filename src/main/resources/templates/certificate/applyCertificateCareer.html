@@ -3,10 +3,6 @@
 <head>
     <title>증명서</title>
     <div th:replace="fragments/header.html :: fragment-header"></div>
-    <script type = "text/javascript" th:src = "@{/js/nanummyeongjo.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/jspdf.js}"></script>
-    <script type = "text/javascript" th:src = "@{/js/autotable.js}"></script>
-    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
 </head>
 <body>
 <div class="container">
@@ -170,108 +166,74 @@
 </div>
 <script>
     window.jsPDF = window.jspdf.jsPDF;
-    document.getElementById('save').onclick = function () {
+    getId('#save').onclick = function () {
         insert();
-        document.getElementById('toPDF').setAttribute('style', 'display:');
-        document.getElementById('btn_pdf_a').setAttribute('style', 'margin: 10px');
-        document.getElementById('save').setAttribute('style', 'display:none');
+        getId('#toPDF').setAttribute('style', 'display:');
+        getId('#btn_pdf_a').setAttribute('style', 'margin: 10px');
+        getId('#save').setAttribute('style', 'display:none');
     }
-
-    function getToday(){
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = ("0" + (1 + date.getMonth())).slice(-2);
-        var day = ("0" + date.getDate()).slice(-2);
-
-        return year + "-" + month + "-" + day;
+    getId('#input_user_address').onkeyup = function () {
+        getId('#prev_user_address').innerText = this.value;
     }
-
-    function setYYYYMMDD(str) {
-        //YYYY-MM-DD >> YYYY. MM. DD.
-        return str.substring(0,4) + '. ' + str.substring(5, 7) + '. ' + str.substring(8, 10) + '.';
+    getId('#input_department').onkeyup = function () {
+        getId('#prev_department').innerText = this.value;
     }
-
-    function setYYMMDD(str) {
-        //YYYY-MM-DD >> YYMMDD
-        return str.substring(2, 4) + str.substring(5, 7) + str.substring(8, 10);
+    getId("#input_purpose").onkeyup = function() {
+        getId("#prev_purpose").innerText = this.value;
     }
-
-    function setKorYYYYMMDD(str) {
-        //YYYY-MM-DD >> YYYY년 MM월 DD일
-        return str.substring(0, 4) + '년 ' + str.substring(5, 7)+ '월 ' + str.substring(8, 10) + '일';
+    getId("#input_department").onkeyup = function() {
+        getId("#prev_department").innerText = this.value;
     }
-
-    const blindNumber = function(str) {
-        let temp = '';
-        for(let i = 0; i < str.length; i++) {
-            temp += '*';
-        }
-        temp = temp.substring(0, 7);
-        return temp;
-    }
-    document.getElementById('input_user_address').onkeyup = function () {
-        document.getElementById('prev_user_address').innerText = this.value;
-    }
-    document.getElementById('input_department').onkeyup = function () {
-        document.getElementById('prev_department').innerText = this.value;
-    }
-    document.getElementById("input_purpose").onkeyup = function() {
-        document.getElementById("prev_purpose").innerText = this.value;
-    }
-    document.getElementById("input_department").onkeyup = function() {
-        document.getElementById("prev_department").innerText = this.value;
-    }
-    document.getElementById("input_identification_no_front").onkeyup = function() {
+    getId("#input_identification_no_front").onkeyup = function() {
         this.value = this.value.substring(0, 6);
-        document.getElementById('prev_identification_no_front').innerText = this.value;
+        getId('#prev_identification_no_front').innerText = this.value;
     }
-    document.getElementById("input_identification_no_back").onkeyup = function() {
+    getId("#input_identification_no_back").onkeyup = function() {
         this.value = this.value.substring(0, 7);
-        document.getElementById("prev_identification_no_back").innerText = this.value;
+        getId("#prev_identification_no_back").innerText = this.value;
     }
-    document.getElementById("input_start_year").onchange = function () {
-        document.getElementById("prev_start_year").innerText = setKorYYYYMMDD(this.value);
+    getId("#input_start_year").onchange = function () {
+        getId("#prev_start_year").innerText = setKorYYYYMMDD(this.value);
     }
-    document.getElementById("input_end_year").onchange = function () {
-        document.getElementById("prev_end_year").innerText = setKorYYYYMMDD(this.value);
+    getId("#input_end_year").onchange = function () {
+        getId("#prev_end_year").innerText = setKorYYYYMMDD(this.value);
     }
-    document.getElementById("input_user_name").onkeyup = function () {
-        document.getElementById("prev_user_name").innerText = this.value;
+    getId("#input_user_name").onkeyup = function () {
+        getId("#prev_user_name").innerText = this.value;
     }
-    document.getElementById("input_responsibilities_of_office").onkeyup = function() {
-        document.getElementById("prev_responsibilities_of_office").innerText = this.value;
+    getId("#input_responsibilities_of_office").onkeyup = function() {
+        getId("#prev_responsibilities_of_office").innerText = this.value;
     }
-    document.getElementById("fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
-    document.getElementById("prev_date_yyyymmdd").innerText = setYYYYMMDD(getToday());
+    getId("#fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';
+    getId("#prev_date_yyyymmdd").innerText = setYYYYMMDD(getToday());
 
-    function insert() {
+    const insert = () => {
         let formData = new FormData();
-        //formData.append('user_id', '퇴직');
         formData.append('user_address', '저장하지 않음');
-        formData.append('department', document.getElementById("prev_department").innerText);
-        formData.append('responsibilities_of_office', document.getElementById("prev_responsibilities_of_office").innerText);
-        formData.append('user_name', document.getElementById("prev_user_name").innerText);
-        formData.append('purpose', document.getElementById("prev_purpose").innerText);
-        formData.append('note', document.getElementById("input_note").value);
-        formData.append('type', 'C');
+        formData.append('department', getInnerText("#prev_department"));
+        formData.append('responsibilities_of_office', getInnerText("#prev_responsibilities_of_office"));
+        formData.append('user_name', getInnerText("#prev_user_name"));
+        formData.append('purpose', getInnerText("#prev_purpose"));
+        formData.append('note', getValue("#input_note"));
+        formData.append('type', '경력증명서');
         formData.append('status_code', '1');
         formData.append('apply_date', setYYMMDD(getToday()));
 
-        document.getElementById('input_responsibilities_of_office').readOnly = true;
-        document.getElementById('input_user_name').readOnly = true;
-        document.getElementById('input_identification_no_front').readOnly = true;
-        document.getElementById('input_identification_no_back').readOnly = true;
-        document.getElementById('input_start_year').readOnly = true;
-        document.getElementById('input_end_year').readOnly = true;
-        document.getElementById('input_purpose').readOnly = true;
-        document.getElementById('input_note').readOnly = true;
+        getId('#input_responsibilities_of_office').readOnly = true;
+        getId('#input_user_name').readOnly = true;
+        getId('#input_identification_no_front').readOnly = true;
+        getId('#input_identification_no_back').readOnly = true;
+        getId('#input_start_year').readOnly = true;
+        getId('#input_end_year').readOnly = true;
+        getId('#input_purpose').readOnly = true;
+        getId('#input_note').readOnly = true;
 
         if(confirm("신청 하시겠습니까?")) {
             fetch("/applyCareer", {
                 method: "POST",
                 body: formData
             }).then((response) => response.json()).then((data) => {
-                document.getElementById('doc_no').value = data.getDocNo;
+                getId('#doc_no').value = data.getDocNo;
             }).catch(e => {
                 e.json().then(msg => {
                     for (let i = 0; i < msg.errors.length; i++) {
@@ -284,16 +246,16 @@
         }
     }
 
-    function savePDF() {
+    const savePDF = () => {
         if(confirm("PDF 파일로 저장 하시겠습니까?")) {
             var doc = new jsPDF("p", "mm", "a4");
             doc.addFileToVFS("MyFont.ttf", myFont);
             doc.addFont("MyFont.ttf", "MyFont", "normal");
             doc.setFont("MyFont");
             doc.setFontSize(10);
-            doc.text(30, 30, '제　' + document.getElementById('doc_no').value + '　호');
+            doc.text(30, 30, '제　' + getValue('#doc_no') + '　호');
             doc.setFontSize(30);
-            doc.text(105, 50, document.getElementById('prev_type').innerText, 'center');
+            doc.text(105, 50, getInnerText('#prev_type'), 'center');
             doc.autoTable({
                 startY: 65,
                 margin: { left: 30, right: 30 },
@@ -303,33 +265,38 @@
                 body: [
                     [
                         {content: '주　　　　소', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_user_address').innerText }
+                        {content: getInnerText('#prev_user_address') }
                     ],
                     [
                         {content: '소　　　　속', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_department').innerText }
+                        {content: getInnerText('#prev_department') }
                     ],
                     [
                         {content: '직　　　　책', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_responsibilities_of_office').innerText }
+                        {content: getInnerText('#prev_responsibilities_of_office') }
                     ],
                     [
                         {content: '성　　　　명', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_user_name').innerText }
+                        {content: getInnerText('#prev_user_name') }
                     ],
                     [
                         {content: '주민등록번호', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_identification_no_front').innerText.substring(0, 6) + '-' + document.getElementById('prev_identification_no_back').innerText.substring(0, 7)}
+                        {content: getInnerText('#prev_identification_no_front').substring(0, 6)
+                                + '-'
+                                + getInnerText('#prev_identification_no_back').substring(0, 7)}
                     ],
                     [
                         {content: '용　　　　도', styles: { halign: "center", cellWidth: 28} },
-                        {content: document.getElementById('prev_purpose').innerText }
+                        {content: getInnerText('#prev_purpose') }
                     ],
                     [
                         {content: '\n\n\n\n\n상기인은 당사에서 '
-                                +  document.getElementById('prev_start_year').innerText
-                                + ' 부터 ' + document.getElementById('prev_end_year').innerText
-                                + ' 까지\n\n근무한 경력이 있음을 증명함.\n\n\n\n' + document.getElementById('prev_date_yyyymmdd').innerText + '\n\n\n\n\n\n\n\n\n\n\n',
+                                +  getInnerText('#prev_start_year')
+                                + ' 부터 '
+                                + getInnerText('#prev_end_year')
+                                + ' 까지\n\n근무한 경력이 있음을 증명함.\n\n\n\n'
+                                + getInnerText('#prev_date_yyyymmdd')
+                                + '\n\n\n\n\n\n\n\n\n\n\n',
                             colSpan: 2,
                             styles: { halign: "center", fontSize: 12 }
                         }
@@ -341,10 +308,10 @@
                 }
             });
             doc.setFontSize(20);
-            doc.text(105, 220, document.getElementById('prev_company_signature1').innerText, 'center');
-            doc.text(105, 230, document.getElementById('prev_company_signature2').innerText, 'center');
-            doc.addImage(document.getElementById('seal'), 'JPEG', 145, 210);
-            doc.save(document.getElementById('doc_no').value + ' 경력증명서.pdf');
+            doc.text(105, 220, getInnerText('#prev_company_signature1'), 'center');
+            doc.text(105, 230, getInnerText('#prev_company_signature2'), 'center');
+            doc.addImage(getId('#seal'), 'JPEG', 145, 210);
+            doc.save(getValue('#doc_no') + ' 경력증명서.pdf');
         } else {
             return;
         }

@@ -31,6 +31,8 @@ This project has a function to manage annual leave and members.
 
 7. Mail
 
+8. etc(Will add more as time permits.)
+
 ## More
 
 Welcome any feedback in our [github](https://github.com/Gn0thiSeaut0n/Annual-Project).

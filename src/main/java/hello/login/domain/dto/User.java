@@ -27,6 +27,7 @@ public class User {
     private String sex;
     @NotEmpty
     private String auth;
+    @NotEmpty
     @Email
     private String email;
     @NotEmpty

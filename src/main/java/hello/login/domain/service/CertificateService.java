@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -19,8 +20,8 @@ public class CertificateService {
         certificateDAO.insertCertificate(certificate);
     }
 
-    public List<Certificate> selectCertificateAll() {
-        return certificateDAO.selectCertificateAll();
+    public List<Certificate> selectCertificateAll(Map<String, Object> pageParam) {
+        return certificateDAO.selectCertificateAll(pageParam);
     }
 
     public void approveCertificate(String doc_no) {
@@ -56,5 +57,9 @@ public class CertificateService {
     public String insertCertificateEn(Certificate certificate) {
         certificateDAO.insertCertificateEn(certificate);
         return  certificateDAO.getRecentDocNo();
+    }
+
+    public int findByAllCertificateCnt(Map<String, String> searchParam) {
+        return certificateDAO.findByAllCertificateCnt(searchParam);
     }
 }

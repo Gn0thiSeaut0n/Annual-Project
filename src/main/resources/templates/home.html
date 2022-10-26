@@ -10,8 +10,17 @@
             <div class="sub_content">
                 <div>
                     <div class='sub_header'>
-                        <p class='title'>연차</p>
+                        <p class='title'>연차 신청</p>
                     </div>
+                </div>
+                <br>
+                <div class='sub_btn_menu' style="margin: 0 0 15px 0;">
+                    <ul>
+                        <a th:href="@{/}" class='btn_line btn_gray' style="float: left;">연차 신청</a>
+                    </ul>
+                    <ul>
+                        <a th:href="@{/annualList}" class='btn_line btn_gray' style="float: left;">연차 신청 리스트</a>
+                    </ul>
                 </div>
                 <div class="sub_panel_box" th:object="${user}">
                     <p class="sub_title">기본정보</p>
@@ -86,9 +95,9 @@
                             <th style="padding-right: 35px;">기간</th>
                             <td>
                                 <p>
-                                    <input type="text" value="" id="start_date" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"/>
+                                    <input type="text" value="" id="start_date" readonly="readonly" class="input_text3" style="background-color: white;" th:onchange="removeClass(this)"/>
                                     <span id="tilde">~</span>
-                                    <input type="text" value="" id="end_date" readonly="readonly" class="input_text3" th:onchange="removeClass(this)"/>
+                                    <input type="text" value="" id="end_date" readonly="readonly" class="input_text3" style="background-color: white;" th:onchange="removeClass(this)"/>
                                     <label id="label_hidden" hidden>
                                         <label class="time" hidden>
                                             <input type="radio" name="time" id="def" value="연차" checked>
@@ -119,7 +128,7 @@
                         <tr>
                             <th>사유</th>
                             <td colspan="3">
-                                <textarea rows="8" id="reason" class="input_text" th:onchange="removeClass(this)"></textarea>
+                                <input type="text" id="reason" class="input_text" style="background-color: white;" th:onkeydown="removeClass(this)"></textarea>
                             </td>
                         </tr>
                         <tr class="uploadFile" style="display: none;">
@@ -142,18 +151,17 @@
 <script th:inline="javascript">
     const yearChecked = () => {
         if (getValue('input[name="years"]:checked') === 'year') {
-            document.getElementById('putIn').hidden = false;
-            document.getElementById('tilde').hidden = false;
-            document.getElementById('end_date').hidden = false;
-            document.getElementById('label_hidden').hidden = true;
-            document.getElementById('def').checked = true;
-        }
-        else {
-            document.getElementById('putIn').hidden = true;
-            document.getElementById('tilde').hidden = true;
-            document.getElementById('end_date').hidden = true;
-            document.getElementById('label_hidden').hidden = false;
-            document.getElementById('am').checked = true;
+            getId('#putIn').hidden = false;
+            getId('#tilde').hidden = false;
+            getId('#end_date').hidden = false;
+            getId('#label_hidden').hidden = true;
+            getId('#def').checked = true;
+        } else {
+            getId('#putIn').hidden = true;
+            getId('#tilde').hidden = true;
+            getId('#end_date').hidden = true;
+            getId('#label_hidden').hidden = false;
+            getId('#am').checked = true;
         }
     }
 
@@ -187,9 +195,9 @@
             result = new Date(day).getDate() - count;
 
         if(isNaN(result))
-            document.querySelector('#application_year').value = 0;
+            setValue('#application_year', 0);
         else
-            document.querySelector('#application_year').value = result;
+            setValue('#application_year', result);
     }
 
     const application = async () => {
@@ -215,9 +223,9 @@
 
             let formData = new FormData();
             let holiday = "";
-            let file = document.querySelector('#uploadFile');
+            let file = getId('#uploadFile');
 
-            if(document.querySelector('#holiday1').checked == true || document.querySelector('#holiday2').checked == true) {
+            if(getId('#holiday1').checked == true || getId('#holiday2').checked == true) {
                 holiday = getValue('input[name="holiday"]:checked');
             }
 
@@ -227,7 +235,7 @@
             formData.append('department', getValue("#department"));
             formData.append('start_year', getValue("#start_year"));
             formData.append('birthday', getValue("#birthday"));
-            formData.append('sex', document.querySelector("#sex").name);
+            formData.append('sex', getId("#sex").name);
             formData.append('user_number', getValue("#user_number"));
             formData.append('total_annual', getValue("#total_annual"));
             formData.append('use_annual', getValue("#use_annual"));
@@ -267,8 +275,8 @@
 
     const paramChecked = () => {
         if (getValue('input[name="years"]:checked') === 'half-year') {
-            document.querySelector('#application_year').value = "0.5";
-            document.querySelector("#end_date").value = getValue("#start_date");
+            setValue('#application_year', "0.5");
+            setValue("#end_date", getValue("#start_date"));
         }
 
         if (isNaN(getValue("#application_year")) || getValue("#application_year") == "0") {
@@ -296,8 +304,8 @@
         disabledWeekDays :[0, 6]
     });
 
-    let holiday1 = document.querySelector('#holiday1');
-    let holiday2 = document.querySelector('#holiday2');
+    let holiday1 = getId('#holiday1');
+    let holiday2 = getId('#holiday2');
     let uploadFile = document.querySelector('.uploadFile');
 
     holiday1.onclick = () => {
@@ -307,12 +315,11 @@
         if(holiday1.checked == false) {
             uploadFile.style.display = 'none';
         }
-
     }
 
     holiday2.onclick = () => {
         uploadFile.style.display = 'none';
-        document.querySelector('#uploadFile').value = '';
+        setValue('#uploadFile', '');
         holiday1.checked = false;
     }
 </script>

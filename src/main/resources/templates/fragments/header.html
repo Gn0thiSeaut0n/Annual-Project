@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="fragment-header" class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
     <meta charset="UTF-8">
+    <link th:href="@{/favicon.ico}" rel="icon">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/annual.css}" rel="stylesheet">
     <link th:href="@{/css/signin.css}" rel="stylesheet">
@@ -13,30 +14,37 @@
     <script th:src="@{/fullcalendar/main.js}"></script>
     <script th:src="@{/js/common.js}"></script>
     <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+    <script th:src = "@{/js/nanummyeongjo.js}"></script>
+    <script th:src = "@{/js/jspdf.js}"></script>
+    <script th:src = "@{/js/autotable.js}"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
     <div class="container">
         <div class="col-md-12 text-end">
             <div class="inline-block images float">
             </div>
             <div class="inline-block float m-lg-3">
-                <a th:href="@{/}">신청</a>
+                <a th:href="@{/}">연차 신청</a>
             </div>
             <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
                 <a th:href="@{/selectAll}">전체 조회</a>
             </div>
             <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
-                <a th:href="|@{/annualStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|">연차</a>
-            </div>
-            <div th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}" class="inline-block float m-lg-3">
-                <a th:href="@{/userManagement}">회원</a>
+                <a th:href="|@{/annualStatus(year = ${#dates.format(#calendars.createNow(), 'yyyy')})}|">연차 관리</a>
             </div>
             <div class="inline-block float m-lg-3">
                 <a th:href="@{/viewCalendar}">달력</a>
             </div>
-            <div class="inline-block float m-lg-3">
-                <a th:href="@{/certificateList}">증명서</a>
-            </div>
-            <form th:action="@{/myPage}" method="get" class="inline-block">
+<!--            <div class="inline-block float m-lg-3">-->
+<!--                <a th:href="@{/certificateList}">증명서</a>-->
+<!--            </div>-->
+<!--            <div class="inline-block float m-lg-3">-->
+<!--                <a th:href="@{/selectBusinessCard}">명함</a>-->
+<!--            </div>-->
+            <form th:action="@{/userManagement}" method="get" class="inline-block">
                 <span class="mb-3" th:text="|${user.user_name} ${user.responsibilities_of_office}|">로그인 사용자 이름</span>
+                <button type="submit" class="btn btn-outline-success me-2 myPage" th:if="${user.auth.equals('admin')} or ${user.auth.equals('manager')}">회원 관리</button>
+            </form>
+            <form th:action="@{/myPage}" method="get" class="inline-block">
                 <button type="submit" class="btn btn-outline-primary me-2 myPage">마이페이지</button>
             </form>
             <form th:action="@{/logout}" method="post" class="inline-block">

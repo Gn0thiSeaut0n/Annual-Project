@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hello.login.domain.dao.CertificateDAO">
     <insert id="insertCertificate" parameterType="Certificate">
-        INSERT INTO annual.certificate_list
+        INSERT INTO ANNUAL.CERTIFICATE_LIST
         (
-            `DOC_NO`,
-            `TYPE`,
-            `STATUS_CODE`,
-            `USER_ID`,
-            `USER_ADDRESS`,
-            `DEPARTMENT`,
-            `RESPONSIBILITIES_OF_OFFICE`,
-            `USER_NAME`,
-            `IDENTIFICATION_NO_FRONT`,
-            `IDENTIFICATION_NO_BACK`,
-            `START_YEAR`,
-            `PURPOSE`,
-            `NOTE`,
-            `APPLY_DATE`
+            DOC_NO,
+            TYPE,
+            STATUS_CODE,
+            USER_ID,
+            USER_ADDRESS,
+            DEPARTMENT,
+            RESPONSIBILITIES_OF_OFFICE,
+            USER_NAME,
+            IDENTIFICATION_NO_FRONT,
+            IDENTIFICATION_NO_BACK,
+            START_YEAR,
+            PURPOSE,
+            NOTE,
+            APPLY_DATE
         )
         VALUES
             (
@@ -38,28 +38,98 @@
             )
     </insert>
 
-    <select id="selectCertificateAll" resultType="Certificate">
+    <select id="selectCertificateAll" parameterType="Map" resultType="Certificate">
         SELECT
-               *
-        FROM
-             annual.certificate_list
-        ORDER BY
+            DOC_NO,
+            TYPE,
+            STATUS_CODE,
+            USER_ID,
+            USER_ADDRESS,
+            DEPARTMENT,
+            RESPONSIBILITIES_OF_OFFICE,
+            USER_NAME,
+            IDENTIFICATION_NO_FRONT,
+            IDENTIFICATION_NO_BACK,
+            START_YEAR,
+            PURPOSE,
+            NOTE,
             APPLY_DATE
-        DESC
+        FROM
+             ANNUAL.CERTIFICATE_LIST
+        WHERE
+             1=1
+        <if test='select_search eq "0"'>
+            AND DOC_NO LIKE CONCAT ('%', #{input_search} , '%')
+        </if>
+        <if test='select_search eq "1"'>
+            AND USER_ID LIKE CONCAT('%', #{input_search}, '%')
+        </if>
+        <if test='select_search eq "2"'>
+            AND USER_NAME LIKE CONCAT('%', #{input_search}, '%')
+        </if>
+        <if test='select_search eq "3"'>
+            AND TYPE LIKE CONCAT('%', #{input_search}, '%')
+        </if>
+        ORDER BY
+            APPLY_DATE DESC, USER_ID
+        LIMIT
+            #{pageSize} OFFSET #{startIndex}
+    </select>
+
+    <select id="findByAllCertificateCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            ANNUAL.CERTIFICATE_LIST
+        WHERE
+            1=1
+        <if test='select_search eq "0"'>
+            AND DOC_NO LIKE CONCAT ('%', #{input_search} , '%')
+        </if>
+        <if test='select_search eq "1"'>
+            AND USER_ID LIKE CONCAT('%', #{input_search}, '%')
+        </if>
+        <if test='select_search eq "2"'>
+            AND USER_NAME LIKE CONCAT('%', #{input_search}, '%')
+        </if>
+        <if test='select_search eq "3"'>
+            AND TYPE LIKE CONCAT('%', #{input_search}, '%')
+        </if>
     </select>
 
     <select id="findByDocNoDetail" resultType="Certificate" parameterType="String">
         SELECT
-            *
+            DOC_NO,
+            TYPE,
+            STATUS_CODE,
+            USER_ID,
+            USER_ADDRESS,
+            DEPARTMENT,
+            RESPONSIBILITIES_OF_OFFICE,
+            USER_NAME,
+            IDENTIFICATION_NO_FRONT,
+            IDENTIFICATION_NO_BACK,
+            START_YEAR,
+            PURPOSE,
+            NOTE,
+            APPLY_DATE,
+            (
+                SELECT
+                    EMAIL
+                FROM
+                    ANNUAL.USER_INFO
+                WHERE
+                    ANNUAL.USER_INFO.USER_ID = ANNUAL.CERTIFICATE_LIST.USER_ID
+            ) AS EMAIL
         FROM
-            annual.certificate_list
+            ANNUAL.CERTIFICATE_LIST
         WHERE
             DOC_NO = #{doc_no}
     </select>
 
     <update id="approveCertificate" parameterType="String">
         UPDATE
-            annual.certificate_list
+            ANNUAL.CERTIFICATE_LIST
         SET
             STATUS_CODE = '1'
         WHERE
@@ -68,14 +138,14 @@
 
     <delete id="deleteCertificate" parameterType="String">
         DELETE FROM
-            annual.certificate_list
+            ANNUAL.CERTIFICATE_LIST
         WHERE
             DOC_NO = #{doc_no}
     </delete>
 
     <update id="updateSocialNumber" parameterType="Certificate">
         UPDATE
-            annual.certificate_list
+            ANNUAL.CERTIFICATE_LIST
         SET
             IDENTIFICATION_NO_BACK = #{identification_no_back}
         WHERE
@@ -83,19 +153,19 @@
     </update>
 
     <insert id="insertCertificateCareer" parameterType="Certificate">
-        INSERT INTO annual.certificate_list
+        INSERT INTO ANNUAL.CERTIFICATE_LIST
         (
-            `DOC_NO`,
-            `TYPE`,
-            `STATUS_CODE`,
-            `USER_ID`,
-            `USER_ADDRESS`,
-            `DEPARTMENT`,
-            `RESPONSIBILITIES_OF_OFFICE`,
-            `USER_NAME`,
-            `PURPOSE`,
-            `NOTE`,
-            `APPLY_DATE`
+            DOC_NO,
+            TYPE,
+            STATUS_CODE,
+            USER_ID,
+            USER_ADDRESS,
+            DEPARTMENT,
+            RESPONSIBILITIES_OF_OFFICE,
+            USER_NAME,
+            PURPOSE,
+            NOTE,
+            APPLY_DATE
         )
         VALUES
             (
@@ -117,7 +187,7 @@
         SELECT
             DOC_NO
         FROM
-            annual.certificate_list
+            ANNUAL.CERTIFICATE_LIST
         ORDER BY
             DOC_NO
         DESC
@@ -125,19 +195,19 @@
     </select>
 
     <insert id="insertCertificateEn" parameterType="Certificate">
-        INSERT INTO annual.certificate_list
+        INSERT INTO ANNUAL.CERTIFICATE_LIST
         (
-            `DOC_NO`,
-            `TYPE`,
-            `STATUS_CODE`,
-            `USER_ID`,
-            `USER_ADDRESS`,
-            `DEPARTMENT`,
-            `RESPONSIBILITIES_OF_OFFICE`,
-            `USER_NAME`,
-            `PURPOSE`,
-            `NOTE`,
-            `APPLY_DATE`
+            DOC_NO,
+            TYPE,
+            STATUS_CODE,
+            USER_ID,
+            USER_ADDRESS,
+            DEPARTMENT,
+            RESPONSIBILITIES_OF_OFFICE,
+            USER_NAME,
+            PURPOSE,
+            NOTE,
+            APPLY_DATE
         )
         VALUES
             (
