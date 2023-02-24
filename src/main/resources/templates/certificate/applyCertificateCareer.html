@@ -166,42 +166,42 @@
 </div>
 <script>
     window.jsPDF = window.jspdf.jsPDF;
-    getId('#save').onclick = function () {
+    getId('#save').onclick = () => {
         insert();
         getId('#toPDF').setAttribute('style', 'display:');
         getId('#btn_pdf_a').setAttribute('style', 'margin: 10px');
         getId('#save').setAttribute('style', 'display:none');
     }
-    getId('#input_user_address').onkeyup = function () {
+    getId('#input_user_address').onkeyup = () => {
         getId('#prev_user_address').innerText = this.value;
     }
-    getId('#input_department').onkeyup = function () {
+    getId('#input_department').onkeyup = () => {
         getId('#prev_department').innerText = this.value;
     }
-    getId("#input_purpose").onkeyup = function() {
+    getId("#input_purpose").onkeyup = () => {
         getId("#prev_purpose").innerText = this.value;
     }
-    getId("#input_department").onkeyup = function() {
+    getId("#input_department").onkeyup = () => {
         getId("#prev_department").innerText = this.value;
     }
-    getId("#input_identification_no_front").onkeyup = function() {
+    getId("#input_identification_no_front").onkeyup = () => {
         this.value = this.value.substring(0, 6);
         getId('#prev_identification_no_front').innerText = this.value;
     }
-    getId("#input_identification_no_back").onkeyup = function() {
+    getId("#input_identification_no_back").onkeyup = () => {
         this.value = this.value.substring(0, 7);
         getId("#prev_identification_no_back").innerText = this.value;
     }
-    getId("#input_start_year").onchange = function () {
+    getId("#input_start_year").onchange = () => {
         getId("#prev_start_year").innerText = setKorYYYYMMDD(this.value);
     }
-    getId("#input_end_year").onchange = function () {
+    getId("#input_end_year").onchange = () => {
         getId("#prev_end_year").innerText = setKorYYYYMMDD(this.value);
     }
-    getId("#input_user_name").onkeyup = function () {
+    getId("#input_user_name").onkeyup = () => {
         getId("#prev_user_name").innerText = this.value;
     }
-    getId("#input_responsibilities_of_office").onkeyup = function() {
+    getId("#input_responsibilities_of_office").onkeyup = () => {
         getId("#prev_responsibilities_of_office").innerText = this.value;
     }
     getId("#fake_doc_no").innerText = setYYMMDD(getToday()) + ' - 000';

@@ -88,7 +88,7 @@
         </section>
     </div>
 <script>
-    const enterKey = (e) => {
+    const enterKey = e => {
         if(e.keyCode === 13) {
             search(1);
         } else {
@@ -96,14 +96,14 @@
         }
     }
 
-    const search = (pageNum) => {
+    const search = pageNum => {
         let user_id = getValue('#user_id');
         let user_name = getValue('#user_name');
 
         window.location.href=`/userManagement?page=${pageNum}&user_id=${user_id}&user_name=${user_name}`;
     }
 
-    const userDetail = (user_id) => {
+    const userDetail = user_id => {
         window.location.href = "/userDetail/" + user_id;
     }
 </script>

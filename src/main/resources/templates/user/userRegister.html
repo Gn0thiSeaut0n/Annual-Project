@@ -305,7 +305,7 @@
         }
     }
 
-    const removeClass = (obj) => {
+    const removeClass = obj => {
         obj.classList.remove("field-error");
     }
 
@@ -319,7 +319,7 @@
             format: 'Y-m-d'
         });
 
-    const autoHypenPhone = (str) => {
+    const autoHypenPhone = str => {
         str = str.replace(/[^0-9]/g, '');
         let tmp = '';
 
@@ -375,7 +375,7 @@
         return str;
     }
 
-    getId('#user_number').onkeyup = (e) => {
+    getId('#user_number').onkeyup = e => {
         e.target.value = autoHypenPhone(e.target.value);
     }
 </script>

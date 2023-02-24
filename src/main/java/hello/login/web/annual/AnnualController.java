@@ -89,7 +89,7 @@ public class AnnualController {
             bigBox.put(i, new HashMap<>(smallBox));
         }
 
-        annualService.selectAnnualMonth(Map.of("year", year, "user_id", user)).stream().forEach(
+        annualService.selectAnnualMonth(Map.of("year", year, "user_id", user)).forEach(
                 (data) -> {
                     Map inSmallBox = new HashMap<>();
                     inSmallBox.put("day", data.getApplication_year());

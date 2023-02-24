@@ -211,7 +211,7 @@
     getId("#prev_purpose").innerText = getValue("#input_purpose");
     getId("#prev_date_yyyymmdd").innerText = setYYYYMMDD(getToday());
 
-    const savePDF = (row) => {
+    const savePDF = row => {
         if(confirm("PDF 파일로 저장 하시겠습니까?")) {
             fetch("/viewCertificate/" + row.name + "/save", {
                 method: "PUT",

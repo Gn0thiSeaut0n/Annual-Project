@@ -87,9 +87,7 @@
 </div>
 <script>
     const search = (pageNum) => {
-        let date = new Date();
-        selectYear = date.getFullYear();
-
+        selectYear = new Date().getFullYear();
         window.location.href=`/annualManageStatus?page=${pageNum}&year=${selectYear}`;
     }
 </script>

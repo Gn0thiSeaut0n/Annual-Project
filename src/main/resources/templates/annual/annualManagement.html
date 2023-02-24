@@ -82,7 +82,7 @@
 <script>
     const annualUpdate = () => {
         if(confirm("저장하시겠습니까?")) {
-            let params = {
+            const params = {
                 "year1" : getValue('#year1'),
                 "year2" : getValue('#year2'),
                 "year3" : getValue('#year3'),
@@ -119,7 +119,7 @@
                 window.location.href='/annualManagement';
             }).catch(e => {
                 e.json().then(msg => {
-
+                    console.log(msg);
                 });
             });
         } else {

@@ -130,7 +130,7 @@
     </section>
 </div>
 <script>
-    const deleteCertificate = (row) => {
+    const deleteCertificate = row => {
         if(confirm("문서번호 '" + row.name + "' 증명서를 삭제 하시겠습니까?")) {
             fetch("/delete/" + row.name, {
                 method: "DELETE"
@@ -147,7 +147,7 @@
         }
     }
 
-    const approveCertificate = (row) => {
+    const approveCertificate = row => {
         if(confirm("승인 처리 하시겠습니까?")) {
             fetch("/approve/"+row.name, {
                 method: "PUT",
@@ -169,7 +169,7 @@
         }
     }
 
-    const enterKey = (e) => {
+    const enterKey = e => {
         if(e.keyCode === 13) {
             search(1);
         } else {
@@ -177,7 +177,7 @@
         }
     }
 
-    const search = (pageNum) => {
+    const search = pageNum => {
         let select_search = document.querySelector('#select_search').value;
         let input_search = document.querySelector('#input_search').value;
 

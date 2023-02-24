@@ -177,11 +177,11 @@
     getId('#save').onclick = () => {
         insert();
     }
-    getId("#input_purpose").onkeyup = function() {
+    getId("#input_purpose").onkeyup = () => {
         getId("#prev_purpose").innerText = this.value;
     }
-    getId("#input_identification_no_back").onkeyup = function() {
-        let temp = blindNumber(this.value);
+    getId("#input_identification_no_back").onkeyup = () => {
+        const temp = blindNumber(this.value);
         getId("#input_identification_no_back").value = getId("#input_identification_no_back").value.replace(/[^0-9]/g, '');
         getId("#input_identification_no_back").value = getId("#input_identification_no_back").value.substring(0, 7);
         getId("#prev_identification_no").innerText = getId("#input_identification_no_front").value + '-' + temp;

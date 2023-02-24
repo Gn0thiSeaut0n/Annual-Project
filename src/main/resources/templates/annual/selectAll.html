@@ -128,7 +128,7 @@
         </section>
     </div>
 <script>
-    const enterKey = (e) => {
+    const enterKey = e => {
         if(e.keyCode === 13) {
             search(1);
         } else {
@@ -136,19 +136,19 @@
         }
     }
 
-    const search = (pageNum) => {
-        let selectYear = getValue('#year');
+    const search = pageNum => {
+        const selectYear = getValue('#year');
         let selectMonth = getValue('#month');
-        let user_name = getValue('#user_name');
+        const user_name = getValue('#user_name');
 
-        if(selectMonth.length == 1) {
+        if(selectMonth.length === 1) {
             selectMonth = "0".concat(selectMonth);
         }
 
         window.location.href=`/selectAll?page=${pageNum}&year=${selectYear}&month=${selectMonth}&user_name=${user_name}`;
     }
 
-    const apprHistory = async (id) => {
+    const apprHistory = async id => {
         if(confirm("승인 처리 하시겠습니까?")) {
             loadingShow();
             await fetch("/apprHistory/"+id.name, {
@@ -200,12 +200,12 @@
     document.addEventListener('DOMContentLoaded', () => {
         let iFrameCnt = 0;
 
-        $(document).on('click', '.allDownload', (e) => { //파일 일괄 다운로드
+        $(document).on('click', '.allDownload', e => { //파일 일괄 다운로드
             $('.activeFile li[id*="file_"]').each((index, element) => {
-                let file_uuid = element.attributes["name"].value;
-                let file_name = element.innerText.replace(/\n/g, "").replace("\t", "").trim();
+                const file_uuid = element.attributes["name"].value;
+                const file_name = element.innerText.replace(/\n/g, "").replace("\t", "").trim();
 
-                let url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + encodeURIComponent(file_name);
+                const url = "/allFileDownload?file_uuid=" + file_uuid + "&file_name=" + encodeURIComponent(file_name);
 
                 fnCreateIframe(iFrameCnt); // 보이지 않는 iframe 생성
                 $("iframe[name=" + iFrameCnt + "]").attr("src", url);
@@ -214,24 +214,24 @@
             });
         });
 
-        fnSleep = (delay) => {
-            let start = new Date().getTime();
+        fnSleep = delay => {
+            const start = new Date().getTime();
             while (start + delay > new Date().getTime());
         };
 
-        fnCreateIframe = (name) => {
-           let frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
+        fnCreateIframe = name => {
+           const frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
            frm.appendTo("body");
         }
 
-        let lastIndex = document.querySelectorAll("li:nth-last-child(1).fileList");
+        const lastIndex = document.querySelectorAll("li:nth-last-child(1).fileList");
 
         for(let i = 0; i < lastIndex.length; i++) {
             lastIndex[i].style.padding = '0 0 20px';
         }
     });
 
-    $(document).on('click', '.view_file_box a.btn_link', function() {
+    $(document).on('click', '.view_file_box a.btn_link', () => {
         if ($(this).hasClass("active") && document.getElementsByClassName("active").length < 2) {
             $(this).removeClass("active").next().stop(true, true).slideUp(0);
             $(this).siblings().removeClass("activeFile");
