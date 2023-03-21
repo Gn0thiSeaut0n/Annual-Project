@@ -31,7 +31,7 @@ This project has a function to manage annual leave and members.
 
 7. Mail
 
-8. etc(Will add more as time permits.)
+8. etc
 
 ## More
 
