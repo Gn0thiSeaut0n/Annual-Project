@@ -14,6 +14,7 @@ This project has a function to manage annual leave and members.
 
 - Mybatis  
 
+## IDE
 - IntelliJ IDEA or STS4   
 
 ## Main Function
